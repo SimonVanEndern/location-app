@@ -1,4 +1,4 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao

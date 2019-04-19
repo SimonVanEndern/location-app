@@ -1,4 +1,4 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase

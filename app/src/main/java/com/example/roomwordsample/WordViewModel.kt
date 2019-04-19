@@ -3,6 +3,8 @@ package com.example.roomwordsample
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
+import com.example.roomwordsample.database.Word
+import com.example.roomwordsample.database.WordRoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

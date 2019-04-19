@@ -1,4 +1,4 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

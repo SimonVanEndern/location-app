@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.roomwordsample.database.Word
 
 class WordListAdapter internal constructor(
     context: Context
