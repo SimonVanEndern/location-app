@@ -11,6 +11,6 @@ interface GPSDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(gpsData: GPSData)
 
-    @Query("SELECT * FROM gps_data_table, gps_location_table WHERE timestamp = :timestamp")
+    @Query("SELECT * FROM gps_data_table, gps_location_table WHERE timestamp = :timestamp LIMIT 1")
     fun getByTimestamp(timestamp: Long): GPSLocation
 }
