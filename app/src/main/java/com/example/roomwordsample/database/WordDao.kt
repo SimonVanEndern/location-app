@@ -1,16 +1,16 @@
 package com.example.roomwordsample.database
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface WordDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(word : Word)
+    fun insert(word: Word)
 
     @Query("DELETE FROM word_table")
     fun deleteAll()
