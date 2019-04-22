@@ -9,8 +9,8 @@ import androidx.room.Query
 interface GPSLocationDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(location: GPSLocation)
+    fun insert(location: GPSLocation) : Long
 
     @Query("SELECT * FROM gps_location_table WHERE id = :id LIMIT 1")
-    fun getById(id: Int): GPSLocation
+    fun getById(id: Long): GPSLocation
 }
