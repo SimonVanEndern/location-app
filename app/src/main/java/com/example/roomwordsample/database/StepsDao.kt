@@ -11,7 +11,7 @@ interface StepsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(stepStatistic: Steps)
 
-    @Query("SELECT * FROM step_counter_table WHERE day = :day LIMIT 1")
+    @Query("SELECT steps FROM step_counter_table WHERE day = :day LIMIT 1")
     fun getSteps(day: String): Int
 
     @Query("SELECT AVG(steps) FROM step_counter_table WHERE day >= :startDayInclusive AND day >= :endDayInclusive")
