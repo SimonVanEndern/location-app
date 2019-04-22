@@ -47,6 +47,9 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
+
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
 //    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1-alpha04'
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.archLifecycleVersion"
