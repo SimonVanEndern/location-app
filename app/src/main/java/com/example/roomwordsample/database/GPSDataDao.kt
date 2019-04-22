@@ -12,5 +12,5 @@ interface GPSDataDao {
     fun insert(gpsData: GPSData)
 
     @Query("SELECT * FROM gps_data_table, gps_location_table WHERE timestamp = :timestamp")
-    fun getByTimestamp(timestamp: Int): GPSLocation
+    fun getByTimestamp(timestamp: Long): GPSLocation
 }
