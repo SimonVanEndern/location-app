@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Steps
 import com.example.roomwordsample.database.StepsDao
-import com.example.roomwordsample.database.StepsRoomDatabase
 import org.junit.*
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -19,7 +19,7 @@ class StepsDaoTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var stepsDao: StepsDao
-    private lateinit var db: StepsRoomDatabase
+    private lateinit var db: LocationRoomDatabase
 
     var formatter = SimpleDateFormat("dd-MM-yyyy")
 
@@ -27,7 +27,7 @@ class StepsDaoTest {
     fun createDb() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        db = Room.inMemoryDatabaseBuilder(context, StepsRoomDatabase::class.java)
+        db = Room.inMemoryDatabaseBuilder(context, LocationRoomDatabase::class.java)
             .allowMainThreadQueries()
             .build()
         stepsDao = db.stepsDao()
@@ -78,6 +78,6 @@ class StepsDaoTest {
         stepsDao.insert(stepsObject1)
         stepsDao.insert(stepsObject2)
         val result = stepsDao.getAverageSteps(day1, day2)
-        Assert.assertEquals((steps1 + steps2) / 2, result)
+        Assert.assertEquals((steps1 + steps2) / 2 .toFloat(), result)
     }
 }

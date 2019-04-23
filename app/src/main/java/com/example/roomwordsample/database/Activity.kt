@@ -3,7 +3,6 @@ package com.example.roomwordsample.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.android.gms.location.DetectedActivity
 import java.util.*
 
 @Entity(tableName = "activity_table")

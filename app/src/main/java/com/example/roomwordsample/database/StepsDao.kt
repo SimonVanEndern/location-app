@@ -16,5 +16,5 @@ interface StepsDao {
     fun getSteps(day: Date): Int
 
     @Query("SELECT AVG(steps) FROM step_counter_table WHERE day BETWEEN :startDayInclusive AND :endDayInclusive")
-    fun getAverageSteps(startDayInclusive: Date, endDayInclusive: Date): Int
+    fun getAverageSteps(startDayInclusive: Date, endDayInclusive: Date): Float
 }
