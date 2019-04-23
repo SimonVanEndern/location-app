@@ -13,5 +13,5 @@ interface ActivityDao {
     fun insert (activity : Activity)
 
     @Query("SELECT * FROM activity_table WHERE day = :day")
-    fun getActivitiesByDay (day : Date) : List<Activity>
+    fun getActivitiesByDay (day : Date?) : List<Activity>
 }
