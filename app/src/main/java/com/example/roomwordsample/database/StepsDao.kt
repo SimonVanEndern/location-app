@@ -2,14 +2,14 @@ package com.example.roomwordsample.database
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import java.util.*
 
 @Dao
 interface StepsDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = REPLACE)
     fun insert(stepStatistic: Steps)
 
     @Query("SELECT steps FROM step_counter_table WHERE day = :day LIMIT 1")

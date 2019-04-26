@@ -2,7 +2,7 @@ package com.example.roomwordsample.database
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.OnConflictStrategy.ABORT
 import androidx.room.Query
 import com.google.android.gms.location.DetectedActivity
 import java.util.*
@@ -10,7 +10,7 @@ import java.util.*
 @Dao
 interface ActivityDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = ABORT)
     fun insert(activity: Activity)
 
     @Query("SELECT * FROM activity_table WHERE day = :day")
@@ -21,5 +21,5 @@ interface ActivityDao {
          WHERE activity = :activity AND
          day BETWEEN :start AND :end"""
     )
-    fun getTotalTimeSpentOnActivity(start: Date?, end: Date?, activity: DetectedActivity) : Long
+    fun getTotalTimeSpentOnActivity(start: Date?, end: Date?, activity: DetectedActivity): Long
 }
