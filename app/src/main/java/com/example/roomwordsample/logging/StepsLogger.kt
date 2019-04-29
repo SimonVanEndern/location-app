@@ -46,7 +46,6 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
     override fun onSensorChanged(event: SensorEvent) {
         scope.launch(Dispatchers.IO) {
             Log.d("STEPS", "step sensor triggered")
-            Toast.makeText(context, "Step sensor triggered", Toast.LENGTH_SHORT).show()
             stepsRepository.insert(Steps(Date(), event.values[0].toInt()))
         }
     }
