@@ -35,7 +35,7 @@ class NewWordActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_word)
-        editWordView = findViewById(R.id.edit_word)
+        editWordView = this.findViewById(R.id.edit_word)
 
         val button = findViewById<Button>(R.id.button_save)
         button.setOnClickListener {

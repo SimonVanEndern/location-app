@@ -17,12 +17,7 @@ package com.example.roomwordsample
  */
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,14 +26,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Word
+import com.example.roomwordsample.logging.LoggingService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity(), SensorEventListener {
-
-    //Step counter:
-    var running = false
-    var sensorManager: SensorManager? = null
+class MainActivity : AppCompatActivity() {
 
     private val newWordActivityRequestCode = 1
     private lateinit var wordViewModel: WordViewModel
@@ -46,7 +39,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -59,12 +51,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // Get a new or existing ViewModel from the ViewModelProvider.
         wordViewModel = ViewModelProviders.of(this).get(WordViewModel::class.java)
 
+
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        wordViewModel.allWords.observe(this, Observer { words ->
+        LocationRoomDatabase.getDatabase(this).stepsDao().get10RecentSteps().observe(this, Observer { steps ->
             // Update the cached copy of the words in the adapter.
-            words?.let { adapter.setWords(it) }
+            steps?.let { adapter.setSteps(it) }
         })
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
@@ -72,28 +65,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             val intent = Intent(this@MainActivity, NewWordActivity::class.java)
             startActivityForResult(intent, newWordActivityRequestCode)
         }
-    }
 
-    // For Step sensor / counter
-    override fun onResume() {
-        super.onResume()
-        running = true
-        var stepsSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+        val i = Intent(this, LoggingService::class.java)
+        startService(i)
 
-        if (stepsSensor == null) {
-            Toast.makeText(this, "No Step Counter Sensor !", Toast.LENGTH_SHORT).show()
-        } else {
-            sensorManager?.registerListener(this, stepsSensor, SensorManager.SENSOR_DELAY_UI)
-        }
-    }
-
-    // For Step sensor / counter
-    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
-
-    override fun onSensorChanged(event: SensorEvent) {
-        if (running) {
-            wordViewModel.insert(Word("" + event.values[0]))
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {

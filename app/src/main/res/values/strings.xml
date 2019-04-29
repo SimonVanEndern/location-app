@@ -4,4 +4,7 @@
     <string name="hint_word">Word...</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Word not saved because it is empty.</string>
+    <string name="notification_title">Do not quit, needs to stay here</string>
+    <string name="notification_message">Message</string>
+    <string name="ticker_text">ticker</string>
 </resources>

@@ -31,6 +31,7 @@ class WordListAdapter internal constructor(
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var words = emptyList<Word>() // Cached copy of words
+    private var steps = emptyList<Int>()
 
     inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val wordItemView: TextView = itemView.findViewById(R.id.textView)
@@ -42,8 +43,8 @@ class WordListAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        val current = words[position]
-        holder.wordItemView.text = current.word
+        val current = steps[position]
+        holder.wordItemView.text = "" + current
     }
 
     internal fun setWords(words: List<Word>) {
@@ -51,7 +52,12 @@ class WordListAdapter internal constructor(
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = words.size
+    internal fun setSteps(steps : List<Int>) {
+        this.steps = steps
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount() = steps.size
 }
 
 
