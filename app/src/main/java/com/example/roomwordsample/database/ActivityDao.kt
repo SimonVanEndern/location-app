@@ -1,5 +1,6 @@
 package com.example.roomwordsample.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.ABORT
@@ -22,4 +23,8 @@ interface ActivityDao {
          day BETWEEN :start AND :end"""
     )
     fun getTotalTimeSpentOnActivity(start: Date?, end: Date?, activity: DetectedActivity): Long
+
+    // For testing
+    @Query("SELECT * FROM activity_table ORDER BY day DESC LIMIT 10")
+    fun get10RecentActivities (): LiveData<List<Activity>>
 }

@@ -17,12 +17,12 @@ package com.example.roomwordsample
  */
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.example.roomwordsample.database.Word
+import androidx.recyclerview.widget.RecyclerView
+import com.example.roomwordsample.database.Activity
 
 
 class WordListAdapter internal constructor(
@@ -30,8 +30,8 @@ class WordListAdapter internal constructor(
 ) : RecyclerView.Adapter<WordListAdapter.WordViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var words = emptyList<Word>() // Cached copy of words
-    private var steps = emptyList<Int>()
+    private var activities = emptyList<String>() // Cached copy of words
+    private var steps = emptyList<String>()
 
     inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val wordItemView: TextView = itemView.findViewById(R.id.textView)
@@ -43,21 +43,24 @@ class WordListAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        val current = steps[position]
-        holder.wordItemView.text = "" + current
+        val combined = ArrayList<String>()
+        combined.addAll(steps)
+        combined.addAll(activities)
+        val current = combined[position]
+        holder.wordItemView.text = current
     }
 
-    internal fun setWords(words: List<Word>) {
-        this.words = words
+    internal fun setActivities(activities: List<Activity>) {
+        this.activities = activities.map { activity -> activity.toString() }
         notifyDataSetChanged()
     }
 
-    internal fun setSteps(steps : List<Int>) {
-        this.steps = steps
+    internal fun setSteps(steps: List<Int>) {
+        this.steps = steps.map { step -> "" + step }
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = steps.size
+    override fun getItemCount() = steps.size + activities.size
 }
 
 

@@ -20,14 +20,15 @@ import kotlin.coroutines.CoroutineContext
 class StepsLogger(private val context: Context) : Runnable, SensorEventListener {
 
     var sensorManager: SensorManager? = null
-    private val stepsDao = LocationRoomDatabase.getDatabase(context).stepsDao()
-    private val stepsRepository = StepsRepository(stepsDao)
-
     private var parentJob = Job()
 
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Main
+
     private val scope = CoroutineScope(coroutineContext)
+
+    private val stepsDao = LocationRoomDatabase.getDatabase(context, scope).stepsDao()
+    private val stepsRepository = StepsRepository(stepsDao)
 
     override fun run() {
 
@@ -37,15 +38,15 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
 
         if (stepsSensor != null) {
             sensorManager?.registerListener(this, stepsSensor, SensorManager.SENSOR_DELAY_NORMAL)
-            Toast.makeText(context, "registered listener", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "registered listener", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "Cannot register listener", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Cannot register step sensor listener", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onSensorChanged(event: SensorEvent) {
         scope.launch(Dispatchers.IO) {
-            Log.d("STEPS", "step sensor triggered")
+//            Log.d("STEPS", "step sensor triggered")
             stepsRepository.insert(Steps(Date(), event.values[0].toInt()))
         }
     }

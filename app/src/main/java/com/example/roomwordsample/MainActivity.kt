@@ -30,6 +30,10 @@ import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Word
 import com.example.roomwordsample.logging.LoggingService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,9 +59,14 @@ class MainActivity : AppCompatActivity() {
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        LocationRoomDatabase.getDatabase(this).stepsDao().get10RecentSteps().observe(this, Observer { steps ->
+        wordViewModel.mostRecentSteps.observe(this, Observer { steps ->
             // Update the cached copy of the words in the adapter.
             steps?.let { adapter.setSteps(it) }
+        })
+
+        wordViewModel.mostRecentActivity.observe(this, Observer { activities ->
+            // Update the cached copy of the words in the adapter.
+            activities?.let { adapter.setActivities(it) }
         })
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)

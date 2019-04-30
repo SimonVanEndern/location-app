@@ -5,6 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
 @Database(
     entities = [GPSLocation::class, GPSData::class, Activity::class, Trajectory::class, Steps::class],
@@ -12,6 +17,27 @@ import androidx.room.TypeConverters
 )
 @TypeConverters(Converters::class)
 abstract class LocationRoomDatabase : RoomDatabase() {
+
+    private class LocationRoomDatabaseCallback(
+        private val scope: CoroutineScope
+    ) : RoomDatabase.Callback() {
+
+        override fun onOpen(db: SupportSQLiteDatabase) {
+            super.onOpen(db)
+            INSTANCE?.let { database ->
+                scope.launch(Dispatchers.IO) {
+                    populateDatabase(database.activityDao())
+                }
+            }
+        }
+
+        fun populateDatabase(activityDao: ActivityDao) {
+//            wordDao.deleteAll()
+
+            val activity = Activity(0, Date(), 5, 1000, 1100)
+            activityDao.insert(activity)
+        }
+    }
 
     abstract fun gPSLocationDao(): GPSLocationDao
 
@@ -28,8 +54,9 @@ abstract class LocationRoomDatabase : RoomDatabase() {
         private var INSTANCE: LocationRoomDatabase? = null
 
         fun getDatabase(
-            context: Context
-            ): LocationRoomDatabase {
+            context: Context,
+            scope: CoroutineScope
+        ): LocationRoomDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -39,7 +66,8 @@ abstract class LocationRoomDatabase : RoomDatabase() {
                     context.applicationContext,
                     LocationRoomDatabase::class.java,
                     "Location_database"
-                ).build()
+                ).addCallback(LocationRoomDatabaseCallback(scope))
+                    .build()
                 INSTANCE = instance
                 return instance
             }

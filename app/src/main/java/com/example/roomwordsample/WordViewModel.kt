@@ -17,8 +17,11 @@ package com.example.roomwordsample
  */
 
 import android.app.Application
+import android.location.Location
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.example.roomwordsample.database.Activity
+import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Word
 import com.example.roomwordsample.database.WordRoomDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -41,16 +44,26 @@ class WordViewModel(application: Application) : AndroidViewModel(application) {
     private val scope = CoroutineScope(coroutineContext)
 
     private val repository: WordRepository
+    private val stepsRepository : StepsRepository
+    private val activityRepository : ActivityRepository
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
     val allWords: LiveData<List<Word>>
+    val mostRecentSteps : LiveData<List<Int>>
+    val mostRecentActivity : LiveData<List<Activity>>
 
     init {
         val wordsDao = WordRoomDatabase.getDatabase(application, scope).wordDao()
+        val stepsDao = LocationRoomDatabase.getDatabase(application, scope).stepsDao()
+        val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityDao()
+        stepsRepository = StepsRepository(stepsDao)
+        activityRepository = ActivityRepository(activityDao)
         repository = WordRepository(wordsDao)
         allWords = repository.allWords
+        mostRecentSteps = stepsRepository.recentSteps
+        mostRecentActivity = activityRepository.recentActivities
     }
 
     /**

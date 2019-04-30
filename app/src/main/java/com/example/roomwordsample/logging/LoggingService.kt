@@ -22,7 +22,9 @@ class LoggingService : Service() {
 
             // Do GPS Logging here
             val stepsLogger = StepsLogger(applicationContext)
+            TransitionRecognition(applicationContext)
             post(stepsLogger)
+            Log.d("LOGGING_SERVICE", "Started all services")
 
             try {
                 sleep(5000)
@@ -36,7 +38,7 @@ class LoggingService : Service() {
 
     override fun onCreate() {
 //        super.onCreate()
-        Toast.makeText(this, "logging service created", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "logging service created", Toast.LENGTH_SHORT).show()
 
         Log.d("FOREGROUND", "created")
         HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND).apply {
@@ -63,7 +65,7 @@ class LoggingService : Service() {
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Toast.makeText(this, "logging service starting", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "logging service starting", Toast.LENGTH_SHORT).show()
 
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
@@ -92,7 +94,7 @@ class LoggingService : Service() {
             .build()
 
         startForeground(1, notification)
-        Toast.makeText(this, "Foreground service running", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "Foreground service running", Toast.LENGTH_SHORT).show()
 
         return super.onStartCommand(intent, flags, startId)
     }
