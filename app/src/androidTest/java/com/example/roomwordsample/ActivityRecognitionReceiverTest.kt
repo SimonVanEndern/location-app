@@ -29,7 +29,7 @@ class ActivityRecognitionReceiverTest {
         mContext = mock(Context::class.java)
     }
 
-    @Ignore
+    @Ignore("Not possible to properly inject a mocked object")
     @Test
     fun testReceiverAllIntent() {
         val intent = Intent(mContext, ActivityRecognitionReceiver::class.java)

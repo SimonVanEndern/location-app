@@ -1,22 +1,6 @@
 package com.example.roomwordsample
 
-/*
- * Copyright (C) 2017 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -26,19 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.roomwordsample.database.LocationRoomDatabase
-import com.example.roomwordsample.database.Word
 import com.example.roomwordsample.logging.LoggingService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
     private val newWordActivityRequestCode = 1
-    private lateinit var wordViewModel: WordViewModel
+    private lateinit var allDataViewModel: AllDataViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,23 +26,23 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = WordListAdapter(this)
+        val adapter = StepsAndActivityListAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Get a new or existing ViewModel from the ViewModelProvider.
-        wordViewModel = ViewModelProviders.of(this).get(WordViewModel::class.java)
+        allDataViewModel = ViewModelProviders.of(this).get(AllDataViewModel::class.java)
 
 
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        wordViewModel.mostRecentSteps.observe(this, Observer { steps ->
+        allDataViewModel.mostRecentSteps.observe(this, Observer { steps ->
             // Update the cached copy of the words in the adapter.
             steps?.let { adapter.setSteps(it) }
         })
 
-        wordViewModel.mostRecentActivity.observe(this, Observer { activities ->
+        allDataViewModel.mostRecentActivity.observe(this, Observer { activities ->
             // Update the cached copy of the words in the adapter.
             activities?.let { adapter.setActivities(it) }
         })
@@ -83,17 +61,10 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
 
-        if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            intentData?.let { data ->
-                val word = Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY))
-                wordViewModel.insert(word)
-            }
-        } else {
-            Toast.makeText(
-                applicationContext,
-                R.string.empty_not_saved,
-                Toast.LENGTH_LONG
-            ).show()
-        }
+        Toast.makeText(
+            applicationContext,
+            R.string.empty_not_saved,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

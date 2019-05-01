@@ -25,29 +25,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.roomwordsample.database.Activity
 
 
-class WordListAdapter internal constructor(
+class StepsAndActivityListAdapter internal constructor(
     context: Context
-) : RecyclerView.Adapter<WordListAdapter.WordViewHolder>() {
+) : RecyclerView.Adapter<StepsAndActivityListAdapter.StepsAndActivityViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var activities = emptyList<String>() // Cached copy of words
     private var steps = emptyList<String>()
 
-    inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val wordItemView: TextView = itemView.findViewById(R.id.textView)
+    inner class StepsAndActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val stepsAndActivityItemView: TextView = itemView.findViewById(R.id.textView)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepsAndActivityViewHolder {
         val itemView = inflater.inflate(R.layout.recyclerview_item, parent, false)
-        return WordViewHolder(itemView)
+        return StepsAndActivityViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StepsAndActivityViewHolder, position: Int) {
         val combined = ArrayList<String>()
         combined.addAll(steps)
         combined.addAll(activities)
         val current = combined[position]
-        holder.wordItemView.text = current
+        holder.stepsAndActivityItemView.text = current
     }
 
     internal fun setActivities(activities: List<Activity>) {
