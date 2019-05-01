@@ -22,7 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.roomwordsample.database.Activity
+import com.example.roomwordsample.database.ActivityTransition
 
 
 class StepsAndActivityListAdapter internal constructor(
@@ -50,7 +50,7 @@ class StepsAndActivityListAdapter internal constructor(
         holder.stepsAndActivityItemView.text = current
     }
 
-    internal fun setActivities(activities: List<Activity>) {
+    internal fun setActivities(activities: List<ActivityTransition>) {
         this.activities = activities.map { activity -> activity.toString() }
         notifyDataSetChanged()
     }

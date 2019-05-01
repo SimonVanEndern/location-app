@@ -1,5 +1,6 @@
 package com.example.roomwordsample.logging
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -7,7 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.roomwordsample.ActivityRepository
 import com.example.roomwordsample.StepsRepository
-import com.example.roomwordsample.database.Activity
+import com.example.roomwordsample.database.ActivityTransition
 import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Steps
 import com.google.android.gms.location.ActivityTransitionEvent
@@ -56,7 +57,8 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
             for (activity in detectedActivities) {
                 Log.d("ACTIVITY", "The activity ${activity.activityType}")
                 scope.launch(Dispatchers.IO) {
-                    activityRepository.insert(Activity(0, Date(), activity.activityType, 0, 0))
+                    activity.elapsedRealTimeNanos
+                    activityRepository.insert(ActivityTransition(0, Date(), activity.activityType, 0, 0))
                 }
             }
 

@@ -16,6 +16,7 @@ package com.example.roomwordsample
  * limitations under the License.
  */
 
+import android.app.Activity
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.example.roomwordsample.database.*
@@ -24,9 +25,9 @@ import com.example.roomwordsample.database.*
  * Abstracted Repository as promoted by the Architecture Guide.
  * https://developer.android.com/topic/libraries/architecture/guide.html
  */
-class ActivityRepository(private val activityDao: ActivityDao) {
+class ActivityRepository(private val activityTransitionDao: ActivityTransitionDao) {
 
-    val recentActivities: LiveData<List<Activity>> = activityDao.get10RecentActivities()
+    val recentActivities: LiveData<List<ActivityTransition>> = activityTransitionDao.get10RecentActivities()
 
 
     // You must call this on a non-UI thread or your app will crash. So we're making this a
@@ -35,7 +36,7 @@ class ActivityRepository(private val activityDao: ActivityDao) {
     // thread, blocking the UI.
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insert(activity: Activity) {
-        activityDao.insert(activity)
+    suspend fun insert(activity: ActivityTransition) {
+        activityTransitionDao.insert(activity)
     }
 }
