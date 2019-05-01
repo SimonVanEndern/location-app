@@ -25,28 +25,6 @@ import java.util.*
 @TypeConverters(Converters::class)
 abstract class LocationRoomDatabase : RoomDatabase() {
 
-    val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.beginTransaction()
-            try {
-                database.execSQL("ALTER TABLE activity_table RENAME TO activity_table_old;")
-                database.execSQL("""CREATE TABLE activity_table (
-                    id LONG PRIMARY KEY AUTOINCREMENT,
-                    day LONG,
-                    activity_type INT,
-                    transition_type INT,
-                    start LONG
-                    )""")
-                database.execSQL("""INSERT INTO activity_table (id, day, activity_type, transition_type, start)
-                    SELECT id, day, activity, 0, start
-                    FROM activity_table_old""")
-                database.setTransactionSuccessful()
-            } finally {
-                database.endTransaction()
-            }
-        }
-    }
-
     private class LocationRoomDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
@@ -91,11 +69,34 @@ abstract class LocationRoomDatabase : RoomDatabase() {
                 return tempInstance
             }
             synchronized(this) {
+                val MIGRATION_1_2 = object : Migration(1, 2) {
+                    override fun migrate(database: SupportSQLiteDatabase) {
+                        database.beginTransaction()
+                        try {
+                            database.execSQL("ALTER TABLE activity_table RENAME TO activity_table_old;")
+                            database.execSQL("""CREATE TABLE activity_table (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    day INTEGER,
+                    activity_type INTEGER NOT NULL,
+                    transition_type INTEGER NOT NULL,
+                    start INTEGER NOT NULL
+                    )""")
+                            database.execSQL("""INSERT INTO activity_table (id, day, activity_type, transition_type, start)
+                    SELECT id, day, activity, 0, start
+                    FROM activity_table_old""")
+                            database.setTransactionSuccessful()
+                        } finally {
+                            database.endTransaction()
+                        }
+                    }
+                }
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     LocationRoomDatabase::class.java,
                     "Location_database"
                 ).addCallback(LocationRoomDatabaseCallback(scope))
+                    .addMigrations(MIGRATION_1_2)
                     .build()
                 INSTANCE = instance
                 return instance

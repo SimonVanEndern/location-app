@@ -45,8 +45,6 @@ class LoggingService : Service() {
             start()
             serviceLooper = looper
             serviceHandler = ServiceHandler(looper)
-
-
         }
     }
 

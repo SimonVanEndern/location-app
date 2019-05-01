@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
 
         val i = Intent(this, LoggingService::class.java)
         startService(i)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {

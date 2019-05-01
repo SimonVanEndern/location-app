@@ -57,8 +57,11 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
             for (activity in detectedActivities) {
                 Log.d("ACTIVITY", "The activity ${activity.activityType}")
                 scope.launch(Dispatchers.IO) {
-                    activity.elapsedRealTimeNanos
-                    activityRepository.insert(ActivityTransition(0, Date(), activity.activityType, 0, 0))
+                    activityRepository.insert(ActivityTransition(0,
+                        Date(),
+                        activity.activityType,
+                        activity.activityType,
+                        activity.elapsedRealTimeNanos / 1000))
                 }
             }
 
