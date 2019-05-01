@@ -1,6 +1,5 @@
 package com.example.roomwordsample.logging
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -37,9 +36,9 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
 
         Log.d("BroadCastReceiver", "Started onReceive")
         Toast.makeText(context, "Started onReceive", Toast.LENGTH_SHORT).show()
-        scope.launch(Dispatchers.IO) {
-            stepsRepository.insert(Steps(Date(), 111))
-        }
+//        scope.launch(Dispatchers.IO) {
+//            stepsRepository.insert(Steps(Date(), 111))
+//        }
 
         //Check whether the Intent contains activity recognition data//
         if (ActivityTransitionResult.hasResult(intent)) {
@@ -48,20 +47,24 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
             val result = ActivityTransitionResult.extractResult(intent)
             Toast.makeText(context, "Got activity ${result.toString()}", Toast.LENGTH_SHORT).show()
 
-            scope.launch(Dispatchers.IO) {
-                stepsRepository.insert(Steps(Date(), 333))
-            }
+//            scope.launch(Dispatchers.IO) {
+//                stepsRepository.insert(Steps(Date(), 333))
+//            }
 
             //Get an array of DetectedActivity objects//
             val detectedActivities = result?.transitionEvents as List<ActivityTransitionEvent>
             for (activity in detectedActivities) {
                 Log.d("ACTIVITY", "The activity ${activity.activityType}")
                 scope.launch(Dispatchers.IO) {
-                    activityRepository.insert(ActivityTransition(0,
-                        Date(),
-                        activity.activityType,
-                        activity.activityType,
-                        activity.elapsedRealTimeNanos / 1000))
+                    activityRepository.insert(
+                        ActivityTransition(
+                            0,
+                            Date(),
+                            activity.activityType,
+                            activity.activityType,
+                            activity.elapsedRealTimeNanos / 1000
+                        )
+                    )
                 }
             }
 

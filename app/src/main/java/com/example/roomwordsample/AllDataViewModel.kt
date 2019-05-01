@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.roomwordsample.database.ActivityTransition
+import com.example.roomwordsample.database.GPSData
 import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Steps
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +29,7 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     //Getting the Repositories for the respective data
     private val stepsRepository: StepsRepository
     private val activityRepository: ActivityRepository
+    private val locationRepository : GPSRepository
 
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
@@ -35,16 +37,21 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     // - Repository is completely separated from the UI through the ViewModel.
     val mostRecentSteps: LiveData<List<Int>>
     val mostRecentActivity: LiveData<List<ActivityTransition>>
+    val mostRecentLocation: LiveData<List<GPSData>>
 
     init {
         val stepsDao = LocationRoomDatabase.getDatabase(application, scope).stepsDao()
         val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityDao()
+        val locationDao = LocationRoomDatabase.getDatabase(application, scope).gPSLocationDao()
+        val gpsDataDao = LocationRoomDatabase.getDatabase(application, scope).gPSDataDao()
 
         stepsRepository = StepsRepository(stepsDao)
         activityRepository = ActivityRepository(activityDao)
+        locationRepository = GPSRepository(locationDao, gpsDataDao)
 
         mostRecentSteps = stepsRepository.recentSteps
         mostRecentActivity = activityRepository.recentActivities
+        mostRecentLocation = locationRepository.recentLocations
     }
 
     /**

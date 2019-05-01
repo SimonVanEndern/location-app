@@ -1,5 +1,6 @@
 package com.example.roomwordsample.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.ABORT
@@ -13,4 +14,11 @@ interface GPSLocationDao {
 
     @Query("SELECT * FROM gps_location_table WHERE id = :id LIMIT 1")
     fun getById(id: Long): GPSLocation
+
+    @Query("""SELECT * FROM gps_location_table, gps_data_table
+        WHERE id = location_id
+        ORDER BY timestamp DESC
+        LIMIT 10
+    """)
+    fun get10MostRecentLocations () : LiveData<List<GPSData>>
 }

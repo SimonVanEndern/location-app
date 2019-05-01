@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomwordsample.database.ActivityTransition
+import com.example.roomwordsample.database.GPSData
 
 
 class StepsAndActivityListAdapter internal constructor(
@@ -32,6 +33,7 @@ class StepsAndActivityListAdapter internal constructor(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var activities = emptyList<String>() // Cached copy of words
     private var steps = emptyList<String>()
+    private var locations = emptyList<String>()
 
     inner class StepsAndActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val stepsAndActivityItemView: TextView = itemView.findViewById(R.id.textView)
@@ -46,12 +48,13 @@ class StepsAndActivityListAdapter internal constructor(
         val combined = ArrayList<String>()
         combined.addAll(steps)
         combined.addAll(activities)
+        combined.addAll(locations)
         val current = combined[position]
         holder.stepsAndActivityItemView.text = current
     }
 
     internal fun setActivities(activities: List<ActivityTransition>) {
-        this.activities = activities.map { activity -> activity.toString() }
+        this.activities = activities.map(ActivityTransition::toString)
         notifyDataSetChanged()
     }
 
@@ -60,7 +63,12 @@ class StepsAndActivityListAdapter internal constructor(
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = steps.size + activities.size
+    internal fun setLocations(locations: List<GPSData>) {
+        this.locations = locations.map(GPSData::toString)
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount() = steps.size + activities.size + locations.size
 }
 
 

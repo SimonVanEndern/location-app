@@ -16,10 +16,10 @@ package com.example.roomwordsample
  * limitations under the License.
  */
 
-import android.app.Activity
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import com.example.roomwordsample.database.*
+import com.example.roomwordsample.database.ActivityTransition
+import com.example.roomwordsample.database.ActivityTransitionDao
 
 /**
  * Abstracted Repository as promoted by the Architecture Guide.

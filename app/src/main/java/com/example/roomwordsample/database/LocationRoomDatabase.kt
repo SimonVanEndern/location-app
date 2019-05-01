@@ -1,7 +1,7 @@
 package com.example.roomwordsample.database
 
-import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -11,7 +11,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 @Database(
     entities = [
@@ -33,16 +32,17 @@ abstract class LocationRoomDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
-                    populateDatabase(database.activityDao())
+                    populateDatabase(database.gPSLocationDao(), database.gPSDataDao())
                 }
             }
         }
 
-        fun populateDatabase(activityTransitionDao: ActivityTransitionDao) {
+        fun populateDatabase(gpsLocationDao: GPSLocationDao, gpsDataDao: GPSDataDao) {
 //            wordDao.deleteAll()
-
-            val activity = ActivityTransition(0, Date(), 5, 0, 1100)
-            activityTransitionDao.insert(activity)
+            Log.d("DATABASE", "populated")
+            val location = GPSLocation(0, 1.1F, 1.2F, 2.0F)
+            val id = gpsLocationDao.insert(location)
+            gpsDataDao.insert(GPSData(id, 12345))
         }
     }
 
@@ -74,16 +74,20 @@ abstract class LocationRoomDatabase : RoomDatabase() {
                         database.beginTransaction()
                         try {
                             database.execSQL("ALTER TABLE activity_table RENAME TO activity_table_old;")
-                            database.execSQL("""CREATE TABLE activity_table (
+                            database.execSQL(
+                                """CREATE TABLE activity_table (
                     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     day INTEGER,
                     activity_type INTEGER NOT NULL,
                     transition_type INTEGER NOT NULL,
                     start INTEGER NOT NULL
-                    )""")
-                            database.execSQL("""INSERT INTO activity_table (id, day, activity_type, transition_type, start)
+                    )"""
+                            )
+                            database.execSQL(
+                                """INSERT INTO activity_table (id, day, activity_type, transition_type, start)
                     SELECT id, day, activity, 0, start
-                    FROM activity_table_old""")
+                    FROM activity_table_old"""
+                            )
                             database.setTransactionSuccessful()
                         } finally {
                             database.endTransaction()

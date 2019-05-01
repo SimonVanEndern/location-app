@@ -1,11 +1,15 @@
 package com.example.roomwordsample
 
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
+    private val ACTIVITY_REQUEST_CODE = 777
     private val newWordActivityRequestCode = 1
     private lateinit var allDataViewModel: AllDataViewModel
 
@@ -47,12 +52,27 @@ class MainActivity : AppCompatActivity() {
             activities?.let { adapter.setActivities(it) }
         })
 
+        allDataViewModel.mostRecentLocation.observe(this, Observer {location ->
+            location?.let {adapter.setLocations(it)}
+        })
+
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
             val intent = Intent(this@MainActivity, NewWordActivity::class.java)
             startActivityForResult(intent, newWordActivityRequestCode)
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                ACTIVITY_REQUEST_CODE)
+        } else {
+            startBackgroundService()
+        }
+
+    }
+
+    private fun startBackgroundService () {
         val i = Intent(this, LoggingService::class.java)
         startService(i)
     }
@@ -65,5 +85,18 @@ class MainActivity : AppCompatActivity() {
             R.string.empty_not_saved,
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults : IntArray) {
+        when (requestCode) {
+            ACTIVITY_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startBackgroundService()
+
+                } else {
+                    Toast.makeText(this, "Sorry, cannot run without location", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }

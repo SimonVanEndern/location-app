@@ -23,6 +23,7 @@ class LoggingService : Service() {
             // Do GPS Logging here
             val stepsLogger = StepsLogger(applicationContext)
             TransitionRecognition(applicationContext)
+            LocationUpdates(applicationContext)
             post(stepsLogger)
             Log.d("LOGGING_SERVICE", "Started all services")
 
