@@ -4,6 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.roomwordsample.database.*
+import com.example.roomwordsample.database.schemata.Activity
+import com.example.roomwordsample.database.schemata.ActivityTransition
+import com.example.roomwordsample.database.schemata.GPSData
+import com.example.roomwordsample.database.schemata.Steps
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

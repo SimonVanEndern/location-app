@@ -6,6 +6,10 @@ import android.content.Intent
 import android.util.Log
 import com.example.roomwordsample.GPSRepository
 import com.example.roomwordsample.database.*
+import com.example.roomwordsample.database.schemata.GPSData
+import com.example.roomwordsample.database.schemata.GPSDataDao
+import com.example.roomwordsample.database.schemata.GPSLocation
+import com.example.roomwordsample.database.schemata.GPSLocationDao
 import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

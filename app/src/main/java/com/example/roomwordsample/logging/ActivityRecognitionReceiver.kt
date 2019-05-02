@@ -6,11 +6,8 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.example.roomwordsample.ActivityRepository
-import com.example.roomwordsample.StepsRepository
-import com.example.roomwordsample.database.Activity
-import com.example.roomwordsample.database.ActivityTransition
+import com.example.roomwordsample.database.schemata.ActivityTransition
 import com.example.roomwordsample.database.LocationRoomDatabase
-import com.example.roomwordsample.database.Steps
 import com.google.android.gms.location.ActivityTransitionEvent
 import com.google.android.gms.location.ActivityTransitionResult
 import kotlinx.coroutines.CoroutineScope

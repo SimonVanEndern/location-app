@@ -1,6 +1,10 @@
 package com.example.roomwordsample.database
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.roomwordsample.database.schemata.GPSLocation
+import com.example.roomwordsample.database.schemata.GPSLocationDao
+import com.example.roomwordsample.database.schemata.Trajectory
+import com.example.roomwordsample.database.schemata.TrajectoryDao
 import com.google.android.gms.location.DetectedActivity
 import org.junit.Assert
 import org.junit.Before
@@ -34,7 +38,8 @@ class TrajectoryDaoTest : DaoTest() {
         val startTime = 10000L
         val endTime = 20000L
         val activity = DetectedActivity.ON_FOOT
-        val trajectory = Trajectory(0, startTime, endTime, id1, id2, activity)
+        val trajectory =
+            Trajectory(0, startTime, endTime, id1, id2, activity)
         val trajectoryId = trajectoryDao.insert(trajectory)
         Assert.assertEquals(trajectory.start, trajectoryDao.getById(trajectoryId).start)
     }

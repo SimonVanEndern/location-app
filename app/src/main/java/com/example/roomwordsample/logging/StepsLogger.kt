@@ -5,11 +5,10 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import android.widget.Toast
 import com.example.roomwordsample.StepsRepository
 import com.example.roomwordsample.database.LocationRoomDatabase
-import com.example.roomwordsample.database.Steps
+import com.example.roomwordsample.database.schemata.Steps
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

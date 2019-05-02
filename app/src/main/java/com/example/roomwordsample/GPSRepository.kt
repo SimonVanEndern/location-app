@@ -3,10 +3,10 @@ package com.example.roomwordsample
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import com.example.roomwordsample.database.GPSData
-import com.example.roomwordsample.database.GPSDataDao
-import com.example.roomwordsample.database.GPSLocation
-import com.example.roomwordsample.database.GPSLocationDao
+import com.example.roomwordsample.database.schemata.GPSData
+import com.example.roomwordsample.database.schemata.GPSDataDao
+import com.example.roomwordsample.database.schemata.GPSLocation
+import com.example.roomwordsample.database.schemata.GPSLocationDao
 
 /**
  * Abstracted Repository as promoted by the Architecture Guide.

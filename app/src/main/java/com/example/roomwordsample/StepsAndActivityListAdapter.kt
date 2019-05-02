@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.roomwordsample.database.Activity
-import com.example.roomwordsample.database.ActivityTransition
-import com.example.roomwordsample.database.GPSData
+import com.example.roomwordsample.database.schemata.Activity
+import com.example.roomwordsample.database.schemata.ActivityTransition
+import com.example.roomwordsample.database.schemata.GPSData
 
 
 class StepsAndActivityListAdapter internal constructor(

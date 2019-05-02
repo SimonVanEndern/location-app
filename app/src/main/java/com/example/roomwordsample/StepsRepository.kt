@@ -18,8 +18,8 @@ package com.example.roomwordsample
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import com.example.roomwordsample.database.Steps
-import com.example.roomwordsample.database.StepsDao
+import com.example.roomwordsample.database.schemata.Steps
+import com.example.roomwordsample.database.schemata.StepsDao
 
 /**
  * Abstracted Repository as promoted by the Architecture Guide.
