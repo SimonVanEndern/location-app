@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.roomwordsample.ActivityRepository
 import com.example.roomwordsample.StepsRepository
+import com.example.roomwordsample.database.Activity
 import com.example.roomwordsample.database.ActivityTransition
 import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Steps
@@ -29,10 +30,9 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context, intent: Intent) {
-        val activityDao = LocationRoomDatabase.getDatabase(context, scope).activityTransitionDao()
-        val activityRepository = ActivityRepository(activityDao)
-        val stepsDao = LocationRoomDatabase.getDatabase(context, scope).stepsDao()
-        val stepsRepository = StepsRepository(stepsDao)
+        val activityDao = LocationRoomDatabase.getDatabase(context, scope).activityDao()
+        val activityTransitionDao = LocationRoomDatabase.getDatabase(context, scope).activityTransitionDao()
+        val activityRepository = ActivityRepository(activityTransitionDao, activityDao)
 
         Log.d("BroadCastReceiver", "Started onReceive")
         Toast.makeText(context, "Started onReceive", Toast.LENGTH_SHORT).show()
@@ -48,7 +48,7 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
             Toast.makeText(context, "Got activity ${result.toString()}", Toast.LENGTH_SHORT).show()
 
 //            scope.launch(Dispatchers.IO) {
-//                stepsRepository.insert(Steps(Date(), 333))
+//                activityRepository.insert(Activity(0, Date(), 10, 1, 2))
 //            }
 
             //Get an array of DetectedActivity objects//
@@ -61,8 +61,9 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
                             0,
                             Date(),
                             activity.activityType,
-                            activity.activityType,
-                            activity.elapsedRealTimeNanos / 1000
+                            activity.transitionType,
+                            activity.elapsedRealTimeNanos / 1000,
+                            false
                         )
                     )
                 }

@@ -1,10 +1,6 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.GPSLocation
-import com.example.roomwordsample.database.GPSLocationDao
-import com.example.roomwordsample.database.Trajectory
-import com.example.roomwordsample.database.TrajectoryDao
 import com.google.android.gms.location.DetectedActivity
 import org.junit.Assert
 import org.junit.Before

@@ -9,8 +9,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.example.roomwordsample.R
+import com.example.roomwordsample.database.DatabaseAggregator
 import java.lang.Thread.sleep
+import java.util.concurrent.TimeUnit
 
 
 class LoggingService : Service() {
@@ -25,6 +29,14 @@ class LoggingService : Service() {
             TransitionRecognition(applicationContext)
             LocationUpdates(applicationContext)
             post(stepsLogger)
+
+            val aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
+                DatabaseAggregator::class.java,
+                PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+                .build()
+            WorkManager.getInstance().enqueue(aggregateDataWorkRequest)
             Log.d("LOGGING_SERVICE", "Started all services")
 
             try {

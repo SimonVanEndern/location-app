@@ -1,11 +1,7 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.GPSData
-import com.example.roomwordsample.database.GPSDataDao
-import com.example.roomwordsample.database.GPSLocation
-import com.example.roomwordsample.database.GPSLocationDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

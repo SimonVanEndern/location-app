@@ -1,7 +1,5 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
-import com.example.roomwordsample.database.Activity
-import com.example.roomwordsample.database.ActivityDao
 import com.google.android.gms.location.DetectedActivity
 import org.junit.Assert
 import org.junit.Before

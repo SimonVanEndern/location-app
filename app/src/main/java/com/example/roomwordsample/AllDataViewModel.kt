@@ -3,10 +3,7 @@ package com.example.roomwordsample
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.roomwordsample.database.ActivityTransition
-import com.example.roomwordsample.database.GPSData
-import com.example.roomwordsample.database.LocationRoomDatabase
-import com.example.roomwordsample.database.Steps
+import com.example.roomwordsample.database.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,22 +33,25 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
     val mostRecentSteps: LiveData<List<Int>>
-    val mostRecentActivity: LiveData<List<ActivityTransition>>
-    val mostRecentLocation: LiveData<List<GPSData>>
+    val mostRecentActivities: LiveData<List<Activity>>
+    val mostRecentLocations: LiveData<List<GPSData>>
+    val mostRecentActivityTransitions: LiveData<List<ActivityTransition>>
 
     init {
         val stepsDao = LocationRoomDatabase.getDatabase(application, scope).stepsDao()
-        val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityTransitionDao()
+        val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityDao()
+        val activityTransitionDao = LocationRoomDatabase.getDatabase(application, scope).activityTransitionDao()
         val locationDao = LocationRoomDatabase.getDatabase(application, scope).gPSLocationDao()
         val gpsDataDao = LocationRoomDatabase.getDatabase(application, scope).gPSDataDao()
 
         stepsRepository = StepsRepository(stepsDao)
-        activityRepository = ActivityRepository(activityDao)
+        activityRepository = ActivityRepository(activityTransitionDao, activityDao)
         locationRepository = GPSRepository(locationDao, gpsDataDao)
 
         mostRecentSteps = stepsRepository.recentSteps
-        mostRecentActivity = activityRepository.recentActivities
-        mostRecentLocation = locationRepository.recentLocations
+        mostRecentActivities = activityRepository.recentActivities
+        mostRecentLocations = locationRepository.recentLocations
+        mostRecentActivityTransitions = activityRepository.recentActivityTransitions
     }
 
     /**

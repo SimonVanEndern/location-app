@@ -1,8 +1,6 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.Steps
-import com.example.roomwordsample.database.StepsDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

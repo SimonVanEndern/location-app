@@ -18,6 +18,8 @@ package com.example.roomwordsample
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import com.example.roomwordsample.database.Activity
+import com.example.roomwordsample.database.ActivityDao
 import com.example.roomwordsample.database.ActivityTransition
 import com.example.roomwordsample.database.ActivityTransitionDao
 
@@ -25,9 +27,11 @@ import com.example.roomwordsample.database.ActivityTransitionDao
  * Abstracted Repository as promoted by the Architecture Guide.
  * https://developer.android.com/topic/libraries/architecture/guide.html
  */
-class ActivityRepository(private val activityTransitionDao: ActivityTransitionDao) {
+class ActivityRepository(private val activityTransitionDao: ActivityTransitionDao,
+                         private val activityDao: ActivityDao) {
 
-    val recentActivities: LiveData<List<ActivityTransition>> = activityTransitionDao.get10RecentActivities()
+    val recentActivityTransitions: LiveData<List<ActivityTransition>> = activityTransitionDao.get10RecentActivityTransitions()
+    val recentActivities : LiveData<List<Activity>> = activityDao.get10RecentActivities()
 
 
     // You must call this on a non-UI thread or your app will crash. So we're making this a
@@ -36,7 +40,13 @@ class ActivityRepository(private val activityTransitionDao: ActivityTransitionDa
     // thread, blocking the UI.
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insert(activity: ActivityTransition) {
-        activityTransitionDao.insert(activity)
+    suspend fun insert(activityTransition: ActivityTransition) {
+        activityTransitionDao.insert(activityTransition)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insert(activity: Activity) {
+        activityDao.insert(activity)
     }
 }

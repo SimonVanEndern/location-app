@@ -47,13 +47,17 @@ class MainActivity : AppCompatActivity() {
             steps?.let { adapter.setSteps(it) }
         })
 
-        allDataViewModel.mostRecentActivity.observe(this, Observer { activities ->
+        allDataViewModel.mostRecentActivities.observe(this, Observer { activities ->
             // Update the cached copy of the words in the adapter.
             activities?.let { adapter.setActivities(it) }
         })
 
-        allDataViewModel.mostRecentLocation.observe(this, Observer {location ->
+        allDataViewModel.mostRecentLocations.observe(this, Observer {location ->
             location?.let {adapter.setLocations(it)}
+        })
+
+        allDataViewModel.mostRecentActivityTransitions.observe(this, Observer {activityTransition ->
+            activityTransition?.let {adapter.setActivityTransitions(it)}
         })
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)

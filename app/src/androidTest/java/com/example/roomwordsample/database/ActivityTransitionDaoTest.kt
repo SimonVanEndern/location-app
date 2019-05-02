@@ -1,8 +1,6 @@
-package com.example.roomwordsample
+package com.example.roomwordsample.database
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.ActivityTransition
-import com.example.roomwordsample.database.ActivityTransitionDao
 import com.google.android.gms.location.DetectedActivity
 import org.junit.Assert
 import org.junit.Before
@@ -28,8 +26,8 @@ class ActivityTransitionDaoTest : DaoTest() {
         val start = day.time + 10000
         val day2 = formatter.parse("01-01-2019")
         val start2 = day.time + 40000L
-        val activity1 = ActivityTransition(0, day, DetectedActivity.ON_FOOT, 0, start)
-        val activity2 = ActivityTransition(0, day2, DetectedActivity.ON_BICYCLE, 0, start2)
+        val activity1 = ActivityTransition(0, day, DetectedActivity.ON_FOOT, 0, start, false)
+        val activity2 = ActivityTransition(0, day2, DetectedActivity.ON_BICYCLE, 0, start2, false)
         activityTransitionDao.insert(activity1)
         activityTransitionDao.insert(activity2)
         val activities = activityTransitionDao.getActivitiesByDay(day)
