@@ -1,43 +1,25 @@
 package com.example.roomwordsample
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.example.roomwordsample.database.ActivityTransition
 import com.example.roomwordsample.database.ActivityTransitionDao
-import com.example.roomwordsample.database.LocationRoomDatabase
 import com.google.android.gms.location.DetectedActivity
-import org.junit.*
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 import java.text.SimpleDateFormat
 
 @RunWith(AndroidJUnit4::class)
-class ActivityTransitionDaoTest {
-
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+class ActivityTransitionDaoTest : DaoTest() {
 
     var formatter = SimpleDateFormat("dd-MM-yyyy")
 
     private lateinit var activityTransitionDao: ActivityTransitionDao
-    private lateinit var db: LocationRoomDatabase
 
     @Before
-    fun createDb() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        db = Room.inMemoryDatabaseBuilder(context, LocationRoomDatabase::class.java)
-            .allowMainThreadQueries()
-            .build()
-        activityTransitionDao = db.activityDao()
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
+    fun init() {
+        activityTransitionDao = getDb().activityTransitionDao()
     }
 
     @Test

@@ -41,7 +41,7 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         val stepsDao = LocationRoomDatabase.getDatabase(application, scope).stepsDao()
-        val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityDao()
+        val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityTransitionDao()
         val locationDao = LocationRoomDatabase.getDatabase(application, scope).gPSLocationDao()
         val gpsDataDao = LocationRoomDatabase.getDatabase(application, scope).gPSDataDao()
 

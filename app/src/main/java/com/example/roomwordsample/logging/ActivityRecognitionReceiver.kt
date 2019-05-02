@@ -29,7 +29,7 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context, intent: Intent) {
-        val activityDao = LocationRoomDatabase.getDatabase(context, scope).activityDao()
+        val activityDao = LocationRoomDatabase.getDatabase(context, scope).activityTransitionDao()
         val activityRepository = ActivityRepository(activityDao)
         val stepsDao = LocationRoomDatabase.getDatabase(context, scope).stepsDao()
         val stepsRepository = StepsRepository(stepsDao)

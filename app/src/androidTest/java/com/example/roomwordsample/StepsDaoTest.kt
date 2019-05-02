@@ -1,42 +1,24 @@
 package com.example.roomwordsample
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.example.roomwordsample.database.LocationRoomDatabase
 import com.example.roomwordsample.database.Steps
 import com.example.roomwordsample.database.StepsDao
-import org.junit.*
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 import java.text.SimpleDateFormat
 
 @RunWith(AndroidJUnit4::class)
-class StepsDaoTest {
-
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+class StepsDaoTest : DaoTest() {
 
     private lateinit var stepsDao: StepsDao
-    private lateinit var db: LocationRoomDatabase
 
     var formatter = SimpleDateFormat("dd-MM-yyyy")
 
     @Before
-    fun createDb() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        db = Room.inMemoryDatabaseBuilder(context, LocationRoomDatabase::class.java)
-            .allowMainThreadQueries()
-            .build()
-        stepsDao = db.stepsDao()
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
+    fun init() {
+        stepsDao = getDb().stepsDao()
     }
 
     @Test
@@ -78,6 +60,6 @@ class StepsDaoTest {
         stepsDao.insert(stepsObject1)
         stepsDao.insert(stepsObject2)
         val result = stepsDao.getAverageSteps(day1, day2)
-        Assert.assertEquals((steps1 + steps2) / 2 .toFloat(), result)
+        Assert.assertEquals((steps1 + steps2) / 2.toFloat(), result)
     }
 }

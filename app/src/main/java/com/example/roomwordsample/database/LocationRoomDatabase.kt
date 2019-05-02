@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
         GPSData::class,
         ActivityTransition::class,
         Trajectory::class,
-        Steps::class],
+        Steps::class,
+        Activity::class],
     version = 2
 )
 @TypeConverters(Converters::class)
@@ -50,7 +51,9 @@ abstract class LocationRoomDatabase : RoomDatabase() {
 
     abstract fun gPSDataDao(): GPSDataDao
 
-    abstract fun activityDao(): ActivityTransitionDao
+    abstract fun activityDao(): ActivityDao
+
+    abstract fun activityTransitionDao(): ActivityTransitionDao
 
     abstract fun trajectoryDao(): TrajectoryDao
 

@@ -1,41 +1,26 @@
 package com.example.roomwordsample
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.example.roomwordsample.database.*
-import com.google.android.gms.location.ActivityRecognition
+import com.example.roomwordsample.database.GPSLocation
+import com.example.roomwordsample.database.GPSLocationDao
+import com.example.roomwordsample.database.Trajectory
+import com.example.roomwordsample.database.TrajectoryDao
 import com.google.android.gms.location.DetectedActivity
-import org.junit.*
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class TrajectoryDaoTest {
-
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+class TrajectoryDaoTest : DaoTest() {
 
     private lateinit var trajectoryDao: TrajectoryDao
-    private lateinit var gpsLocationDao : GPSLocationDao
-    private lateinit var db: LocationRoomDatabase
+    private lateinit var gpsLocationDao: GPSLocationDao
 
     @Before
-    fun createDb() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        db = Room.inMemoryDatabaseBuilder(context, LocationRoomDatabase::class.java)
-            .allowMainThreadQueries()
-            .build()
-        trajectoryDao = db.trajectoryDao()
-        gpsLocationDao = db.gPSLocationDao()
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
+    fun init() {
+        trajectoryDao = getDb().trajectoryDao()
+        gpsLocationDao = getDb().gPSLocationDao()
     }
 
     @Test

@@ -1,40 +1,26 @@
 package com.example.roomwordsample
 
 import android.database.sqlite.SQLiteConstraintException
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.example.roomwordsample.database.*
-import org.junit.*
+import com.example.roomwordsample.database.GPSData
+import com.example.roomwordsample.database.GPSDataDao
+import com.example.roomwordsample.database.GPSLocation
+import com.example.roomwordsample.database.GPSLocationDao
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class GPSDataDaoTest {
-
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+class GPSDataDaoTest : DaoTest() {
 
     private lateinit var gpsDataDao: GPSDataDao
     private lateinit var gpsLocationDao: GPSLocationDao
-    private lateinit var db: LocationRoomDatabase
 
     @Before
-    fun createDb() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        db = Room.inMemoryDatabaseBuilder(context, LocationRoomDatabase::class.java)
-            .allowMainThreadQueries()
-            .build()
-        gpsDataDao = db.gPSDataDao()
-        gpsLocationDao = db.gPSLocationDao()
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
+    fun init() {
+        gpsDataDao = getDb().gPSDataDao()
+        gpsLocationDao = getDb().gPSLocationDao()
     }
 
     @Test

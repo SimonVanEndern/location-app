@@ -10,6 +10,6 @@ class AverageTimeInActivity(private val start: Date, private val end: Date, priv
     override fun getValue(): Float {
         val diffInMilliSeconds = Math.abs(end.time - start.time)
         val diff = TimeUnit.DAYS.convert(diffInMilliSeconds, TimeUnit.MILLISECONDS)
-        return (getDb()?.activityDao()?.getTotalTimeSpentOnActivity(start, end, activity)?.toFloat() ?: 0F) / diff
+        return (getDb()?.activityTransitionDao()?.getTotalTimeSpentOnActivity(start, end, activity)?.toFloat() ?: 0F) / diff
     }
 }
