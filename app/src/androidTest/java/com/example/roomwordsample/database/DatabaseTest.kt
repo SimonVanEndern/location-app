@@ -4,14 +4,16 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.CoroutineScope
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
 import java.io.IOException
+import kotlin.coroutines.CoroutineContext
 
 @RunWith(AndroidJUnit4::class)
-abstract class DaoTest {
+abstract class DatabaseTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -29,6 +31,8 @@ abstract class DaoTest {
         db = Room.inMemoryDatabaseBuilder(context, LocationRoomDatabase::class.java)
             .allowMainThreadQueries()
             .build()
+
+        LocationRoomDatabase.setDatabase(db)
     }
 
     @After

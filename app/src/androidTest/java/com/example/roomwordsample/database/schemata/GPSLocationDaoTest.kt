@@ -1,15 +1,14 @@
-package com.example.roomwordsample.database
+package com.example.roomwordsample.database.schemata
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.schemata.GPSLocation
-import com.example.roomwordsample.database.schemata.GPSLocationDao
+import com.example.roomwordsample.database.DatabaseTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class GPSLocationDaoTest : DaoTest() {
+class GPSLocationDaoTest : DatabaseTest() {
 
     private lateinit var gpsLocationDao: GPSLocationDao
 

@@ -19,8 +19,6 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
     private val scope = CoroutineScope(coroutineContext)
 
     override fun doWork(): Result {
-        Log.d("AGGREGATOR", "try aggregation")
-
         val database = LocationRoomDatabase.getDatabase(appContext, scope)
 
         val cursor = database.openHelper.readableDatabase.query(
@@ -29,7 +27,6 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
         cursor.moveToFirst()
         val index = cursor.getColumnIndexOrThrow("MAX(start)")
         val lastTimestamp = cursor.getString(index)
-//        Log.d("AGGREGATOR", lastTimestamp.toString())
 
         database.openHelper.writableDatabase.execSQL(
             """
@@ -50,8 +47,6 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
             """
         )
 
-
-        Log.d("AGGREGATOR", database.query("SELECT * FROM activity_table", arrayOf()).count.toString())
         Log.d("AGGREGATOR", "Successful aggregation")
 
         return Result.success()

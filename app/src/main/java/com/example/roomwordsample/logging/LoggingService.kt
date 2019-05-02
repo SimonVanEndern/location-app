@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.work.Data
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.example.roomwordsample.R

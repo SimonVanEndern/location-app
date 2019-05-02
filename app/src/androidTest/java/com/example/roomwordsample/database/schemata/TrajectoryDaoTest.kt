@@ -1,10 +1,7 @@
-package com.example.roomwordsample.database
+package com.example.roomwordsample.database.schemata
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.schemata.GPSLocation
-import com.example.roomwordsample.database.schemata.GPSLocationDao
-import com.example.roomwordsample.database.schemata.Trajectory
-import com.example.roomwordsample.database.schemata.TrajectoryDao
+import com.example.roomwordsample.database.DatabaseTest
 import com.google.android.gms.location.DetectedActivity
 import org.junit.Assert
 import org.junit.Before
@@ -12,7 +9,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class TrajectoryDaoTest : DaoTest() {
+class TrajectoryDaoTest : DatabaseTest() {
 
     private lateinit var trajectoryDao: TrajectoryDao
     private lateinit var gpsLocationDao: GPSLocationDao

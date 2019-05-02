@@ -1,14 +1,13 @@
-package com.example.roomwordsample.database
+package com.example.roomwordsample.database.schemata
 
-import com.example.roomwordsample.database.schemata.Activity
-import com.example.roomwordsample.database.schemata.ActivityDao
+import com.example.roomwordsample.database.DatabaseTest
 import com.google.android.gms.location.DetectedActivity
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.text.SimpleDateFormat
 
-class ActivityDaoTest : DaoTest() {
+class ActivityDaoTest : DatabaseTest() {
 
     var formatter = SimpleDateFormat("dd-MM-yyyy")
     private lateinit var activityDao : ActivityDao

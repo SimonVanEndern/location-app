@@ -1,8 +1,7 @@
-package com.example.roomwordsample.database
+package com.example.roomwordsample.database.schemata
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.schemata.Steps
-import com.example.roomwordsample.database.schemata.StepsDao
+import com.example.roomwordsample.database.DatabaseTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -10,7 +9,7 @@ import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 
 @RunWith(AndroidJUnit4::class)
-class StepsDaoTest : DaoTest() {
+class StepsDaoTest : DatabaseTest() {
 
     private lateinit var stepsDao: StepsDao
 

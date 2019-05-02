@@ -64,6 +64,10 @@ abstract class LocationRoomDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: LocationRoomDatabase? = null
 
+        fun setDatabase (db : LocationRoomDatabase) {
+            INSTANCE = db
+        }
+
         fun getDatabase(
             context: Context,
             scope: CoroutineScope

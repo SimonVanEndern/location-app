@@ -1,8 +1,7 @@
-package com.example.roomwordsample.database
+package com.example.roomwordsample.database.schemata
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.roomwordsample.database.schemata.ActivityTransition
-import com.example.roomwordsample.database.schemata.ActivityTransitionDao
+import com.example.roomwordsample.database.DatabaseTest
 import com.google.android.gms.location.DetectedActivity
 import org.junit.Assert
 import org.junit.Before
@@ -11,7 +10,7 @@ import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 
 @RunWith(AndroidJUnit4::class)
-class ActivityTransitionDaoTest : DaoTest() {
+class ActivityTransitionDaoTest : DatabaseTest() {
 
     var formatter = SimpleDateFormat("dd-MM-yyyy")
 

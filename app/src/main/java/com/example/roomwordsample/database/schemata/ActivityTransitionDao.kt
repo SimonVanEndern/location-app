@@ -12,7 +12,10 @@ import java.util.*
 interface ActivityTransitionDao {
 
     @Insert(onConflict = ABORT)
-    fun insert(activity: ActivityTransition)
+    fun insert(activityTransition: ActivityTransition) : Long
+
+    @Query("SELECT * FROM activity_transition_table")
+    fun getAll () : List<ActivityTransition>
 
     @Query("SELECT * FROM activity_transition_table WHERE day = :day")
     fun getActivitiesByDay(day: Date?): List<ActivityTransition>
