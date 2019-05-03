@@ -7,7 +7,7 @@ import com.example.roomwordsample.database.*
 import com.example.roomwordsample.database.schemata.Activity
 import com.example.roomwordsample.database.schemata.ActivityTransition
 import com.example.roomwordsample.database.schemata.GPSData
-import com.example.roomwordsample.database.schemata.Steps
+import com.example.roomwordsample.database.schemata.StepsRaw
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -43,12 +43,13 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         val stepsDao = LocationRoomDatabase.getDatabase(application, scope).stepsDao()
+        val stepsRawDao = LocationRoomDatabase.getDatabase(application, scope).stepsRawDao()
         val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityDao()
         val activityTransitionDao = LocationRoomDatabase.getDatabase(application, scope).activityTransitionDao()
         val locationDao = LocationRoomDatabase.getDatabase(application, scope).gPSLocationDao()
         val gpsDataDao = LocationRoomDatabase.getDatabase(application, scope).gPSDataDao()
 
-        stepsRepository = StepsRepository(stepsDao)
+        stepsRepository = StepsRepository(stepsDao, stepsRawDao)
         activityRepository = ActivityRepository(activityTransitionDao, activityDao)
         locationRepository = GPSRepository(locationDao, gpsDataDao)
 
@@ -69,8 +70,8 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
         activityRepository.insert(activityTransition)
     }
 
-    fun insert(steps: Steps) = scope.launch(Dispatchers.IO) {
-        stepsRepository.insert(steps)
+    fun insert(stepsRaw: StepsRaw) = scope.launch(Dispatchers.IO) {
+        stepsRepository.insert(stepsRaw)
     }
 
     override fun onCleared() {

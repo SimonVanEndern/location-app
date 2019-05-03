@@ -8,7 +8,7 @@ import android.hardware.SensorManager
 import android.widget.Toast
 import com.example.roomwordsample.StepsRepository
 import com.example.roomwordsample.database.LocationRoomDatabase
-import com.example.roomwordsample.database.schemata.Steps
+import com.example.roomwordsample.database.schemata.StepsRaw
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,7 +27,8 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
     private val scope = CoroutineScope(coroutineContext)
 
     private val stepsDao = LocationRoomDatabase.getDatabase(context, scope).stepsDao()
-    private val stepsRepository = StepsRepository(stepsDao)
+    private val stepsRawDao = LocationRoomDatabase.getDatabase(context, scope).stepsRawDao()
+    private val stepsRepository = StepsRepository(stepsDao, stepsRawDao)
 
     override fun run() {
 
@@ -46,7 +47,7 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
     override fun onSensorChanged(event: SensorEvent) {
         scope.launch(Dispatchers.IO) {
 //            Log.d("STEPS", "step sensor triggered")
-            stepsRepository.insert(Steps(Date(), event.values[0].toInt()))
+            stepsRepository.insert(StepsRaw(Date().time, Date(), event.values[0].toInt(), false))
         }
     }
 

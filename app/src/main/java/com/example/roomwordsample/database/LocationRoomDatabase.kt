@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
         GPSData::class,
         ActivityTransition::class,
         Trajectory::class,
+        StepsRaw::class,
         Steps::class,
         Activity::class],
     version = 1
@@ -44,7 +45,7 @@ abstract class LocationRoomDatabase : RoomDatabase() {
             Log.d("DATABASE", "populated")
             val location = GPSLocation(0, 1.1F, 1.2F, 2.0F)
             val id = gpsLocationDao.insert(location)
-            gpsDataDao.insert(GPSData(id, 12345))
+//            gpsDataDao.insert(GPSData(id, 12345))
         }
     }
 
@@ -59,6 +60,8 @@ abstract class LocationRoomDatabase : RoomDatabase() {
     abstract fun trajectoryDao(): TrajectoryDao
 
     abstract fun stepsDao(): StepsDao
+
+    abstract fun stepsRawDao() : StepsRawDao
 
     companion object {
         @Volatile

@@ -13,7 +13,7 @@ class StepsDaoTest : DatabaseTest() {
 
     private lateinit var stepsDao: StepsDao
 
-    var formatter = SimpleDateFormat("dd-MM-yyyy")
+    private var formatter = SimpleDateFormat("yyyy-MM-dd")
 
     @Before
     fun init() {
@@ -23,39 +23,39 @@ class StepsDaoTest : DatabaseTest() {
     @Test
     @Throws(Exception::class)
     fun insertAndGetSteps() {
-        val day = formatter.parse("01-01-2019")
+        val day = formatter.parse("2019-01-01")
         val steps = 5000
-        val stepsObject = Steps(day, steps)
+        val stepsObject = Steps(day.time, day, steps)
         stepsDao.insert(stepsObject)
-        val result = stepsDao.getSteps(day)
+        val result = stepsDao.getTotalStepsByDay(day)
         Assert.assertEquals(steps, result)
     }
 
     @Test
     @Throws(Exception::class)
     fun insertNewValueForSameDayOverwrites() {
-        val day = formatter.parse("01-01-2019")
+        val day = formatter.parse("2019-01-01")
         val steps1 = 3000
         val steps2 = 4000
-        val stepsObject1 = Steps(day, steps1)
+        val stepsObject1 = Steps(day.time, day, steps1)
         stepsDao.insert(stepsObject1)
-        var result = stepsDao.getSteps(day)
+        var result = stepsDao.getTotalStepsByDay(day)
         Assert.assertEquals(steps1, result)
-        val stepsObject2 = Steps(day, steps2)
+        val stepsObject2 = Steps(day.time, day, steps2)
         stepsDao.insert(stepsObject2)
-        result = stepsDao.getSteps(day)
+        result = stepsDao.getTotalStepsByDay(day)
         Assert.assertEquals(steps2, result)
     }
 
     @Test
     @Throws(Exception::class)
     fun getAverageSteps() {
-        val day1 = formatter.parse("01-01-2019")
-        val day2 = formatter.parse("02-01-2019")
+        val day1 = formatter.parse("2019-01-01")
+        val day2 = formatter.parse("2019-02-01")
         val steps1 = 3000
         val steps2 = 4000
-        val stepsObject1 = Steps(day1, steps1)
-        val stepsObject2 = Steps(day2, steps2)
+        val stepsObject1 = Steps(day1.time, day1, steps1)
+        val stepsObject2 = Steps(day2.time, day2, steps2)
         stepsDao.insert(stepsObject1)
         stepsDao.insert(stepsObject2)
         val result = stepsDao.getAverageSteps(day1, day2)

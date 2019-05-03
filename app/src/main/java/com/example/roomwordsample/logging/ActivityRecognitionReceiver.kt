@@ -34,7 +34,7 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
         Log.d("BroadCastReceiver", "Started onReceive")
         Toast.makeText(context, "Started onReceive", Toast.LENGTH_SHORT).show()
 //        scope.launch(Dispatchers.IO) {
-//            stepsRepository.insert(Steps(Date(), 111))
+//            stepsRepository.insert(StepsRaw(Date(), 111))
 //        }
 
         //Check whether the Intent contains activity recognition data//
