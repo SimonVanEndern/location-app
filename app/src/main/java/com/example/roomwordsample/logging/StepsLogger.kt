@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import android.widget.Toast
 import com.example.roomwordsample.StepsRepository
 import com.example.roomwordsample.database.LocationRoomDatabase
@@ -19,6 +20,7 @@ import kotlin.coroutines.CoroutineContext
 class StepsLogger(private val context: Context) : Runnable, SensorEventListener {
 
     var sensorManager: SensorManager? = null
+    private var lastTimeStamp : Long? = null
     private var parentJob = Job()
 
     private val coroutineContext: CoroutineContext
@@ -45,9 +47,13 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        scope.launch(Dispatchers.IO) {
-//            Log.d("STEPS", "step sensor triggered")
-            stepsRepository.insert(StepsRaw(Date().time, Date(), event.values[0].toInt(), false))
+        Log.d("STEPS_SENSOR", "last timestamp: $lastTimeStamp")
+        if (lastTimeStamp == null || Date().time - lastTimeStamp!! > 1000 * 60 * 1) {
+            lastTimeStamp = Date().time
+            scope.launch(Dispatchers.IO) {
+                //            Log.d("STEPS", "step sensor triggered")
+                stepsRepository.insert(StepsRaw(Date().time, Date(), event.values[0].toInt(), false))
+            }
         }
     }
 

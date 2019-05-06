@@ -14,7 +14,7 @@ class StepsRepository(
     private val stepsDao : StepsDao,
     private val stepsRawDao: StepsRawDao) {
 
-    val recentSteps: LiveData<List<Int>> = stepsRawDao.get10RecentSteps()
+    val recentSteps: LiveData<List<Int>> = stepsDao.get10RecentSteps()
 
 
     // You must call this on a non-UI thread or your app will crash. So we're making this a

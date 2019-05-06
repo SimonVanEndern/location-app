@@ -6,10 +6,11 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.example.roomwordsample.ActivityRepository
-import com.example.roomwordsample.database.schemata.ActivityTransition
 import com.example.roomwordsample.database.LocationRoomDatabase
+import com.example.roomwordsample.database.schemata.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionEvent
 import com.google.android.gms.location.ActivityTransitionResult
+import com.google.android.gms.location.DetectedActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -65,6 +66,29 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
                     )
                 }
             }
+
+            val i = Intent(context, LoggingService::class.java)
+            val activity = detectedActivities
+                .filter { activity -> activity.transitionType == 0 }
+                .maxBy { activity -> activity.elapsedRealTimeNanos }
+                ?.activityType
+
+            Log.d("ACTIVITY_RECOGNITION", "Got activity for change: $activity")
+
+            when (activity) {
+                DetectedActivity.STILL -> {
+                    i.putExtra("granularity", 0)
+                }
+
+                DetectedActivity.WALKING -> {
+                    i.putExtra("granularity", 1)
+                }
+
+                else -> {
+                    i.putExtra("granularity", 2)
+                }
+            }
+            context.startService(i)
 
         } else {
             throw RuntimeException()

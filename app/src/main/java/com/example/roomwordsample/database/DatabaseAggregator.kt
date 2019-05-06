@@ -45,7 +45,7 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
             INSERT INTO activity_table (day, activity_type, start, duration)
             SELECT at1.day, at1.activity_type, at1.start, at2.start - at1.start
             FROM activity_transition_table at1, activity_transition_table at2
-            WHERE at1.processed = 0
+            WHERE at2.processed = 0
             AND at1.transition_type = 0
             AND at1.activity_type = at2.activity_type
             AND at1.transition_type != at2.transition_type

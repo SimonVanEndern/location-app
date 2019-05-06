@@ -1,5 +1,6 @@
 package com.example.roomwordsample.database.schemata
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -24,4 +25,8 @@ interface StepsDao {
         WHERE day BETWEEN :startDayInclusive AND :endDayInclusive"""
     )
     fun getAverageSteps(startDayInclusive: Date, endDayInclusive: Date): Float
+
+    // For testing
+    @Query("SELECT steps FROM steps_table ORDER BY day DESC, timestamp DESC LIMIT 10")
+    fun get10RecentSteps (): LiveData<List<Int>>
 }

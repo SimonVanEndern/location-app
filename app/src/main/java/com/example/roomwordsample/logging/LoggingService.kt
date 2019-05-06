@@ -21,30 +21,38 @@ import java.util.concurrent.TimeUnit
 class LoggingService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
+    private lateinit var locationUpdates: LocationUpdates
 
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
+            Log.d("SERVICE_HANLDER", "got intent")
 
-            // Do GPS Logging here
-            val stepsLogger = StepsLogger(applicationContext)
-            TransitionRecognition(applicationContext)
-            LocationUpdates(applicationContext)
-            post(stepsLogger)
+            if (msg.arg2 == -1) {
+                // Do GPS Logging here
+                val stepsLogger = StepsLogger(applicationContext)
+                TransitionRecognition(applicationContext)
+                locationUpdates = LocationUpdates(applicationContext)
+                post(stepsLogger)
 
-            val aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
-                DatabaseAggregator::class.java,
-                PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
-                TimeUnit.MILLISECONDS
-            )
-                .build()
-            WorkManager.getInstance().enqueue(aggregateDataWorkRequest)
-            Log.d("LOGGING_SERVICE", "Started all services")
+                val aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
+                    DatabaseAggregator::class.java,
+                    PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
+                    .build()
+                WorkManager.getInstance().enqueue(aggregateDataWorkRequest)
+                Log.d("LOGGING_SERVICE", "Started all services")
 
-            try {
-                sleep(5000)
-            } catch (e: InterruptedException) {
+                try {
+                    sleep(5000)
+                } catch (e: InterruptedException) {
 
+                }
+            } else {
+                Log.d("SERVICE_HANDLER", "intent is change location Updates")
+                locationUpdates.setGranularity(msg.arg2)
             }
+
 
 //            stopSelf(msg.arg1)
         }
@@ -81,6 +89,7 @@ class LoggingService : Service() {
 
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
+            msg.arg2 = intent.getIntExtra("granularity", -1)
             serviceHandler?.sendMessage(msg)
         }
 
