@@ -29,6 +29,6 @@ interface ActivityTransitionDao {
     fun getTotalTimeSpentOnActivity(start: Date?, end: Date?, activity: DetectedActivity): Long
 
     // For testing
-    @Query("SELECT * FROM activity_transition_table ORDER BY day DESC, start DESC LIMIT 10")
+    @Query("SELECT * FROM activity_transition_table ORDER BY id DESC LIMIT 10")
     fun get10RecentActivityTransitions(): LiveData<List<ActivityTransition>>
 }

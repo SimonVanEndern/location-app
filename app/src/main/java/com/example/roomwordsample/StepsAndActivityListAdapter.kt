@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.roomwordsample.database.schemata.Activity
 import com.example.roomwordsample.database.schemata.ActivityTransition
 import com.example.roomwordsample.database.schemata.GPSData
+import com.example.roomwordsample.database.schemata.Steps
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class StepsAndActivityListAdapter internal constructor(
@@ -20,6 +24,10 @@ class StepsAndActivityListAdapter internal constructor(
     private var steps = emptyList<String>()
     private var locations = emptyList<String>()
     private var activityTransitions = emptyList<String>()
+
+    private val dateFormat = SimpleDateFormat("HH:mm - dd MMM yyyy")
+    private val dateFormatWithSeconds = SimpleDateFormat("HH:mm:ss - dd MMMM yyyy")
+
 
     inner class StepsAndActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val stepsAndActivityItemView: TextView = itemView.findViewById(R.id.textView)
@@ -41,22 +49,48 @@ class StepsAndActivityListAdapter internal constructor(
     }
 
     internal fun setActivities(activities: List<Activity>) {
-        this.activities = activities.map(Activity::toString)
+        this.activities = activities.map { activity ->
+            val type =
+                if (activity.activityType == 7) "WALKING" else if (activity.activityType == 3) "STILL" else "Type " + activity.activityType
+            "Activity:\nid = ${activity.id}\n" +
+                    "start = ${dateFormat.format(Date(activity.start))}\n" +
+                    "transitionType = $type\n" +
+                    "duration = ${activity.duration / 3600000}h " +
+                    "${(activity.duration % 3600000) / 60000}m" +
+                    " ${activity.duration % 60000 / 1000}s"
+        }
         notifyDataSetChanged()
     }
 
-    internal fun setSteps(steps: List<Int>) {
-        this.steps = steps.map { step -> "" + step }
+    internal fun setSteps(steps: List<Steps>) {
+        this.steps = steps.map { step ->
+            "Step:\n" +
+                    "start = " + dateFormat.format(Date(step.timestamp)) + "\n" +
+                    "count = " + step.steps
+        }.reversed()
         notifyDataSetChanged()
     }
 
     internal fun setLocations(locations: List<GPSData>) {
-        this.locations = locations.map(GPSData::toString)
+        this.locations = locations.map { gps ->
+        "GPSData: \n" +
+                "id = ${gps.location_id}\n" +
+                "time =" + dateFormatWithSeconds.format(Date(gps.timestamp))}.reversed()
         notifyDataSetChanged()
     }
 
     internal fun setActivityTransitions(activityTransitions: List<ActivityTransition>) {
-        this.activityTransitions = activityTransitions.map(ActivityTransition::toString)
+        this.activityTransitions = activityTransitions.map { transition ->
+            val type =
+                if (transition.activityType == 7) "WALKING" else if (transition.activityType == 3) "STILL" else "Type " + transition.activityType
+            val transitionType = if (transition.transitionType == 0) "ENTER" else "EXIT"
+            "ActivityTransition: \n" +
+                    "id = ${transition.id}\n" +
+                    "start = ${dateFormat.format(Date(transition.start))}\n" +
+                    "activity = $type\n" +
+                    "transitionType = $transitionType\n" +
+                    "processed = ${transition.processed}"
+        }.reversed()
         notifyDataSetChanged()
     }
 

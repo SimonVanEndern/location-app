@@ -2,6 +2,7 @@ package com.example.roomwordsample
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import com.example.roomwordsample.database.schemata.Steps
 import com.example.roomwordsample.database.schemata.StepsDao
 import com.example.roomwordsample.database.schemata.StepsRaw
 import com.example.roomwordsample.database.schemata.StepsRawDao
@@ -14,7 +15,7 @@ class StepsRepository(
     private val stepsDao : StepsDao,
     private val stepsRawDao: StepsRawDao) {
 
-    val recentSteps: LiveData<List<Int>> = stepsDao.get10RecentSteps()
+    val recentSteps: LiveData<List<Steps>> = stepsDao.get10RecentSteps()
 
 
     // You must call this on a non-UI thread or your app will crash. So we're making this a

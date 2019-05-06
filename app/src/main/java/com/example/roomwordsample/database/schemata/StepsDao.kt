@@ -27,6 +27,6 @@ interface StepsDao {
     fun getAverageSteps(startDayInclusive: Date, endDayInclusive: Date): Float
 
     // For testing
-    @Query("SELECT steps FROM steps_table ORDER BY day DESC, timestamp DESC LIMIT 10")
-    fun get10RecentSteps (): LiveData<List<Int>>
+    @Query("SELECT * FROM steps_table ORDER BY day DESC, timestamp DESC LIMIT 10")
+    fun get10RecentSteps (): LiveData<List<Steps>>
 }

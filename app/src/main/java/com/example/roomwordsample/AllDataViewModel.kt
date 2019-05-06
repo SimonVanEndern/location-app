@@ -4,10 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.roomwordsample.database.*
-import com.example.roomwordsample.database.schemata.Activity
-import com.example.roomwordsample.database.schemata.ActivityTransition
-import com.example.roomwordsample.database.schemata.GPSData
-import com.example.roomwordsample.database.schemata.StepsRaw
+import com.example.roomwordsample.database.schemata.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,7 +33,7 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     // - We can put an observer on the data (instead of polling for changes) and only update the
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
-    val mostRecentSteps: LiveData<List<Int>>
+    val mostRecentSteps: LiveData<List<Steps>>
     val mostRecentActivities: LiveData<List<Activity>>
     val mostRecentLocations: LiveData<List<GPSData>>
     val mostRecentActivityTransitions: LiveData<List<ActivityTransition>>

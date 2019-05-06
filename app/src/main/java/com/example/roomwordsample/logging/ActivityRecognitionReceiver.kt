@@ -3,6 +3,7 @@ package com.example.roomwordsample.logging
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import com.example.roomwordsample.ActivityRepository
@@ -60,7 +61,7 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
                             Date(),
                             activity.activityType,
                             activity.transitionType,
-                            activity.elapsedRealTimeNanos / 1000,
+                            Date().time - ((SystemClock.elapsedRealtimeNanos() - activity.elapsedRealTimeNanos) / 1000000),
                             false
                         )
                     )
