@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.roomwordsample">
+          package="tracking">
 
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
@@ -8,15 +8,15 @@
 
     <application
             android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/map_icon_padlock"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@drawable/map_icon_padlock"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".NewWordActivity">
+        <activity android:name="tracking.NewWordActivity">
         </activity>
         <activity
-                android:name=".MainActivity"
+                android:name="tracking.MainActivity"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,12 +26,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".logging.LoggingService" android:stopWithTask="false"/>
-        <receiver android:name=".logging.LocationReceiver"/>
-        <receiver android:name=".logging.RestarterReceiver"/>
-        <receiver android:name=".logging.ActivityRecognitionReceiver">
+        <service android:name="tracking.logging.LoggingService" android:stopWithTask="false"/>
+        <receiver android:name="tracking.logging.LocationReceiver"/>
+        <receiver android:name="tracking.logging.RestarterReceiver"/>
+        <receiver android:name="tracking.logging.ActivityRecognitionReceiver">
             <intent-filter>
-                <action android:name="com.example.roomwordsample.logging.TRANSITION_RECOGNITION" />
+                <action android:name="roomwordsample.logging.TRANSITION_RECOGNITION" />
             </intent-filter>
         </receiver>
     </application>
