@@ -5,6 +5,7 @@
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
             android:allowBackup="true"
@@ -28,7 +29,11 @@
 
         <service android:name="tracking.logging.LoggingService" android:stopWithTask="false"/>
         <receiver android:name="tracking.logging.LocationReceiver"/>
-        <receiver android:name="tracking.logging.RestarterReceiver"/>
+        <receiver android:name="tracking.logging.RestarterReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <receiver android:name="tracking.logging.ActivityRecognitionReceiver">
             <intent-filter>
                 <action android:name="roomwordsample.logging.TRANSITION_RECOGNITION" />
