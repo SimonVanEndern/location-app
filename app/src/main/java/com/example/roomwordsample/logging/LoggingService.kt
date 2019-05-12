@@ -74,7 +74,7 @@ class LoggingService : Service() {
     private fun createNotificationChannel(channelId: String, channelName: String): String {
         val chan = NotificationChannel(
             channelId,
-            channelName, NotificationManager.IMPORTANCE_NONE
+            channelName, NotificationManager.IMPORTANCE_DEFAULT
         )
         chan.lightColor = Color.BLUE
         chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
@@ -85,6 +85,7 @@ class LoggingService : Service() {
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
 //        Toast.makeText(this, "logging service starting", Toast.LENGTH_SHORT).show()
 
         serviceHandler?.obtainMessage()?.also { msg ->
@@ -112,12 +113,13 @@ class LoggingService : Service() {
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentIntent(pendingIntent)
             .setTicker(getText(R.string.ticker_text))
+            .setOngoing(true)
             .build()
 
         startForeground(1, notification)
 //        Toast.makeText(this, "Foreground service running", Toast.LENGTH_SHORT).show()
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -125,6 +127,18 @@ class LoggingService : Service() {
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         Toast.makeText(this, "logging service done", Toast.LENGTH_SHORT).show()
+        Log.e("LOGGINGDESTROY", "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver.")
+        val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
+        sendBroadcast(broadcastIntent)
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        Toast.makeText(this, "logging service done with onTaskRemoved", Toast.LENGTH_SHORT).show()
+        Log.e("LOGGINGDESTROY", "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver.")
+        val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
+        sendBroadcast(broadcastIntent)
     }
 }

@@ -26,8 +26,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".logging.LoggingService"/>
+        <service android:name=".logging.LoggingService" android:stopWithTask="false"/>
         <receiver android:name=".logging.LocationReceiver"/>
+        <receiver android:name=".logging.RestarterReceiver"/>
         <receiver android:name=".logging.ActivityRecognitionReceiver">
             <intent-filter>
                 <action android:name="com.example.roomwordsample.logging.TRANSITION_RECOGNITION" />
