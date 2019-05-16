@@ -22,7 +22,7 @@ class RequestRepository @Inject constructor(
 
     fun getPendingRequests(userId: String): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
 
-        val newRequests = webservice.getRequestsForUser(User(userId)).execute().body() ?: emptyList()
+        val newRequests = webservice.getRequestsForUser((userId)).execute().body() ?: emptyList()
         for (request in newRequests) {
             aggregationRequestDao.insert(
                 com.simonvanendern.tracking.database.schemata.AggregationRequest(

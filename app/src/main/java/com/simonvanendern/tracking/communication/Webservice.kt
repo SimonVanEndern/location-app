@@ -9,8 +9,8 @@ interface Webservice {
     @POST("/user")
     fun createUser(@Body user : User) : Call<Response>
 
-    @GET("/requests?pk={pk}")
-    fun getRequestsForUser(@Path("pk") pk: User): Call<List<AggregationRequest>>
+    @GET("/requests")
+    fun getRequestsForUser(@Query("pk") pk: String): Call<List<AggregationRequest>>
 
     @Headers("Content-Type: application/json")
     @POST("/forward")
