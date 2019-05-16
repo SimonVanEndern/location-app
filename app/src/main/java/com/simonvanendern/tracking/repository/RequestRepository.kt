@@ -1,6 +1,5 @@
 package com.simonvanendern.tracking.repository
 
-import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.communication.AggregationRequest
 import com.simonvanendern.tracking.communication.AggregationResult
 import com.simonvanendern.tracking.communication.User

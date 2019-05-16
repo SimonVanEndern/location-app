@@ -6,13 +6,14 @@ import com.simonvanendern.tracking.database.schemata.Steps
 import com.simonvanendern.tracking.database.schemata.StepsDao
 import com.simonvanendern.tracking.database.schemata.StepsRaw
 import com.simonvanendern.tracking.database.schemata.StepsRawDao
+import javax.inject.Inject
 
 /**
  * Abstracted Repository as promoted by the Architecture Guide.
  * https://developer.android.com/topic/libraries/architecture/guide.html
  */
-class StepsRepository(
-    private val stepsDao : StepsDao,
+class StepsRepository @Inject constructor(
+    stepsDao : StepsDao,
     private val stepsRawDao: StepsRawDao) {
 
     val recentSteps: LiveData<List<Steps>> = stepsDao.get10RecentSteps()
