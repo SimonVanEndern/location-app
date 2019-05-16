@@ -7,7 +7,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import com.simonvanendern.tracking.repository.ActivityRepository
-import com.simonvanendern.tracking.database.LocationRoomDatabase
+import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionEvent
 import com.google.android.gms.location.ActivityTransitionResult
@@ -29,8 +29,8 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context, intent: Intent) {
-        val activityDao = LocationRoomDatabase.getDatabase(context, scope).activityDao()
-        val activityTransitionDao = LocationRoomDatabase.getDatabase(context, scope).activityTransitionDao()
+        val activityDao = TrackingDatabase.getDatabase(context, scope).activityDao()
+        val activityTransitionDao = TrackingDatabase.getDatabase(context, scope).activityTransitionDao()
         val activityRepository =
             ActivityRepository(activityTransitionDao, activityDao)
 

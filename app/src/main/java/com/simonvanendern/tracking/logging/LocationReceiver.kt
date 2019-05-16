@@ -26,8 +26,8 @@ class LocationReceiver : BroadcastReceiver() {
     private val scope = CoroutineScope(coroutineContext)
 
     override fun onReceive(context: Context, intent: Intent) {
-        val locationDao: GPSLocationDao = LocationRoomDatabase.getDatabase(context, scope).gPSLocationDao()
-        val gpsDao: GPSDataDao = LocationRoomDatabase.getDatabase(context, scope).gPSDataDao()
+        val locationDao: GPSLocationDao = TrackingDatabase.getDatabase(context, scope).gPSLocationDao()
+        val gpsDao: GPSDataDao = TrackingDatabase.getDatabase(context, scope).gPSDataDao()
 
         val locationRepository = GPSRepository(locationDao, gpsDao)
 

@@ -8,7 +8,7 @@ import android.hardware.SensorManager
 import android.util.Log
 import android.widget.Toast
 import com.simonvanendern.tracking.repository.StepsRepository
-import com.simonvanendern.tracking.database.LocationRoomDatabase
+import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.StepsRaw
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +28,8 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
 
     private val scope = CoroutineScope(coroutineContext)
 
-    private val stepsDao = LocationRoomDatabase.getDatabase(context, scope).stepsDao()
-    private val stepsRawDao = LocationRoomDatabase.getDatabase(context, scope).stepsRawDao()
+    private val stepsDao = TrackingDatabase.getDatabase(context, scope).stepsDao()
+    private val stepsRawDao = TrackingDatabase.getDatabase(context, scope).stepsRawDao()
     private val stepsRepository = StepsRepository(stepsDao, stepsRawDao)
 
     override fun run() {

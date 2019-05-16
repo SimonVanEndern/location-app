@@ -42,12 +42,12 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     val mostRecentActivityTransitions: LiveData<List<ActivityTransition>>
 
     init {
-        val stepsDao = LocationRoomDatabase.getDatabase(application, scope).stepsDao()
-        val stepsRawDao = LocationRoomDatabase.getDatabase(application, scope).stepsRawDao()
-        val activityDao = LocationRoomDatabase.getDatabase(application, scope).activityDao()
-        val activityTransitionDao = LocationRoomDatabase.getDatabase(application, scope).activityTransitionDao()
-        val locationDao = LocationRoomDatabase.getDatabase(application, scope).gPSLocationDao()
-        val gpsDataDao = LocationRoomDatabase.getDatabase(application, scope).gPSDataDao()
+        val stepsDao = TrackingDatabase.getDatabase(application, scope).stepsDao()
+        val stepsRawDao = TrackingDatabase.getDatabase(application, scope).stepsRawDao()
+        val activityDao = TrackingDatabase.getDatabase(application, scope).activityDao()
+        val activityTransitionDao = TrackingDatabase.getDatabase(application, scope).activityTransitionDao()
+        val locationDao = TrackingDatabase.getDatabase(application, scope).gPSLocationDao()
+        val gpsDataDao = TrackingDatabase.getDatabase(application, scope).gPSDataDao()
 
         stepsRepository = StepsRepository(stepsDao, stepsRawDao)
         activityRepository =

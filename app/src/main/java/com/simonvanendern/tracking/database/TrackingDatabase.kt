@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
     version = 1
 )
 @TypeConverters(Converters::class)
-abstract class LocationRoomDatabase : RoomDatabase() {
+abstract class TrackingDatabase : RoomDatabase() {
 
     private class LocationRoomDatabaseCallback(
         private val scope: CoroutineScope
@@ -68,16 +68,16 @@ abstract class LocationRoomDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE: LocationRoomDatabase? = null
+        private var INSTANCE: TrackingDatabase? = null
 
-        fun setDatabase(db: LocationRoomDatabase) {
+        fun setDatabase(db: TrackingDatabase) {
             INSTANCE = db
         }
 
         fun getDatabase(
             context: Context,
             scope: CoroutineScope
-        ): LocationRoomDatabase {
+        ): TrackingDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -117,7 +117,7 @@ abstract class LocationRoomDatabase : RoomDatabase() {
 
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    LocationRoomDatabase::class.java,
+                    TrackingDatabase::class.java,
                     "Location_database"
                 ).addCallback(LocationRoomDatabaseCallback(scope))
                     .build()

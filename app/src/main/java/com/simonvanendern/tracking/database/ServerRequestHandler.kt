@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.simonvanendern.tracking.database.schemata.Steps
-import com.simonvanendern.tracking.repository.RequestRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +19,7 @@ class ServerRequestHandler(private val appContext: Context, workParams: WorkerPa
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)
-    private val database = LocationRoomDatabase.getDatabase(appContext, scope)
+    private val database = TrackingDatabase.getDatabase(appContext, scope)
 
     private var formatter = SimpleDateFormat("yyyy-MM-dd")
 

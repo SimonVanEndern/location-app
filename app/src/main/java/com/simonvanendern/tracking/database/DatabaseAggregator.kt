@@ -19,7 +19,7 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)
-    private val database = LocationRoomDatabase.getDatabase(appContext, scope)
+    private val database = TrackingDatabase.getDatabase(appContext, scope)
 
     private var formatter = SimpleDateFormat("yyyy-MM-dd")
 

@@ -1,9 +1,8 @@
 package com.simonvanendern.tracking.communication
 
 import android.app.Application
-import android.content.Context
 import androidx.room.Room
-import com.simonvanendern.tracking.database.LocationRoomDatabase
+import com.simonvanendern.tracking.database.TrackingDatabase
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -29,16 +28,16 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     @Singleton
-    fun provideDb (application: Application) : LocationRoomDatabase {
+    fun provideDb (application: Application) : TrackingDatabase {
         return Room.databaseBuilder(
             application,
-            LocationRoomDatabase::class.java,
+            TrackingDatabase::class.java,
             "Location_database").build()
     }
 
 //    @Singleton
 //    @Provides
 //    fun provideAggregationRequestDao() : AggregationRequestDao {
-//        return LocationRoomDatabase.getDatabase()
+//        return TrackingDatabase.getDatabase()
 //    }
 }
