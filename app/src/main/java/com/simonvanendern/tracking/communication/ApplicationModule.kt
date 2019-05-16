@@ -3,6 +3,7 @@ package com.simonvanendern.tracking.communication
 import android.app.Application
 import androidx.room.Room
 import com.simonvanendern.tracking.database.TrackingDatabase
+import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -35,9 +36,9 @@ class ApplicationModule(private val application: Application) {
             "Location_database").build()
     }
 
-//    @Singleton
-//    @Provides
-//    fun provideAggregationRequestDao() : AggregationRequestDao {
-//        return TrackingDatabase.getDatabase()
-//    }
+    @Singleton
+    @Provides
+    fun provideAggregationRequestDao(db : TrackingDatabase) : AggregationRequestDao {
+        return db.aggregationRequestDao()
+    }
 }

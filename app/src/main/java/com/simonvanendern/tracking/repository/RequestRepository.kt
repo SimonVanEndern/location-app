@@ -15,13 +15,13 @@ class RequestRepository @Inject constructor(
     private val aggregationRequestDao: AggregationRequestDao
 ) {
 
-    private val pendingRequests = aggregationRequestDao.getAll()
+//    private val pendingRequests = aggregationRequestDao.getAll()
 
     fun createUser(userId: String): Boolean {
         return webservice.createUser(User(userId)).execute().body()?.status ?: true
     }
 
-    fun getPendingRequests(userId: String): LiveData<List<com.simonvanendern.tracking.database.schemata.AggregationRequest>> {
+    fun getPendingRequests(userId: String): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
 
         val newRequests = webservice.getRequestsForUser(User(userId)).execute().body() ?: emptyList()
         for (request in newRequests) {
@@ -32,7 +32,7 @@ class RequestRepository @Inject constructor(
             )
         }
 
-        return pendingRequests
+        return aggregationRequestDao.getAll()
     }
 
     fun postAggregationRequest(userId: String, request: AggregationRequest): Boolean {
