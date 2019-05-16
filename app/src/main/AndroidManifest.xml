@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+            android:name=".communication.MyApplication"
             android:allowBackup="true"
             android:icon="@drawable/map_icon_padlock"
             android:label="@string/app_name"

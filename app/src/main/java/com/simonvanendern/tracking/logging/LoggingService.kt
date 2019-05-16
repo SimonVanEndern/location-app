@@ -33,6 +33,8 @@ class LoggingService : Service() {
                 locationUpdates = LocationUpdates(applicationContext)
                 post(stepsLogger)
 
+
+                // Aggregate the location data from time to time
                 val aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
                     DatabaseAggregator::class.java,
                     PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,

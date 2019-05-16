@@ -21,7 +21,8 @@ import kotlinx.coroutines.launch
         Trajectory::class,
         StepsRaw::class,
         Steps::class,
-        Activity::class],
+        Activity::class,
+        AggregationRequest::class],
     version = 1
 )
 @TypeConverters(Converters::class)
@@ -61,13 +62,15 @@ abstract class LocationRoomDatabase : RoomDatabase() {
 
     abstract fun stepsDao(): StepsDao
 
-    abstract fun stepsRawDao() : StepsRawDao
+    abstract fun stepsRawDao(): StepsRawDao
+
+    abstract fun aggregationRequestDao(): AggregationRequestDao
 
     companion object {
         @Volatile
         private var INSTANCE: LocationRoomDatabase? = null
 
-        fun setDatabase (db : LocationRoomDatabase) {
+        fun setDatabase(db: LocationRoomDatabase) {
             INSTANCE = db
         }
 
@@ -106,7 +109,7 @@ abstract class LocationRoomDatabase : RoomDatabase() {
                     }
                 }
 
-                val MIGRATION_2_3 = object: Migration(2,3) {
+                val MIGRATION_2_3 = object : Migration(2, 3) {
                     override fun migrate(database: SupportSQLiteDatabase) {
                         database.execSQL("ALTER TABLE activity_table ADD COLUMN processed INTEGER NOT NULL DEFAULT 0")
                     }
