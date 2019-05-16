@@ -7,7 +7,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
 import android.widget.Toast
-import com.simonvanendern.tracking.StepsRepository
+import com.simonvanendern.tracking.repository.StepsRepository
 import com.simonvanendern.tracking.database.LocationRoomDatabase
 import com.simonvanendern.tracking.database.schemata.StepsRaw
 import kotlinx.coroutines.CoroutineScope

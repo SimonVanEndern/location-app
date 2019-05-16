@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking
+package com.simonvanendern.tracking.repository
 
 
 import androidx.annotation.WorkerThread

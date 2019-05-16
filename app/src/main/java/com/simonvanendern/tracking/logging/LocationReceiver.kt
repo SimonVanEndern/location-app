@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.simonvanendern.tracking.GPSRepository
+import com.simonvanendern.tracking.repository.GPSRepository
 import com.simonvanendern.tracking.database.*
 import com.simonvanendern.tracking.database.schemata.GPSData
 import com.simonvanendern.tracking.database.schemata.GPSDataDao

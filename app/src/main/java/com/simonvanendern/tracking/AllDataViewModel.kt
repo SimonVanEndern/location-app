@@ -5,6 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.*
 import com.simonvanendern.tracking.database.schemata.*
+import com.simonvanendern.tracking.repository.ActivityRepository
+import com.simonvanendern.tracking.repository.GPSRepository
+import com.simonvanendern.tracking.repository.StepsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -47,7 +50,8 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
         val gpsDataDao = LocationRoomDatabase.getDatabase(application, scope).gPSDataDao()
 
         stepsRepository = StepsRepository(stepsDao, stepsRawDao)
-        activityRepository = ActivityRepository(activityTransitionDao, activityDao)
+        activityRepository =
+            ActivityRepository(activityTransitionDao, activityDao)
         locationRepository = GPSRepository(locationDao, gpsDataDao)
 
         mostRecentSteps = stepsRepository.recentSteps

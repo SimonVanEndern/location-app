@@ -1,5 +1,7 @@
 package com.simonvanendern.tracking.communication
 
+import com.simonvanendern.tracking.database.LocationRoomDatabase
+import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -18,4 +20,10 @@ class AppModule {
             .build()
             .create(Webservice::class.java)
     }
+
+//    @Singleton
+//    @Provides
+//    fun provideAggregationRequestDao() : AggregationRequestDao {
+//        return LocationRoomDatabase.getDatabase()
+//    }
 }

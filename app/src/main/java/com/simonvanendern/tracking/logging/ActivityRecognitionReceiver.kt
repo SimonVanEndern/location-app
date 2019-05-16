@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
-import com.simonvanendern.tracking.ActivityRepository
+import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.database.LocationRoomDatabase
 import com.simonvanendern.tracking.database.schemata.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionEvent
@@ -31,7 +31,8 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val activityDao = LocationRoomDatabase.getDatabase(context, scope).activityDao()
         val activityTransitionDao = LocationRoomDatabase.getDatabase(context, scope).activityTransitionDao()
-        val activityRepository = ActivityRepository(activityTransitionDao, activityDao)
+        val activityRepository =
+            ActivityRepository(activityTransitionDao, activityDao)
 
         Log.d("BroadCastReceiver", "Started onReceive")
         Toast.makeText(context, "Started onReceive", Toast.LENGTH_SHORT).show()
