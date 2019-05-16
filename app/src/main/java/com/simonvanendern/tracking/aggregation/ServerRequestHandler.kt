@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database
+package com.simonvanendern.tracking.aggregation
 
 import android.content.Context
 import android.util.Log
@@ -7,7 +7,7 @@ import androidx.work.WorkerParameters
 import com.simonvanendern.tracking.repository.RequestRepository
 import javax.inject.Inject
 
-class ServerRequestHandler(private val appContext: Context, workParams: WorkerParameters) :
+class ServerRequestHandler(appContext: Context, workParams: WorkerParameters) :
     Worker(appContext, workParams) {
 
     @Inject

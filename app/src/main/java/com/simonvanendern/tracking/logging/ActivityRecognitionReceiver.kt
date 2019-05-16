@@ -12,6 +12,7 @@ import com.simonvanendern.tracking.database.schemata.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionEvent
 import com.google.android.gms.location.ActivityTransitionResult
 import com.google.android.gms.location.DetectedActivity
+import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -69,7 +70,7 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
                 }
             }
 
-            val i = Intent(context, LoggingService::class.java)
+            val i = Intent(context, BackgroundLoggingService::class.java)
             val activity = detectedActivities
                 .filter { activity -> activity.transitionType == 0 }
                 .maxBy { activity -> activity.elapsedRealTimeNanos }

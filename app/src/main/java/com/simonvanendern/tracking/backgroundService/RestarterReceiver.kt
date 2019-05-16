@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.logging
+package com.simonvanendern.tracking.backgroundService
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -19,7 +19,7 @@ class RestarterReceiver : BroadcastReceiver() {
                 Log.d("RESTARTER", "Service was killed, try restarting ...")
             }
 
-            val serviceIntent = Intent(context, LoggingService::class.java)
+            val serviceIntent = Intent(context, BackgroundLoggingService::class.java)
 
             ContextCompat.startForegroundService(context, serviceIntent)
         } catch (e:Exception) {

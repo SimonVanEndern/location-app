@@ -8,6 +8,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.impl.utils.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
+import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.database.schemata.*
 import org.junit.Assert
 import org.junit.Before

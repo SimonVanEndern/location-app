@@ -1,13 +1,13 @@
-package com.simonvanendern.tracking.communication
+package com.simonvanendern.tracking
 
 import android.app.Application
+import com.simonvanendern.tracking.communication.DaggerApplicationComponent
 
 
 class MyApplication : Application() {
 
     val component: ApplicationComponent by lazy {
-        DaggerApplicationComponent
-            .builder()
+        DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(this))
             .build()
     }

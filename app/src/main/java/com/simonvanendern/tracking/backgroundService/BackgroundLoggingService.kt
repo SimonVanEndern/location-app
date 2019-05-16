@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.logging
+package com.simonvanendern.tracking.backgroundService
 
 import android.app.*
 import android.content.Context
@@ -12,12 +12,15 @@ import androidx.core.app.NotificationCompat
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.simonvanendern.tracking.R
-import com.simonvanendern.tracking.database.DatabaseAggregator
+import com.simonvanendern.tracking.aggregation.DatabaseAggregator
+import com.simonvanendern.tracking.logging.LocationUpdates
+import com.simonvanendern.tracking.logging.StepsLogger
+import com.simonvanendern.tracking.logging.TransitionRecognition
 import java.lang.Thread.sleep
 import java.util.concurrent.TimeUnit
 
 
-class LoggingService : Service() {
+class BackgroundLoggingService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
     private lateinit var locationUpdates: LocationUpdates

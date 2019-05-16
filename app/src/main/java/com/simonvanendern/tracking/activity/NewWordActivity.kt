@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking
+package com.simonvanendern.tracking.activity
 
 /*
  * Copyright (C) 2017 Google Inc.
@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
+import com.simonvanendern.tracking.R
 
 /**
  * Activity for entering a word.

@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking
+package com.simonvanendern.tracking.activity
 
 
 import android.Manifest
@@ -14,8 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.simonvanendern.tracking.logging.LoggingService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.simonvanendern.tracking.AllDataViewModel
+import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
+import com.simonvanendern.tracking.R
+import com.simonvanendern.tracking.StepsAndActivityListAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startBackgroundService () {
-        val i = Intent(this, LoggingService::class.java)
+        val i = Intent(this, BackgroundLoggingService::class.java)
         startService(i)
     }
 

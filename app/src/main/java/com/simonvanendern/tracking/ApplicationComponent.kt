@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.communication
+package com.simonvanendern.tracking
 
 import dagger.Component
 import javax.inject.Singleton

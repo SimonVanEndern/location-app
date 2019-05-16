@@ -9,17 +9,17 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-            android:name=".communication.MyApplication"
+            android:name=".MyApplication"
             android:allowBackup="true"
             android:icon="@drawable/map_icon_padlock"
             android:label="@string/app_name"
             android:roundIcon="@drawable/map_icon_padlock"
             android:supportsRtl="true"
             android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".NewWordActivity">
+        <activity android:name=".activity.NewWordActivity">
         </activity>
         <activity
-                android:name=".MainActivity"
+                android:name=".activity.MainActivity"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".logging.LoggingService" android:stopWithTask="false"
+        <service android:name=".backgroundService.BackgroundLoggingService" android:stopWithTask="false"
                  android:exported="true"
                  android:enabled="true">
             <intent-filter>
@@ -38,7 +38,7 @@
         </service>
         <receiver android:name=".logging.LocationReceiver"/>
 
-        <receiver android:name="com.simonvanendern.tracking.logging.RestarterReceiver"
+        <receiver android:name="com.simonvanendern.tracking.backgroundService.RestarterReceiver"
                   android:enabled="true"
                   android:exported="true"
                   android:permission="android.permission.RECEIVE_BOOT_COMPLETED">

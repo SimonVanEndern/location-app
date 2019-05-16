@@ -1,9 +1,10 @@
-package com.simonvanendern.tracking.database
+package com.simonvanendern.tracking.aggregation
 
 import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.Steps
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,8 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)
-    private val database = TrackingDatabase.getDatabase(appContext, scope)
+    private val database =
+        TrackingDatabase.getDatabase(appContext, scope)
 
     private var formatter = SimpleDateFormat("yyyy-MM-dd")
 
