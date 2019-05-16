@@ -1,7 +1,6 @@
 package com.simonvanendern.tracking
 
 import android.app.Application
-import com.simonvanendern.tracking.communication.DaggerApplicationComponent
 
 
 class MyApplication : Application() {
