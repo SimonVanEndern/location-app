@@ -11,7 +11,8 @@ import javax.inject.Singleton
 class RequestRepository @Inject constructor(private val webservice: Webservice) {
 
     fun createUser(userId: String): Boolean {
-        return webservice.createUser(User(userId)).execute().body() ?: false
+        webservice.createUser(User(userId)).execute().body()
+        return true
     }
 
     fun getPendingRequests(userId: String): List<AggregationRequest> {
