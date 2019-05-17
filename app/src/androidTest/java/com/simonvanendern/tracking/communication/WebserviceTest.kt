@@ -79,4 +79,48 @@ class WebserviceTest {
         assertArrayEquals(result?.first()?.data, request1.data)
         assertArrayEquals(result?.last()?.data, request2.data)
     }
+
+    @Test
+    fun testForwardAggregationRequest() {
+        val request1 = AggregationRequest("22", userId, "1111111".toByteArray())
+
+        val response = "{\"status\":true}"
+
+        server.enqueue(MockResponse().setBody(response))
+        server.start()
+
+        val url = server.url(testUrl)
+
+        val webservice = Retrofit.Builder()
+            .baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(Webservice::class.java)
+
+        val result: Response? = webservice.forwardAggregationRequest(request1).execute().body()
+
+        assertEquals(true, result?.status)
+    }
+
+    @Test
+    fun testInsertAggregationResult() {
+        val result = AggregationResult("22", userId, "1111111".toByteArray())
+
+        val serverResponse = "{\"status\":true}"
+
+        server.enqueue(MockResponse().setBody(serverResponse))
+        server.start()
+
+        val url = server.url(testUrl)
+
+        val webservice = Retrofit.Builder()
+            .baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(Webservice::class.java)
+
+        val response: Response? = webservice.insertAggregationResult(result).execute().body()
+
+        assertEquals(true, response?.status)
+    }
 }

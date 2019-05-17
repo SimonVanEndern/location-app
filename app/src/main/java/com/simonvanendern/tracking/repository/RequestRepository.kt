@@ -35,10 +35,10 @@ class RequestRepository @Inject constructor(
     }
 
     fun postAggregationRequest(userId: String, request: AggregationRequest): Boolean {
-        return webservice.forwardAggregationRequest(request).execute().body() ?: false
+        return webservice.forwardAggregationRequest(request).execute().body()?.status ?: false
     }
 
     fun postAggregationnResult(userId: String, result: AggregationResult): Boolean {
-        return webservice.insertAggregationResult(result).execute().body() ?: false
+        return webservice.insertAggregationResult(result).execute().body()?.status ?: false
     }
 }
