@@ -1,13 +1,9 @@
 package com.simonvanendern.tracking.database
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.simonvanendern.tracking.aggregation.AverageAggregationRequest
-import com.simonvanendern.tracking.aggregation.AverageStepCount
-import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class ConvertersTest {
@@ -15,10 +11,10 @@ class ConvertersTest {
     @Ignore
     @Test
     fun testConversionToJson() {
-        val steps = AverageStepCount(Date(), Date())
-        val request = AverageAggregationRequest(steps, 1, 1.0f)
+//        val steps = AverageStepCount(Date(), Date())
+//        val request = AverageAggregationRequest(steps, 1, 1.0f)
 
-        val result = Converters().aggregationRequestToJson<AverageStepCount>(request)
+//        val result = Converters().aggregationRequestToJson<AverageStepCount>(request)
 
         val expectedResult = "{\n" +
                 "  \"n\": 1,\n" +
@@ -31,6 +27,6 @@ class ConvertersTest {
                 "  \"value\": 1\n" +
                 "}"
 
-        Assert.assertEquals("", result)
+//        Assert.assertEquals("", result)
     }
 }

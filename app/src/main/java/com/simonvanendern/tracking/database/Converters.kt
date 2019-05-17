@@ -1,19 +1,9 @@
 package com.simonvanendern.tracking.database
 
-import android.app.Person
 import androidx.room.TypeConverter
 import com.google.android.gms.location.DetectedActivity
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
-import com.simonvanendern.tracking.aggregation.AverageAggregationRequest
-import com.simonvanendern.tracking.aggregation.AverageStepCount
-import com.simonvanendern.tracking.aggregation.AverageTimeInActivity
-import com.simonvanendern.tracking.aggregation.Datatype
-import com.simonvanendern.tracking.database.schemata.AggregationRequest
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.reflect.KClass
 
 class Converters {
 
@@ -63,10 +53,10 @@ class Converters {
 //        }
 //    }
 
-    @TypeConverter
-    fun <T : Datatype> aggregationRequestToJson(value : AverageAggregationRequest<*>) : String {
-        val test = object : TypeToken<AverageAggregationRequest<T>>(){}.type
-
-        return Gson().toJson(value, test)
-    }
+//    @TypeConverter
+//    fun <T : Datatype> aggregationRequestToJson(value : AverageAggregationRequest<*>) : String {
+//        val test = object : TypeToken<AverageAggregationRequest<T>>(){}.type
+//
+//        return Gson().toJson(value, test)
+//    }
 }
