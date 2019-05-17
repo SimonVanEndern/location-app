@@ -23,15 +23,16 @@ class StepsRepositoryTest : DatabaseTest() {
     @Mock
     lateinit var stepsRawDao: StepsRawDao
 
+    lateinit var stepsRepository: StepsRepository
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        stepsRepository = StepsRepository(stepsDao, stepsRawDao)
     }
 
     @Test
     fun testGet10RecentSteps() {
-        val stepsRepository = StepsRepository(stepsDao, stepsRawDao)
-
         stepsRepository.recentSteps
 
         Mockito.verify(stepsDao).get10RecentSteps()
@@ -39,8 +40,6 @@ class StepsRepositoryTest : DatabaseTest() {
 
     @Test
     fun testInsertRawSteps() {
-        val stepsRepository = StepsRepository(stepsDao, stepsRawDao)
-
         val stepsRaw = StepsRaw(100, Date(), 32, false)
 
         runBlocking { stepsRepository.insert(stepsRaw) }

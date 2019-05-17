@@ -2,7 +2,7 @@ package com.simonvanendern.tracking
 
 import android.app.Application
 import androidx.room.Room
-import com.simonvanendern.tracking.communication.Webservice
+import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
 import dagger.Module
@@ -16,12 +16,12 @@ class ApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideWebservice(): Webservice {
+    fun provideWebservice(): WebService {
         return Retrofit.Builder()
             .baseUrl("http://localhost:8888/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(Webservice::class.java)
+            .create(WebService::class.java)
     }
 
     @Provides

@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -14,7 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @RunWith(AndroidJUnit4::class)
-class WebserviceTest {
+class WebServiceTest {
 
     val testUrl = "/testServer/"
     val userId = "iijoij23jfdsoijf"
@@ -44,7 +43,7 @@ class WebserviceTest {
             .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(Webservice::class.java)
+            .create(WebService::class.java)
 
         val result: Response? = webservice.createUser(User(userId)).execute().body()
 
@@ -68,7 +67,7 @@ class WebserviceTest {
             .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(Webservice::class.java)
+            .create(WebService::class.java)
 
         val result: List<AggregationRequest>? = webservice.getRequestsForUser(userId).execute().body()
 
@@ -95,7 +94,7 @@ class WebserviceTest {
             .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(Webservice::class.java)
+            .create(WebService::class.java)
 
         val result: Response? = webservice.forwardAggregationRequest(request1).execute().body()
 
@@ -117,7 +116,7 @@ class WebserviceTest {
             .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(Webservice::class.java)
+            .create(WebService::class.java)
 
         val response: Response? = webservice.insertAggregationResult(result).execute().body()
 

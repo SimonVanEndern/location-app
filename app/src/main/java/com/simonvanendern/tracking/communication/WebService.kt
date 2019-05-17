@@ -3,7 +3,7 @@ package com.simonvanendern.tracking.communication
 import retrofit2.Call
 import retrofit2.http.*
 
-interface Webservice {
+interface WebService {
 
     @Headers("Content-Type: application/json")
     @POST("/user")
