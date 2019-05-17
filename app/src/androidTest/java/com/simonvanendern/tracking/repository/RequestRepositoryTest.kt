@@ -1,6 +1,7 @@
 package com.simonvanendern.tracking.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.simonvanendern.tracking.communication.AggregationRequest
 import com.simonvanendern.tracking.communication.Response
 import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
@@ -10,6 +11,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations.*
@@ -19,8 +21,6 @@ import retrofit2.Call
 class RequestRepositoryTest : DatabaseTest() {
 
     lateinit var webService: WebService
-    lateinit var call: Call<Response>
-    private val responseHolder: retrofit2.Response<Response> = retrofit2.Response.success(Response(true))
 
     private val user = "test"
 
@@ -33,12 +33,23 @@ class RequestRepositoryTest : DatabaseTest() {
 
     private fun any() = any(User::class.java) ?: User("")
 
+    private fun any2() = any(com.simonvanendern.tracking.database.schemata.AggregationRequest::class.java)
+        ?: com.simonvanendern.tracking.database.schemata.AggregationRequest(0, "", "".toByteArray())
+
     @Before
     fun setUp() {
         webService = mock(WebService::class.java)
-        val call : Call<Response> = mock()
 
         initMocks(this)
+
+        requestRepository = RequestRepository(webService, aggregationRequestDao)
+    }
+
+    @Test
+    fun testCreateUser() {
+        val responseHolder = retrofit2.Response.success(Response(true))
+
+        val call : Call<Response> = mock()
 
         `when`(call.execute())
             .thenReturn(responseHolder)
@@ -46,14 +57,29 @@ class RequestRepositoryTest : DatabaseTest() {
         `when`(webService.createUser(any()))
             .thenReturn(call)
 
-        requestRepository = RequestRepository(webService, aggregationRequestDao)
-    }
-
-    @Test
-    fun testCreateUser() {
         val result = requestRepository.createUser(user)
         assertTrue(result)
 
         verify(webService).createUser(any())
+    }
+
+    @Test
+    fun testGetPendingRequests() {
+        val request1 = AggregationRequest("1", "wo0ifwdji", "11111".toByteArray())
+        val request2 = AggregationRequest("2", "owfijoj2d", "00000".toByteArray())
+
+        val responseHolder = retrofit2.Response.success(listOf(request1, request2))
+        val call : Call<List<AggregationRequest>> = mock()
+
+        `when`(call.execute())
+            .thenReturn(responseHolder)
+
+        `when`(webService.getRequestsForUser(user))
+            .thenReturn(call)
+
+        requestRepository.getPendingRequests(user)
+
+        verify(aggregationRequestDao, times(2)).insert(any2())
+        verify(aggregationRequestDao, times(1)).getAll()
     }
 }
