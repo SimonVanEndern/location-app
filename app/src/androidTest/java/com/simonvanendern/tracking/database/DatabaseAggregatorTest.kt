@@ -10,7 +10,7 @@ import androidx.work.impl.utils.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.database.schemata.*
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +29,6 @@ class DatabaseAggregatorTest : DatabaseTest() {
 
     @Before
     fun init() {
-//        super.createDb()
         activityDao = getDb().activityDao()
         activityTransitionDao = getDb().activityTransitionDao()
         stepsDao = getDb().stepsDao()
@@ -57,11 +56,11 @@ class DatabaseAggregatorTest : DatabaseTest() {
         activityTransitionDao.insert(activityTransition1)
         val id2 = activityTransitionDao.insert(activityTransition2)
 
-        Assert.assertEquals(2, id2.toInt())
+        assertEquals(2, id2.toInt())
 
         var activityTransitions = activityTransitionDao.getAll()
 
-        Assert.assertEquals(2, activityTransitions.size)
+        assertEquals(2, activityTransitions.size)
 
         val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java)
             .build()
@@ -70,10 +69,34 @@ class DatabaseAggregatorTest : DatabaseTest() {
         val activities = activityDao.getAll()
         activityTransitions = activityTransitionDao.getAll()
 
-        Assert.assertEquals(true, activityTransitions.map(ActivityTransition::processed)
+        assertEquals(true, activityTransitions.map(ActivityTransition::processed)
             .reduce { acc, b -> acc && b })
-        Assert.assertEquals(1, activities.size)
-        Assert.assertEquals(100, activities.first().duration)
+        assertEquals(1, activities.size)
+        assertEquals(100, activities.first().duration)
+    }
+
+    @Test
+    fun testComputeOneSteps() {
+        val day1 = "2019-01-02"
+
+        val stepsRaw = StepsRaw(
+            formatter.parse(day1).time,
+            formatter.parse(day1),
+            50,
+            false
+        )
+
+        stepsRawDao.insert(stepsRaw)
+
+        val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java).build()
+        WorkManager.getInstance().enqueue(request).result.get()
+
+        val stepsRawResult = stepsRawDao.getAll()
+        assertEquals(1, stepsRawResult.size)
+        assertEquals(true, stepsRawResult.first().processed)
+
+        val averageSteps = stepsDao.getAverageSteps(formatter.parse(day1), formatter.parse(day1))
+        assertEquals(50, averageSteps.toInt())
     }
 
     @Test
@@ -91,38 +114,38 @@ class DatabaseAggregatorTest : DatabaseTest() {
         )
 
         var steps = stepsDao.getAll()
-        Assert.assertEquals(0, steps.size)
+        assertEquals(0, steps.size)
 
         stepsRaw.forEach { steps -> stepsRawDao.insert(steps) }
         var stepsRawResult = stepsRawDao.getAll()
-        Assert.assertEquals(5, stepsRawResult.size)
+        assertEquals(5, stepsRawResult.size)
 
         val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java)
             .build()
         WorkManager.getInstance().enqueue(request).result.get()
 
         stepsRawResult = stepsRawDao.getAll()
-        Assert.assertEquals(5, stepsRawResult.size)
+        assertEquals(5, stepsRawResult.size)
 
 
-        Assert.assertEquals(true, stepsRawResult.map(StepsRaw::processed)
+        assertEquals(true, stepsRawResult.map(StepsRaw::processed)
             .reduce { acc, s -> acc && s })
         steps = stepsDao.getAll()
-        Assert.assertEquals(4, steps.size)
+        assertEquals(4, steps.size)
 
 
         val totalSteps1 = stepsDao.getTotalStepsByDay(formatter.parse(day1))
         val totalSteps2 = stepsDao.getTotalStepsByDay(formatter.parse(day2))
         val totalSteps3 = stepsDao.getTotalStepsByDay(formatter.parse(day3))
 
-        Assert.assertEquals(190, totalSteps1)
-        Assert.assertEquals(10, totalSteps2)
-        Assert.assertEquals(0, totalSteps3)
+        assertEquals(190, totalSteps1)
+        assertEquals(10, totalSteps2)
+        assertEquals(0, totalSteps3)
 
         val averageSteps = stepsDao.getAverageSteps(formatter.parse(day1), formatter.parse(day3))
 
         // The third day has no entry and thus is not counted in this metric
-        Assert.assertEquals(100, averageSteps.toInt())
+        assertEquals(100, averageSteps.toInt())
     }
 
 }

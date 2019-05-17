@@ -72,6 +72,28 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
 
         if (lastTimestamp != null) {
 
+            val firstValue = database.openHelper.readableDatabase.query(
+                """SELECT *
+                    FROM step_counter_table
+                    WHERE timestamp =
+                    (SELECT MIN(timestamp) FROM step_counter_table)
+                    LIMIT 1"""
+            )
+            firstValue.moveToFirst()
+
+            val index = firstValue.getColumnIndexOrThrow("processed")
+            val processed = firstValue.getInt(index)
+            println(processed)
+            if (processed == 0) {
+                val dayIndex = firstValue.getColumnIndexOrThrow("day")
+                val day = firstValue.getString(dayIndex)
+                val timestampIndex = firstValue.getColumnIndexOrThrow("timestamp")
+                val timestamp = firstValue.getLong(timestampIndex)
+                val stepsIndex = firstValue.getColumnIndexOrThrow("steps")
+                val steps = firstValue.getInt(stepsIndex)
+                database.stepsDao().insert(Steps(timestamp, formatter.parse(day), steps))
+            }
+
             val cursor = database.openHelper.writableDatabase.query(
                 """
             SELECT s1.timestamp, s1.day, s2.steps - s1.steps AS steps
@@ -91,7 +113,6 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
             )
 
             if (cursor.moveToFirst()) {
-                val test = cursor.columnNames
                 val timestamp = cursor.getColumnIndexOrThrow("timestamp")
                 val day = cursor.getColumnIndexOrThrow("day")
                 val steps = cursor.getColumnIndexOrThrow("steps")
@@ -101,7 +122,8 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
                     val s = cursor.getInt(steps)
 
                     database.stepsDao().insert(
-                        Steps(t, formatter.parse(d), s))
+                        Steps(t, formatter.parse(d), s)
+                    )
                 } while (cursor.moveToNext())
             }
 
