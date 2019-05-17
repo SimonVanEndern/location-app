@@ -21,7 +21,7 @@ class AggregationRequestDaoTest : DatabaseTest() {
         val data = "11111111111111".toByteArray()
 
         val aggregationRequest = AggregationRequest(0, serverSideID, "user",
-            "steps", 1, 1.0f, Date(), Date())
+            "steps", 1, 1.0f, Date(), Date(), true)
 
         val id = aggregationRequestDao.insert(aggregationRequest)
 
@@ -40,15 +40,15 @@ class AggregationRequestDaoTest : DatabaseTest() {
         val data_1 = "010101010".toByteArray()
         val data_2 = "101010101".toByteArray()
 
-        val aggregationRequest_0 = AggregationRequest(0, serverSideId_0, "user", "type", 1, 1.0f, Date(), Date())
-        val aggregationRequest_1 = AggregationRequest(0, serverSideId_1, "user", "type", 1, 1.0f, Date(), Date())
-        val aggregationRequest_2 = AggregationRequest(0, serverSideId_2, "user", "type", 1, 1.0f, Date(), Date())
+        val aggregationRequest_0 = AggregationRequest(0, serverSideId_0, "user", "type", 1, 1.0f, Date(), Date(), true)
+        val aggregationRequest_1 = AggregationRequest(0, serverSideId_1, "user", "type", 1, 1.0f, Date(), Date(), true)
+        val aggregationRequest_2 = AggregationRequest(0, serverSideId_2, "user", "type", 1, 1.0f, Date(), Date(), true)
 
         aggregationRequestDao.insert(aggregationRequest_0)
         aggregationRequestDao.insert(aggregationRequest_1)
         aggregationRequestDao.insert(aggregationRequest_2)
 
-        val savedRequests = aggregationRequestDao.getAll()
+        val savedRequests = aggregationRequestDao.getAllPendingRequests()
 
         Assert.assertEquals(savedRequests.size, 3)
         Assert.assertTrue(savedRequests.map(AggregationRequest::serverId).contains(serverSideId_0))

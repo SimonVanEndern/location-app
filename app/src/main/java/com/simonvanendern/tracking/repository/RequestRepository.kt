@@ -23,12 +23,45 @@ class RequestRepository @Inject constructor(
         for (request in newRequests) {
             aggregationRequestDao.insert(
                 com.simonvanendern.tracking.database.schemata.AggregationRequest(
-                    0, request.id, request.nextUser, request.type, request.n, request.value, request.start, request.end
+                    0,
+                    request.id,
+                    request.nextUser,
+                    request.type,
+                    request.n,
+                    request.value,
+                    request.start,
+                    request.end,
+                    true
                 )
             )
         }
 
-        return aggregationRequestDao.getAll()
+        return aggregationRequestDao.getAllPendingRequests()
+    }
+
+    fun insertRequestResult(res: com.simonvanendern.tracking.database.schemata.AggregationRequest) {
+        aggregationRequestDao.insert(res)
+    }
+
+    fun deletePendingRequest(req: com.simonvanendern.tracking.database.schemata.AggregationRequest) {
+        aggregationRequestDao.delete(req)
+    }
+
+    fun sendOutResults() {
+        for (res in aggregationRequestDao.getAllPendingResults()) {
+            webService.forwardAggregationRequest(
+                AggregationRequest(
+                    res.serverId,
+                    res.nextUser,
+                    res.type,
+                    res.n,
+                    res.value,
+                    res.start,
+                    res.end
+                )
+            ).execute()
+            aggregationRequestDao.delete(res)
+        }
     }
 
     fun postAggregationRequest(userId: String, request: AggregationRequest): Boolean {

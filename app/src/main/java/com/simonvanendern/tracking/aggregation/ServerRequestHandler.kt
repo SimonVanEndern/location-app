@@ -11,9 +11,12 @@ class ServerRequestHandler(appContext: Context, workParams: WorkerParameters) :
     Worker(appContext, workParams) {
 
     @Inject
+    lateinit var requestExecuter: RequestExecuter
+
+    @Inject
     lateinit var requestRepository: RequestRepository
 
-    val pendingRequests = requestRepository.getPendingRequests("test")
+    private val pendingRequests = requestRepository.getPendingRequests("test")
 
     override fun doWork(): Result {
         updatePendingRequests()
@@ -25,7 +28,13 @@ class ServerRequestHandler(appContext: Context, workParams: WorkerParameters) :
 
     private fun updatePendingRequests() {
         for (request in pendingRequests) {
-            println(request)
+            val result = requestExecuter.execute(request)
+            requestRepository.insertRequestResult(result)
+            requestRepository.deletePendingRequest(result)
         }
+        requestRepository.sendOutResults()
+//        for (res in requestRepository.getRequestResults()) {
+//
+//        }
     }
 }

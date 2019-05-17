@@ -1,9 +1,6 @@
 package com.simonvanendern.tracking.database.schemata
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface AggregationRequestDao {
@@ -14,6 +11,12 @@ interface AggregationRequestDao {
     @Query("SELECT * FROM aggregationRequest WHERE id = :id LIMIT 1")
     fun getById(id: Int): AggregationRequest
 
-    @Query("SELECT * FROM aggregationRequest")
-    fun getAll(): List<AggregationRequest>
+    @Query("SELECT * FROM aggregationRequest WHERE incoming = 1")
+    fun getAllPendingRequests(): List<AggregationRequest>
+
+    @Query("SELECT * FROM aggregationRequest WHERE incoming = 0")
+    fun getAllPendingResults() : List<AggregationRequest>
+
+    @Delete
+    fun delete (request : AggregationRequest)
 }

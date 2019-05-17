@@ -2,9 +2,11 @@ package com.simonvanendern.tracking
 
 import android.app.Application
 import androidx.room.Room
+import com.simonvanendern.tracking.aggregation.RequestExecuter
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
+import com.simonvanendern.tracking.repository.RequestRepository
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -30,16 +32,32 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     @Singleton
-    fun provideDb (application: Application) : TrackingDatabase {
+    fun provideDb(application: Application): TrackingDatabase {
         return Room.databaseBuilder(
             application,
             TrackingDatabase::class.java,
-            "Location_database").build()
+            "Location_database"
+        ).build()
     }
 
     @Singleton
     @Provides
-    fun provideAggregationRequestDao(db : TrackingDatabase) : AggregationRequestDao {
+    fun provideAggregationRequestDao(db: TrackingDatabase): AggregationRequestDao {
         return db.aggregationRequestDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRequestRepository(
+        webService: WebService,
+        aggregationRequestDao: AggregationRequestDao
+    ): RequestRepository {
+        return RequestRepository(webService, aggregationRequestDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRequestExecutor(db: TrackingDatabase): RequestExecuter {
+        return RequestExecuter(db)
     }
 }
