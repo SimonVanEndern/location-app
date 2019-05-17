@@ -16,7 +16,7 @@ interface WebService {
     @POST("/forward")
     fun forwardAggregationRequest(@Body request: AggregationRequest) : Call<Response>
 
-    @Headers("Content-Type: application/json")
-    @POST("/aggregation")
-    fun insertAggregationResult(@Body result: AggregationResult): Call<Response>
+//    @Headers("Content-Type: application/json")
+//    @POST("/aggregation")
+//    fun insertAggregationResult(@Body result: AggregationResult): Call<Response>
 }

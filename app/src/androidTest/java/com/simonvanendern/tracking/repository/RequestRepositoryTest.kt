@@ -7,15 +7,15 @@ import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations.*
+import org.mockito.MockitoAnnotations.initMocks
 import retrofit2.Call
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class RequestRepositoryTest : DatabaseTest() {
@@ -29,12 +29,12 @@ class RequestRepositoryTest : DatabaseTest() {
 
     lateinit var requestRepository: RequestRepository
 
-    inline fun <reified T: Any> mock() = mock(T::class.java)
+    inline fun <reified T : Any> mock() = mock(T::class.java)
 
     private fun any() = any(User::class.java) ?: User("")
 
     private fun any2() = any(com.simonvanendern.tracking.database.schemata.AggregationRequest::class.java)
-        ?: com.simonvanendern.tracking.database.schemata.AggregationRequest(0, "", "".toByteArray())
+        ?: com.simonvanendern.tracking.database.schemata.AggregationRequest(0, "", "", "", 0, 0f, Date(), Date())
 
     @Before
     fun setUp() {
@@ -49,7 +49,7 @@ class RequestRepositoryTest : DatabaseTest() {
     fun testCreateUser() {
         val responseHolder = retrofit2.Response.success(Response(true))
 
-        val call : Call<Response> = mock()
+        val call: Call<Response> = mock()
 
         `when`(call.execute())
             .thenReturn(responseHolder)
@@ -65,11 +65,11 @@ class RequestRepositoryTest : DatabaseTest() {
 
     @Test
     fun testGetPendingRequests() {
-        val request1 = AggregationRequest("1", "wo0ifwdji", "11111".toByteArray())
-        val request2 = AggregationRequest("2", "owfijoj2d", "00000".toByteArray())
+        val request1 = AggregationRequest("1", "wo0ifwdji", "steps", 1, 1.1f, Date(), Date())
+        val request2 = AggregationRequest("2", "owfijoj2d", "steps", 1, 1.1f, Date(), Date())
 
         val responseHolder = retrofit2.Response.success(listOf(request1, request2))
-        val call : Call<List<AggregationRequest>> = mock()
+        val call: Call<List<AggregationRequest>> = mock()
 
         `when`(call.execute())
             .thenReturn(responseHolder)

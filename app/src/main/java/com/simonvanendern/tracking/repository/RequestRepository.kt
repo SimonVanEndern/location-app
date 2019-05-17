@@ -1,7 +1,6 @@
 package com.simonvanendern.tracking.repository
 
 import com.simonvanendern.tracking.communication.AggregationRequest
-import com.simonvanendern.tracking.communication.AggregationResult
 import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
@@ -24,7 +23,7 @@ class RequestRepository @Inject constructor(
         for (request in newRequests) {
             aggregationRequestDao.insert(
                 com.simonvanendern.tracking.database.schemata.AggregationRequest(
-                    0, request.id, request.data
+                    0, request.id, request.nextUser, request.type, request.n, request.value, request.start, request.end
                 )
             )
         }
@@ -36,7 +35,7 @@ class RequestRepository @Inject constructor(
         return webService.forwardAggregationRequest(request).execute().body()?.status ?: false
     }
 
-    fun postAggregationnResult(userId: String, result: AggregationResult): Boolean {
-        return webService.insertAggregationResult(result).execute().body()?.status ?: false
-    }
+//    fun postAggregationnResult(userId: String, result: AggregationResult): Boolean {
+//        return webService.insertAggregationResult(result).execute().body()?.status ?: false
+//    }
 }

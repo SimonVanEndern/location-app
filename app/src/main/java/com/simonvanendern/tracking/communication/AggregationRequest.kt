@@ -1,7 +1,13 @@
 package com.simonvanendern.tracking.communication
 
+import java.util.*
+
 class AggregationRequest(
     val id: String,
-    val user: String,
-    val data: ByteArray
+    val nextUser: String,
+    val type : String,
+    val n : Int,
+    val value : Float,
+    val start : Date,
+    val end : Date
 )

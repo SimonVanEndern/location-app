@@ -4,6 +4,7 @@ import com.simonvanendern.tracking.database.DatabaseTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 
 class AggregationRequestDaoTest : DatabaseTest() {
 
@@ -19,14 +20,14 @@ class AggregationRequestDaoTest : DatabaseTest() {
         val serverSideID = "jkdjLLIDJFoi298"
         val data = "11111111111111".toByteArray()
 
-        val aggregationRequest = AggregationRequest(0, serverSideID, data)
+        val aggregationRequest = AggregationRequest(0, serverSideID, "user",
+            "steps", 1, 1.0f, Date(), Date())
 
         val id = aggregationRequestDao.insert(aggregationRequest)
 
         val savedAggregationRequest = aggregationRequestDao.getById(id.toInt())
 
         Assert.assertEquals(serverSideID, savedAggregationRequest.serverId)
-        Assert.assertArrayEquals(data, savedAggregationRequest.data)
     }
 
     @Test
@@ -39,9 +40,9 @@ class AggregationRequestDaoTest : DatabaseTest() {
         val data_1 = "010101010".toByteArray()
         val data_2 = "101010101".toByteArray()
 
-        val aggregationRequest_0 = AggregationRequest(0, serverSideId_0, data_0)
-        val aggregationRequest_1 = AggregationRequest(0, serverSideId_1, data_1)
-        val aggregationRequest_2 = AggregationRequest(0, serverSideId_2, data_2)
+        val aggregationRequest_0 = AggregationRequest(0, serverSideId_0, "user", "type", 1, 1.0f, Date(), Date())
+        val aggregationRequest_1 = AggregationRequest(0, serverSideId_1, "user", "type", 1, 1.0f, Date(), Date())
+        val aggregationRequest_2 = AggregationRequest(0, serverSideId_2, "user", "type", 1, 1.0f, Date(), Date())
 
         aggregationRequestDao.insert(aggregationRequest_0)
         aggregationRequestDao.insert(aggregationRequest_1)
