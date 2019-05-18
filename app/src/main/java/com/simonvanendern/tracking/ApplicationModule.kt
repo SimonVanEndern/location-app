@@ -6,6 +6,8 @@ import com.simonvanendern.tracking.aggregation.RequestExecuter
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
+import com.simonvanendern.tracking.database.schemata.StepsDao
+import com.simonvanendern.tracking.database.schemata.StepsRawDao
 import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.repository.RequestRepository
 import dagger.Module
@@ -45,6 +47,18 @@ class ApplicationModule(private val application: Context) {
     @Provides
     fun provideAggregationRequestDao(db: TrackingDatabase): AggregationRequestDao {
         return db.aggregationRequestDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideStepsDao(db: TrackingDatabase): StepsDao {
+        return db.stepsDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideStepsRawDao(db: TrackingDatabase): StepsRawDao {
+        return db.stepsRawDao()
     }
 
     @Singleton

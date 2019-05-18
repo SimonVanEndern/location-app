@@ -39,19 +39,10 @@ class ActivityRepository @Inject constructor(
         activityDao.insert(activity)
     }
 
-    fun getLastActivityTransitionTimestamp(): Long {
-        return activityTransitionDao.getLastTimestamp()
-    }
-
-    fun computeNewActivities() : List<Activity> {
-        return activityTransitionDao.computeNewActivities()
-    }
-
-    fun insertAll(activities : List<Activity>) {
-        return activityDao.insertAll(activities)
-    }
-
-    fun setProcessed (lastTimestamp : Long) {
-        return activityTransitionDao.setProcessed(lastTimestamp)
+    fun aggregateActivities () {
+        val lastTimestamp = activityTransitionDao.getLastTimestamp()
+        val newActivities = activityTransitionDao.computeNewActivities()
+        activityDao.insertAll(newActivities)
+        activityTransitionDao.setProcessed(lastTimestamp)
     }
 }

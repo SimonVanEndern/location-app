@@ -13,7 +13,7 @@ import javax.inject.Inject
  * https://developer.android.com/topic/libraries/architecture/guide.html
  */
 class StepsRepository @Inject constructor(
-    stepsDao : StepsDao,
+    private val stepsDao : StepsDao,
     private val stepsRawDao: StepsRawDao) {
 
     val recentSteps: LiveData<List<Steps>> = stepsDao.get10RecentSteps()
@@ -27,5 +27,12 @@ class StepsRepository @Inject constructor(
     @WorkerThread
     suspend fun insert(stepsRaw: StepsRaw) {
         stepsRawDao.insert(stepsRaw)
+    }
+
+    fun aggregateSteps () {
+        val lastTimestamp = stepsRawDao.getLastTimestamp()
+        val newSteps = stepsRawDao.computeNewSteps()
+        stepsDao.insertAll(newSteps)
+        stepsRawDao.setProcessed(lastTimestamp)
     }
 }

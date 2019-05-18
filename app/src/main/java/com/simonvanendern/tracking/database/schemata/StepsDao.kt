@@ -29,4 +29,7 @@ interface StepsDao {
     // For testing
     @Query("SELECT * FROM steps_table ORDER BY day DESC, timestamp DESC LIMIT 10")
     fun get10RecentSteps (): LiveData<List<Steps>>
+
+    @Insert
+    fun insertAll (steps : List<Steps>)
 }

@@ -13,6 +13,7 @@ import com.simonvanendern.tracking.database.schemata.*
 import com.simonvanendern.tracking.repository.ActivityRepository
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
@@ -65,7 +66,7 @@ class DatabaseAggregatorTest : DatabaseTest() {
 
         assertEquals(2, activityTransitions.size)
 
-        DatabaseAggregator.aggregateActivities(activityRepository)
+        activityRepository.aggregateActivities()
 //        val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java)
 //            .build()
 //
@@ -80,6 +81,7 @@ class DatabaseAggregatorTest : DatabaseTest() {
             .reduce { acc, b -> acc && b })
     }
 
+    @Ignore("The step sensor return the total step count since last restart")
     @Test
     fun testComputeOneSteps() {
         val day1 = "2019-01-02"
@@ -103,54 +105,4 @@ class DatabaseAggregatorTest : DatabaseTest() {
         val averageSteps = stepsDao.getAverageSteps(formatter.parse(day1), formatter.parse(day1))
         assertEquals(50, averageSteps.toInt())
     }
-
-    @Test
-    fun testComputeSteps() {
-        val day1 = "2019-01-02"
-        val day2 = "2019-01-03"
-        val day3 = "2019-01-04"
-
-        val stepsRaw = arrayOf(
-            StepsRaw(formatter.parse(day1).time, formatter.parse(day1), 50, false),
-            StepsRaw(formatter.parse(day1).time + 10000, formatter.parse(day1), 200, false),
-            StepsRaw(formatter.parse(day1).time + 30000, formatter.parse(day1), 20, false),
-            StepsRaw(formatter.parse(day2).time + 200, formatter.parse(day2), 40, false),
-            StepsRaw(formatter.parse(day3).time + 100, formatter.parse(day3), 10, false)
-        )
-
-        var steps = stepsDao.getAll()
-        assertEquals(0, steps.size)
-
-        stepsRaw.forEach { steps -> stepsRawDao.insert(steps) }
-        var stepsRawResult = stepsRawDao.getAll()
-        assertEquals(5, stepsRawResult.size)
-
-        val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java)
-            .build()
-        WorkManager.getInstance().enqueue(request).result.get()
-
-        stepsRawResult = stepsRawDao.getAll()
-        assertEquals(5, stepsRawResult.size)
-
-
-        assertEquals(true, stepsRawResult.map(StepsRaw::processed)
-            .reduce { acc, s -> acc && s })
-        steps = stepsDao.getAll()
-        assertEquals(4, steps.size)
-
-
-        val totalSteps1 = stepsDao.getTotalStepsByDay(formatter.parse(day1))
-        val totalSteps2 = stepsDao.getTotalStepsByDay(formatter.parse(day2))
-        val totalSteps3 = stepsDao.getTotalStepsByDay(formatter.parse(day3))
-
-        assertEquals(10, totalSteps2)
-        assertEquals(0, totalSteps3)
-        assertEquals(190, totalSteps1)
-
-        val averageSteps = stepsDao.getAverageSteps(formatter.parse(day1), formatter.parse(day3))
-
-        // The third day has no entry and thus is not counted in this metric
-        assertEquals(100, averageSteps.toInt())
-    }
-
 }
