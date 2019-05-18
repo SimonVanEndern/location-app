@@ -1,6 +1,7 @@
 package com.simonvanendern.tracking.repository
 
 
+import android.location.Location
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
@@ -32,5 +33,25 @@ class GPSRepository @Inject constructor(db: TrackingDatabase) {
     @WorkerThread
     suspend fun insert(gpsLocation: GPSLocation): Long {
         return gpsLocationDao.insert(gpsLocation)
+    }
+
+    fun insertLocations(locations: List<Location>) {
+        locations.forEach {
+            val location = GPSLocation(
+                0,
+                it.longitude.toFloat(),
+                it.latitude.toFloat(),
+                it.speed
+            )
+
+            val id = gpsLocationDao.insert(location)
+
+            gpsDataDao.insert(
+                GPSData(
+                    id,
+                    it.time
+                )
+            )
+        }
     }
 }

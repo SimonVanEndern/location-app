@@ -5,53 +5,30 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.location.LocationResult
-import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.GPSData
-import com.simonvanendern.tracking.database.schemata.GPSLocation
+import com.simonvanendern.tracking.ApplicationModule
+import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.repository.GPSRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
 class LocationReceiver : BroadcastReceiver() {
 
-    private var parentJob = Job()
-
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
-    private val scope = CoroutineScope(coroutineContext)
+    @Inject
+    lateinit var locationRepository: GPSRepository
 
     override fun onReceive(context: Context, intent: Intent) {
-        val locationRepository = GPSRepository(TrackingDatabase.getDatabase(context, scope))
+        DaggerApplicationComponent.builder()
+            .applicationModule(ApplicationModule(context))
+            .build()
+            .inject(this)
 
-        Log.d("LocationReceiver", "Started onReceive")
+        Log.d("LOCATION_RECEIVER", "Started onReceive")
 
         if (LocationResult.hasResult(intent)) {
             val result = LocationResult.extractResult(intent)
 
-            Log.d("LocationReceiver", "onReceive with result")
+            Log.d("LOCATION_RECEIVER", "onReceive with result")
 
-
-            for (location in result.locations) {
-                scope.launch(Dispatchers.IO) {
-                    val id = locationRepository.insert(
-                        GPSLocation(
-                            0,
-                            location.longitude.toFloat(),
-                            location.latitude.toFloat(),
-                            location.speed
-                        )
-                    )
-                    locationRepository.insert(
-                        GPSData(
-                            id,
-                            location.time
-                        )
-                    )
-                }
-            }
+            locationRepository.insertLocations(result.locations)
         }
     }
 }
