@@ -4,12 +4,16 @@ import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.simonvanendern.tracking.ApplicationModule
+import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.Steps
+import com.simonvanendern.tracking.repository.ActivityRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import java.text.SimpleDateFormat
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class DatabaseAggregator(private val appContext: Context, workParams: WorkerParameters) :
@@ -25,41 +29,49 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
 
     private var formatter = SimpleDateFormat("yyyy-MM-dd")
 
+    @Inject
+    lateinit var activityRepository: ActivityRepository
+
     override fun doWork(): Result {
+        val component = DaggerApplicationComponent.builder()
+            .applicationModule(ApplicationModule(appContext))
+            .build()
+            .inject(this)
+        aggregateActivities(activityRepository)
         aggregateSteps()
-        aggregateActivities()
 
         Log.d("AGGREGATOR", "Successful aggregation")
 
         return Result.success()
     }
 
-    private fun aggregateActivities() {
-        val cursor = database.openHelper.readableDatabase.query(
-            "SELECT MAX(start) FROM activity_transition_table"
-        )
-        cursor.moveToFirst()
-        val index = cursor.getColumnIndexOrThrow("MAX(start)")
-        val lastTimestamp = cursor.getString(index)
+    companion object {
 
-        database.openHelper.writableDatabase.execSQL(
-            """
-            INSERT INTO activity_table (day, activity_type, start, duration)
-            SELECT at1.day, at1.activity_type, at1.start, at2.start - at1.start
-            FROM activity_transition_table at1, activity_transition_table at2
-            WHERE at2.processed = 0
-            AND at1.transition_type = 0
-            AND at1.activity_type = at2.activity_type
-            AND at1.transition_type != at2.transition_type
-            AND at2.start = (SELECT MIN(start) FROM activity_transition_table WHERE start > at1.start)
-        """
-        )
+        fun aggregateActivities(activityRepository: ActivityRepository) {
+            val lastTimestamp = activityRepository.getLastActivityTransitionTimestamp()
+            val newActivities = activityRepository.computeNewActivities()
+            activityRepository.insertAll(newActivities)
+            activityRepository.setProcessed(lastTimestamp)
 
-        database.openHelper.writableDatabase.execSQL(
-            """UPDATE activity_transition_table SET processed = 1
-                WHERE start <= $lastTimestamp
-            """
-        )
+//        database.openHelper.writableDatabase.execSQL(
+//            """
+//            INSERT INTO activity_table (day, activity_type, start, duration)
+//            SELECT at1.day, at1.activity_type, at1.start, at2.start - at1.start
+//            FROM activity_transition_table at1, activity_transition_table at2
+//            WHERE at2.processed = 0
+//            AND at1.transition_type = 0
+//            AND at1.activity_type = at2.activity_type
+//            AND at1.transition_type != at2.transition_type
+//            AND at2.start = (SELECT MIN(start) FROM activity_transition_table WHERE start > at1.start)
+//        """
+//        )
+//
+//        database.openHelper.writableDatabase.execSQL(
+//            """UPDATE activity_transition_table SET processed = 1
+//                WHERE start <= $lastTimestamp
+//            """
+//        )
+        }
     }
 
     private fun aggregateSteps() {

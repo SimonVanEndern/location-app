@@ -6,17 +6,21 @@ import com.simonvanendern.tracking.database.schemata.Activity
 import com.simonvanendern.tracking.database.schemata.ActivityDao
 import com.simonvanendern.tracking.database.schemata.ActivityTransition
 import com.simonvanendern.tracking.database.schemata.ActivityTransitionDao
+import javax.inject.Inject
 
 /**
  * Abstracted Repository as promoted by the Architecture Guide.
  * https://developer.android.com/topic/libraries/architecture/guide.html
  */
-class ActivityRepository(private val activityTransitionDao: ActivityTransitionDao,
-                         private val activityDao: ActivityDao
+class ActivityRepository @Inject constructor(
+    private val activityTransitionDao: ActivityTransitionDao,
+    private val activityDao: ActivityDao
 ) {
 
-    val recentActivityTransitions: LiveData<List<ActivityTransition>> = activityTransitionDao.get10RecentActivityTransitions()
-    val recentActivities : LiveData<List<Activity>> = activityDao.get10RecentActivities()
+
+    val recentActivityTransitions: LiveData<List<ActivityTransition>> =
+        activityTransitionDao.get10RecentActivityTransitions()
+    val recentActivities: LiveData<List<Activity>> = activityDao.get10RecentActivities()
 
 
     // You must call this on a non-UI thread or your app will crash. So we're making this a
@@ -33,5 +37,21 @@ class ActivityRepository(private val activityTransitionDao: ActivityTransitionDa
     @WorkerThread
     suspend fun insert(activity: Activity) {
         activityDao.insert(activity)
+    }
+
+    fun getLastActivityTransitionTimestamp(): Long {
+        return activityTransitionDao.getLastTimestamp()
+    }
+
+    fun computeNewActivities() : List<Activity> {
+        return activityTransitionDao.computeNewActivities()
+    }
+
+    fun insertAll(activities : List<Activity>) {
+        return activityDao.insertAll(activities)
+    }
+
+    fun setProcessed (lastTimestamp : Long) {
+        return activityTransitionDao.setProcessed(lastTimestamp)
     }
 }

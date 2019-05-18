@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database
+package com.simonvanendern.tracking.aggregation
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,8 +8,9 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.impl.utils.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
-import com.simonvanendern.tracking.aggregation.DatabaseAggregator
+import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.schemata.*
+import com.simonvanendern.tracking.repository.ActivityRepository
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -24,6 +25,7 @@ class DatabaseAggregatorTest : DatabaseTest() {
     private lateinit var activityTransitionDao: ActivityTransitionDao
     private lateinit var stepsDao: StepsDao
     private lateinit var stepsRawDao: StepsRawDao
+    private lateinit var activityRepository: ActivityRepository
 
     private var formatter = SimpleDateFormat("yyyy-MM-dd")
 
@@ -31,6 +33,7 @@ class DatabaseAggregatorTest : DatabaseTest() {
     fun init() {
         activityDao = getDb().activityDao()
         activityTransitionDao = getDb().activityTransitionDao()
+        activityRepository = ActivityRepository(activityTransitionDao, activityDao)
         stepsDao = getDb().stepsDao()
         stepsRawDao = getDb().stepsRawDao()
 
@@ -62,17 +65,19 @@ class DatabaseAggregatorTest : DatabaseTest() {
 
         assertEquals(2, activityTransitions.size)
 
-        val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java)
-            .build()
-        WorkManager.getInstance().enqueue(request).result.get()
+        DatabaseAggregator.aggregateActivities(activityRepository)
+//        val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java)
+//            .build()
+//
+//        WorkManager.getInstance().enqueue(request).result.get()
 
         val activities = activityDao.getAll()
         activityTransitions = activityTransitionDao.getAll()
 
-        assertEquals(true, activityTransitions.map(ActivityTransition::processed)
-            .reduce { acc, b -> acc && b })
         assertEquals(1, activities.size)
         assertEquals(100, activities.first().duration)
+        assertEquals(true, activityTransitions.map(ActivityTransition::processed)
+            .reduce { acc, b -> acc && b })
     }
 
     @Test
@@ -138,9 +143,9 @@ class DatabaseAggregatorTest : DatabaseTest() {
         val totalSteps2 = stepsDao.getTotalStepsByDay(formatter.parse(day2))
         val totalSteps3 = stepsDao.getTotalStepsByDay(formatter.parse(day3))
 
-        assertEquals(190, totalSteps1)
         assertEquals(10, totalSteps2)
         assertEquals(0, totalSteps3)
+        assertEquals(190, totalSteps1)
 
         val averageSteps = stepsDao.getAverageSteps(formatter.parse(day1), formatter.parse(day3))
 

@@ -29,4 +29,7 @@ interface ActivityDao {
          day BETWEEN :start AND :end"""
     )
     fun getTotalTimeSpentOnActivity(start: Date?, end: Date?, activity: Int): Long
+
+    @Insert
+    fun insertAll (activities : List<Activity>)
 }
