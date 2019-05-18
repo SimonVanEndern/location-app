@@ -6,52 +6,52 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import android.widget.Toast
-import com.simonvanendern.tracking.database.TrackingDatabase
+import com.simonvanendern.tracking.ApplicationModule
+import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.database.schemata.StepsRaw
 import com.simonvanendern.tracking.repository.StepsRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
 class StepsLogger(private val context: Context) : Runnable, SensorEventListener {
 
     var sensorManager: SensorManager? = null
-    private var lastTimeStamp: Long? = null
-    private var parentJob = Job()
+    private var lastTimeStamp = 0L
 
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
-
-    private val scope = CoroutineScope(coroutineContext)
-
-    private val stepsRepository = StepsRepository(TrackingDatabase.getDatabase(context, scope))
+    @Inject
+    lateinit var stepsRepository: StepsRepository
 
     override fun run() {
+        DaggerApplicationComponent.builder()
+            .applicationModule(ApplicationModule(context))
+            .build()
+            .inject(this)
 
         sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-
         val stepsSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
         if (stepsSensor != null) {
-            sensorManager?.registerListener(this, stepsSensor, SensorManager.SENSOR_DELAY_NORMAL)
-//            Toast.makeText(context, "registered listener", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, "Cannot register step sensor listener", Toast.LENGTH_SHORT).show()
+            sensorManager?.registerListener(
+                this,
+                stepsSensor,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
         }
     }
 
     override fun onSensorChanged(event: SensorEvent) {
         Log.d("STEPS_SENSOR", "last timestamp: $lastTimeStamp")
-        if (lastTimeStamp == null || Date().time - lastTimeStamp!! > 1000 * 60 * 1) {
-            lastTimeStamp = Date().time
-            scope.launch(Dispatchers.IO) {
-                //            Log.d("STEPS", "step sensor triggered")
-                stepsRepository.insert(StepsRaw(Date().time, Date(), event.values[0].toInt(), false))
-            }
+        val now = Date()
+        if (now.time - lastTimeStamp > 1000 * 60 * 1) {
+            lastTimeStamp = now.time
+            stepsRepository.insert(
+                StepsRaw(
+                    now.time,
+                    now,
+                    event.values[0].toInt(),
+                    false
+                )
+            )
         }
     }
 

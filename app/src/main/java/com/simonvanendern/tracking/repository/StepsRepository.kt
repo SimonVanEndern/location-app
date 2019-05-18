@@ -22,9 +22,9 @@ class StepsRepository @Inject constructor(db: TrackingDatabase) {
     // suspend function so the caller methods know this.
     // Like this, Room ensures that you're not doing any long running operations on the main
     // thread, blocking the UI.
-    @Suppress("RedundantSuspendModifier")
+//    @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insert(stepsRaw: StepsRaw) {
+    fun insert(stepsRaw: StepsRaw) {
         stepsRawDao.insert(stepsRaw)
     }
 
