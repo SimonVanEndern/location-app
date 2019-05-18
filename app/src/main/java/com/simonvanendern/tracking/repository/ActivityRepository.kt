@@ -1,10 +1,13 @@
 package com.simonvanendern.tracking.repository
 
+import android.os.SystemClock.elapsedRealtimeNanos
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import com.google.android.gms.location.ActivityTransitionEvent
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.Activity
 import com.simonvanendern.tracking.database.schemata.ActivityTransition
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -40,5 +43,21 @@ class ActivityRepository @Inject constructor(db: TrackingDatabase) {
         val newActivities = activityTransitionDao.computeNewActivities()
         activityDao.insertAll(newActivities)
         activityTransitionDao.setProcessed(lastTimestamp)
+    }
+
+    fun insertDetectedActiviteis(activities: List<ActivityTransitionEvent>) {
+        val now = Date()
+        val activityTransitions = activities.map {
+            ActivityTransition(
+                0,
+                now,
+                it.activityType,
+                it.transitionType,
+                now.time - ((elapsedRealtimeNanos() - it.elapsedRealTimeNanos) / 1000000),
+                false
+            )
+        }
+
+        activityTransitionDao.insertAll(activityTransitions)
     }
 }

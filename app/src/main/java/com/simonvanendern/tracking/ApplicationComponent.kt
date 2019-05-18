@@ -1,6 +1,7 @@
 package com.simonvanendern.tracking
 
 import com.simonvanendern.tracking.aggregation.DatabaseAggregator
+import com.simonvanendern.tracking.logging.ActivityRecognitionReceiver
 import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.repository.RequestRepository
 import dagger.Component
@@ -12,6 +13,7 @@ interface ApplicationComponent {
     fun inject(application: MyApplication)
 //    fun inject(activityRepository: ActivityRepository)
     fun inject(databaseAggregator: DatabaseAggregator)
+    fun inject(activityRecognitionReceiver : ActivityRecognitionReceiver)
 
 //        fun activityRepository() : ActivityRepository
 //    fun databaseAggregator(activityRepository : ActivityRepository)

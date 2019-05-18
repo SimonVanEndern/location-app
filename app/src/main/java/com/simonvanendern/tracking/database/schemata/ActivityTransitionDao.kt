@@ -45,4 +45,7 @@ interface ActivityTransitionDao {
                 WHERE start <= :lastTimestamp"""
     )
     fun setProcessed(lastTimestamp: Long)
+
+    @Insert
+    fun insertAll (activityTransitions : List<ActivityTransition>)
 }
