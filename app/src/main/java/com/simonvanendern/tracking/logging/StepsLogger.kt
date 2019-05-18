@@ -7,9 +7,9 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
 import android.widget.Toast
-import com.simonvanendern.tracking.repository.StepsRepository
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.StepsRaw
+import com.simonvanendern.tracking.repository.StepsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +20,7 @@ import kotlin.coroutines.CoroutineContext
 class StepsLogger(private val context: Context) : Runnable, SensorEventListener {
 
     var sensorManager: SensorManager? = null
-    private var lastTimeStamp : Long? = null
+    private var lastTimeStamp: Long? = null
     private var parentJob = Job()
 
     private val coroutineContext: CoroutineContext
@@ -28,9 +28,7 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
 
     private val scope = CoroutineScope(coroutineContext)
 
-    private val stepsDao = TrackingDatabase.getDatabase(context, scope).stepsDao()
-    private val stepsRawDao = TrackingDatabase.getDatabase(context, scope).stepsRawDao()
-    private val stepsRepository = StepsRepository(stepsDao, stepsRawDao)
+    private val stepsRepository = StepsRepository(TrackingDatabase.getDatabase(context, scope))
 
     override fun run() {
 

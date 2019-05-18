@@ -3,7 +3,7 @@ package com.simonvanendern.tracking
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.simonvanendern.tracking.database.*
+import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.*
 import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.repository.GPSRepository
@@ -30,7 +30,7 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     //Getting the Repositories for the respective data
     private val stepsRepository: StepsRepository
     private val activityRepository: ActivityRepository
-    private val locationRepository : GPSRepository
+    private val locationRepository: GPSRepository
 
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
@@ -42,17 +42,11 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     val mostRecentActivityTransitions: LiveData<List<ActivityTransition>>
 
     init {
-        val stepsDao = TrackingDatabase.getDatabase(application, scope).stepsDao()
-        val stepsRawDao = TrackingDatabase.getDatabase(application, scope).stepsRawDao()
-        val activityDao = TrackingDatabase.getDatabase(application, scope).activityDao()
-        val activityTransitionDao = TrackingDatabase.getDatabase(application, scope).activityTransitionDao()
-        val locationDao = TrackingDatabase.getDatabase(application, scope).gPSLocationDao()
-        val gpsDataDao = TrackingDatabase.getDatabase(application, scope).gPSDataDao()
+        val db = TrackingDatabase.getDatabase(application, scope)
 
-        stepsRepository = StepsRepository(stepsDao, stepsRawDao)
-        activityRepository =
-            ActivityRepository(activityTransitionDao, activityDao)
-        locationRepository = GPSRepository(locationDao, gpsDataDao)
+        stepsRepository = StepsRepository(db)
+        activityRepository = ActivityRepository(db)
+        locationRepository = GPSRepository(db)
 
         mostRecentSteps = stepsRepository.recentSteps
         mostRecentActivities = activityRepository.recentActivities

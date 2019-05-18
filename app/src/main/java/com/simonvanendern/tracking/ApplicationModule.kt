@@ -65,9 +65,9 @@ class ApplicationModule(private val application: Context) {
     @Provides
     fun provideRequestRepository(
         webService: WebService,
-        aggregationRequestDao: AggregationRequestDao
+        db : TrackingDatabase
     ): RequestRepository {
-        return RequestRepository(webService, aggregationRequestDao)
+        return RequestRepository(db, webService)
     }
 
     @Singleton
@@ -79,6 +79,6 @@ class ApplicationModule(private val application: Context) {
     @Singleton
     @Provides
     fun provideActivityRepository(db: TrackingDatabase): ActivityRepository {
-        return ActivityRepository(db.activityTransitionDao(), db.activityDao())
+        return ActivityRepository(db)
     }
 }

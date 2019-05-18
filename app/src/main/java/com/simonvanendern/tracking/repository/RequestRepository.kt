@@ -3,15 +3,16 @@ package com.simonvanendern.tracking.repository
 import com.simonvanendern.tracking.communication.AggregationRequest
 import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
-import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
+import com.simonvanendern.tracking.database.TrackingDatabase
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RequestRepository @Inject constructor(
-    private val webService: WebService,
-    private val aggregationRequestDao: AggregationRequestDao
+    db: TrackingDatabase,
+    private val webService: WebService
 ) {
+    private val aggregationRequestDao = db.aggregationRequestDao()
 
     fun createUser(userId: String): Boolean {
         return webService.createUser(User(userId)).execute().body()?.status ?: true

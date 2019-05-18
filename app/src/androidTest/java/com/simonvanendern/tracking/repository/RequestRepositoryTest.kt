@@ -6,6 +6,7 @@ import com.simonvanendern.tracking.communication.Response
 import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.DatabaseTest
+import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -39,10 +40,13 @@ class RequestRepositoryTest : DatabaseTest() {
     @Before
     fun setUp() {
         webService = mock(WebService::class.java)
-
         initMocks(this)
 
-        requestRepository = RequestRepository(webService, aggregationRequestDao)
+        val db = mock(TrackingDatabase::class.java)
+        `when`(db.aggregationRequestDao())
+            .thenReturn(aggregationRequestDao)
+
+        requestRepository = RequestRepository(db, webService)
     }
 
     @Test

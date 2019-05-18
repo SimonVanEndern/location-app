@@ -1,21 +1,18 @@
 package com.simonvanendern.tracking.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
-import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.database.DatabaseTest
+import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.StepsDao
 import com.simonvanendern.tracking.database.schemata.StepsRaw
 import com.simonvanendern.tracking.database.schemata.StepsRawDao
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,14 +34,19 @@ class StepsRepositoryTest : DatabaseTest() {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        stepsRepository = StepsRepository(stepsDao, stepsRawDao)
+        val db = mock(TrackingDatabase::class.java)
+        `when`(db.stepsDao())
+            .thenReturn(stepsDao)
+        `when`(db.stepsRawDao())
+            .thenReturn(stepsRawDao)
+        stepsRepository = StepsRepository(db)
     }
 
     @Test
     fun testGet10RecentSteps() {
         stepsRepository.recentSteps
 
-        Mockito.verify(stepsDao).get10RecentSteps()
+        verify(stepsDao).get10RecentSteps()
     }
 
     @Test
@@ -53,14 +55,14 @@ class StepsRepositoryTest : DatabaseTest() {
 
         runBlocking { stepsRepository.insert(stepsRaw) }
 
-        Mockito.verify(stepsRawDao).insert(stepsRaw)
+        verify(stepsRawDao).insert(stepsRaw)
     }
 
     @Test
     fun testAggregateSteps() {
         stepsRawDao = getDb().stepsRawDao()
         stepsDao = getDb().stepsDao()
-        stepsRepository = StepsRepository(stepsDao, stepsRawDao)
+        stepsRepository = StepsRepository(getDb())
 
         val day1 = "2019-01-02"
         val day2 = "2019-01-03"

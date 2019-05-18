@@ -2,25 +2,14 @@ package com.simonvanendern.tracking.repository
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.work.Configuration
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
-import androidx.work.impl.utils.SynchronousExecutor
-import androidx.work.testing.WorkManagerTestInitHelper
-import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.database.DatabaseTest
-import com.simonvanendern.tracking.database.schemata.*
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert
-import org.junit.Assert.*
+import com.simonvanendern.tracking.database.schemata.ActivityDao
+import com.simonvanendern.tracking.database.schemata.ActivityTransition
+import com.simonvanendern.tracking.database.schemata.ActivityTransitionDao
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
-import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
@@ -34,7 +23,7 @@ class ActivityRepositoryTest : DatabaseTest() {
     fun init() {
         activityDao = getDb().activityDao()
         activityTransitionDao = getDb().activityTransitionDao()
-        activityRepository = ActivityRepository(activityTransitionDao, activityDao)
+        activityRepository = ActivityRepository(getDb())
     }
 
     @Test

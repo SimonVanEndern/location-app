@@ -4,13 +4,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.simonvanendern.tracking.repository.GPSRepository
-import com.simonvanendern.tracking.database.*
-import com.simonvanendern.tracking.database.schemata.GPSData
-import com.simonvanendern.tracking.database.schemata.GPSDataDao
-import com.simonvanendern.tracking.database.schemata.GPSLocation
-import com.simonvanendern.tracking.database.schemata.GPSLocationDao
 import com.google.android.gms.location.LocationResult
+import com.simonvanendern.tracking.database.TrackingDatabase
+import com.simonvanendern.tracking.database.schemata.GPSData
+import com.simonvanendern.tracking.database.schemata.GPSLocation
+import com.simonvanendern.tracking.repository.GPSRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,10 +24,7 @@ class LocationReceiver : BroadcastReceiver() {
     private val scope = CoroutineScope(coroutineContext)
 
     override fun onReceive(context: Context, intent: Intent) {
-        val locationDao: GPSLocationDao = TrackingDatabase.getDatabase(context, scope).gPSLocationDao()
-        val gpsDao: GPSDataDao = TrackingDatabase.getDatabase(context, scope).gPSDataDao()
-
-        val locationRepository = GPSRepository(locationDao, gpsDao)
+        val locationRepository = GPSRepository(TrackingDatabase.getDatabase(context, scope))
 
         Log.d("LocationReceiver", "Started onReceive")
 
