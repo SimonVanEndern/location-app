@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.aggregation
+package com.simonvanendern.tracking.repository
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,46 +8,33 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.impl.utils.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
+import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.schemata.*
-import com.simonvanendern.tracking.repository.ActivityRepository
-import org.junit.Assert.assertEquals
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-class DatabaseAggregatorTest : DatabaseTest() {
+class ActivityRepositoryTest : DatabaseTest() {
 
     private lateinit var activityDao: ActivityDao
     private lateinit var activityTransitionDao: ActivityTransitionDao
-    private lateinit var stepsDao: StepsDao
-    private lateinit var stepsRawDao: StepsRawDao
     private lateinit var activityRepository: ActivityRepository
-
-    private var formatter = SimpleDateFormat("yyyy-MM-dd")
 
     @Before
     fun init() {
         activityDao = getDb().activityDao()
         activityTransitionDao = getDb().activityTransitionDao()
         activityRepository = ActivityRepository(activityTransitionDao, activityDao)
-        stepsDao = getDb().stepsDao()
-        stepsRawDao = getDb().stepsRawDao()
-
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val config = Configuration.Builder()
-            // Set log level to Log.DEBUG to make it easier to debug
-            .setMinimumLoggingLevel(Log.DEBUG)
-            // Use a SynchronousExecutor here to make it easier to write tests
-            .setExecutor(SynchronousExecutor())
-            .build()
-
-        // Initialize WorkManager for instrumentation tests.
-        WorkManagerTestInitHelper.initializeTestWorkManager(context, config)
     }
 
     @Test
@@ -79,30 +66,5 @@ class DatabaseAggregatorTest : DatabaseTest() {
         assertEquals(100, activities.first().duration)
         assertEquals(true, activityTransitions.map(ActivityTransition::processed)
             .reduce { acc, b -> acc && b })
-    }
-
-    @Ignore("The step sensor return the total step count since last restart")
-    @Test
-    fun testComputeOneSteps() {
-        val day1 = "2019-01-02"
-
-        val stepsRaw = StepsRaw(
-            formatter.parse(day1).time,
-            formatter.parse(day1),
-            50,
-            false
-        )
-
-        stepsRawDao.insert(stepsRaw)
-
-        val request = OneTimeWorkRequest.Builder(DatabaseAggregator::class.java).build()
-        WorkManager.getInstance().enqueue(request).result.get()
-
-        val stepsRawResult = stepsRawDao.getAll()
-        assertEquals(1, stepsRawResult.size)
-        assertEquals(true, stepsRawResult.first().processed)
-
-        val averageSteps = stepsDao.getAverageSteps(formatter.parse(day1), formatter.parse(day1))
-        assertEquals(50, averageSteps.toInt())
     }
 }
