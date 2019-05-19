@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.aggregated.Steps
 import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class StepsRepository @Inject constructor(db: TrackingDatabase) {
@@ -20,12 +18,10 @@ class StepsRepository @Inject constructor(db: TrackingDatabase) {
     // suspend function so the caller methods know this.
     // Like this, Room ensures that you're not doing any long running operations on the main
     // thread, blocking the UI.
-//    @Suppress("RedundantSuspendModifier")
+    @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    fun insert(stepsRaw: StepsRaw) {
-        GlobalScope.launch {
-            stepsRawDao.insert(stepsRaw)
-        }
+    suspend fun insert(stepsRaw: StepsRaw) {
+        stepsRawDao.insert(stepsRaw)
     }
 
     fun aggregateSteps() {

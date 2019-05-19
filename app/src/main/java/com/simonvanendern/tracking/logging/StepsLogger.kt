@@ -10,6 +10,8 @@ import com.simonvanendern.tracking.ApplicationModule
 import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
 import com.simonvanendern.tracking.repository.StepsRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -44,14 +46,16 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
         val now = Date()
         if (now.time - lastTimeStamp > 1000 * 60 * 1) {
             lastTimeStamp = now.time
-            stepsRepository.insert(
-                StepsRaw(
-                    now.time,
-                    now,
-                    event.values[0].toInt(),
-                    false
+            GlobalScope.launch {
+                stepsRepository.insert(
+                    StepsRaw(
+                        now.time,
+                        now,
+                        event.values[0].toInt(),
+                        false
+                    )
                 )
-            )
+            }
         }
     }
 

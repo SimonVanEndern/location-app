@@ -12,8 +12,11 @@ interface StepsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(steps: Steps): Long
 
+    @Insert
+    fun insertAll(steps: List<Steps>)
+
     @Query("SELECT * FROM steps_table")
-    fun getAll () : List<Steps>
+    fun getAll(): List<Steps>
 
     @Query("SELECT SUM(steps) FROM steps_table WHERE day = :day GROUP BY day")
     fun getTotalStepsByDay(day: Date): Int
@@ -26,10 +29,6 @@ interface StepsDao {
     )
     fun getAverageSteps(startDayInclusive: Date, endDayInclusive: Date): Float
 
-    // For testing
     @Query("SELECT * FROM steps_table ORDER BY day DESC, timestamp DESC LIMIT 10")
-    fun get10RecentSteps (): LiveData<List<Steps>>
-
-    @Insert
-    fun insertAll (steps : List<Steps>)
+    fun get10RecentSteps(): LiveData<List<Steps>>
 }

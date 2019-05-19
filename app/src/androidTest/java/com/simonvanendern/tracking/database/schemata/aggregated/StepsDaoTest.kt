@@ -2,8 +2,7 @@ package com.simonvanendern.tracking.database.schemata.aggregated
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
-import com.simonvanendern.tracking.database.schemata.aggregated.Steps
-import com.simonvanendern.tracking.database.schemata.aggregated.StepsDao
+import com.simonvanendern.tracking.waitForValue
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -62,5 +61,24 @@ class StepsDaoTest : DatabaseTest() {
         stepsDao.insert(stepsObject2)
         val result = stepsDao.getAverageSteps(day1, day2)
         Assert.assertEquals((steps1 + steps2) / 2.toFloat(), result)
+    }
+
+    @Test
+    fun testGet10RecentSteps() {
+        val dayFraction = "2019-01-"
+
+        for (i in 11..30) {
+            stepsDao.insert(
+                Steps(
+                    formatter.parse(dayFraction + i).time,
+                    formatter.parse(dayFraction + i),
+                    230 + i
+                )
+            )
+        }
+
+        val result = stepsDao.get10RecentSteps().waitForValue()
+        Assert.assertEquals(10, result.size)
+        Assert.assertEquals(260, result.first().steps)
     }
 }
