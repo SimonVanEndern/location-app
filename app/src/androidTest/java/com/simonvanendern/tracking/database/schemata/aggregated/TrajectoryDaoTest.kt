@@ -1,10 +1,8 @@
 package com.simonvanendern.tracking.database.schemata.aggregated
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.simonvanendern.tracking.database.DatabaseTest
 import com.google.android.gms.location.DetectedActivity
-import com.simonvanendern.tracking.database.schemata.aggregated.Trajectory
-import com.simonvanendern.tracking.database.schemata.aggregated.TrajectoryDao
+import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
 import com.simonvanendern.tracking.database.schemata.raw.GPSLocationDao
 import org.junit.Assert
@@ -20,8 +18,8 @@ class TrajectoryDaoTest : DatabaseTest() {
 
     @Before
     fun init() {
-        trajectoryDao = getDb().trajectoryDao()
-        gpsLocationDao = getDb().gPSLocationDao()
+        trajectoryDao = db.trajectoryDao()
+        gpsLocationDao = db.gPSLocationDao()
     }
 
     @Test

@@ -12,7 +12,7 @@ class AggregationRequestDaoTest : DatabaseTest() {
 
     @Before
     fun init() {
-        aggregationRequestDao = getDb().aggregationRequestDao()
+        aggregationRequestDao = db.aggregationRequestDao()
     }
 
     @Test

@@ -18,9 +18,5 @@ interface ApplicationComponent {
     fun inject(activityRecognitionReceiver : ActivityRecognitionReceiver)
     fun inject(LocationReceiver : LocationReceiver)
     fun inject(stepsLogger: StepsLogger)
-
-//        fun activityRepository() : ActivityRepository
-//    fun databaseAggregator(activityRepository : ActivityRepository)
-
-//    fun inject(mainActivity: MainActivity)
+    fun inject(allDataViewModel: AllDataViewModel)
 }

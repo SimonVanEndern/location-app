@@ -16,11 +16,7 @@ abstract class DatabaseTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var db: TrackingDatabase
-
-    fun getDb () : TrackingDatabase {
-        return db
-    }
+    lateinit var db: TrackingDatabase
 
     @Before
     fun createDb() {
@@ -29,8 +25,6 @@ abstract class DatabaseTest {
         db = Room.inMemoryDatabaseBuilder(context, TrackingDatabase::class.java)
             .allowMainThreadQueries()
             .build()
-
-        TrackingDatabase.setDatabase(db)
     }
 
     @After

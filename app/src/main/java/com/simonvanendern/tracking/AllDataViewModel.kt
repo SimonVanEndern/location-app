@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -45,8 +46,14 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
     val mostRecentLocations: LiveData<List<GPSData>>
     val mostRecentActivityTransitions: LiveData<List<ActivityTransition>>
 
+    @Inject
+    lateinit var db : TrackingDatabase
+
     init {
-        val db = TrackingDatabase.getDatabase(application, scope)
+        val component = DaggerApplicationComponent.builder()
+            .applicationModule(ApplicationModule(application))
+            .build()
+        component.inject(this)
 
         stepsRepository = StepsRepository(db)
         activityRepository = ActivityRepository(db)
@@ -57,13 +64,6 @@ class AllDataViewModel(application: Application) : AndroidViewModel(application)
         mostRecentLocations = locationRepository.recentLocations
         mostRecentActivityTransitions = activityRepository.recentActivityTransitions
     }
-
-    /**
-     * Launching a new coroutine to insert the data in a non-blocking way
-     */
-//    fun insert(word: Word) = scope.launch(Dispatchers.IO) {
-//        wordRepository.insert(word)
-//    }
 
     fun insert(activityTransition: ActivityTransition) = scope.launch(Dispatchers.IO) {
         activityRepository.insert(activityTransition)

@@ -16,8 +16,8 @@ class GPSDataDaoTest : DatabaseTest() {
 
     @Before
     fun init() {
-        gpsDataDao = getDb().gPSDataDao()
-        gpsLocationDao = getDb().gPSLocationDao()
+        gpsDataDao = db.gPSDataDao()
+        gpsLocationDao = db.gPSLocationDao()
     }
 
     @Test

@@ -15,7 +15,7 @@ class ActivityDaoTest : DatabaseTest() {
 
     @Before
     fun init() {
-        activityDao = getDb().activityDao()
+        activityDao = db.activityDao()
     }
 
     @Test

@@ -18,7 +18,7 @@ class StepsDaoTest : DatabaseTest() {
 
     @Before
     fun init() {
-        stepsDao = getDb().stepsDao()
+        stepsDao = db.stepsDao()
     }
 
     @Test

@@ -21,9 +21,9 @@ class ActivityRepositoryTest : DatabaseTest() {
 
     @Before
     fun init() {
-        activityDao = getDb().activityDao()
-        activityTransitionDao = getDb().activityTransitionDao()
-        activityRepository = ActivityRepository(getDb())
+        activityDao = db.activityDao()
+        activityTransitionDao = db.activityTransitionDao()
+        activityRepository = ActivityRepository(db)
     }
 
     @Test

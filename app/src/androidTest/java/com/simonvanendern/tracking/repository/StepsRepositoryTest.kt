@@ -60,9 +60,9 @@ class StepsRepositoryTest : DatabaseTest() {
 
     @Test
     fun testAggregateSteps() {
-        stepsRawDao = getDb().stepsRawDao()
-        stepsDao = getDb().stepsDao()
-        stepsRepository = StepsRepository(getDb())
+        stepsRawDao = db.stepsRawDao()
+        stepsDao = db.stepsDao()
+        stepsRepository = StepsRepository(db)
 
         val day1 = "2019-01-02"
         val day2 = "2019-01-03"

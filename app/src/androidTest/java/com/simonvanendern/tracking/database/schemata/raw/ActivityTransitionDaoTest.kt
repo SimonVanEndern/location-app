@@ -21,7 +21,7 @@ class ActivityTransitionDaoTest : DatabaseTest() {
 
     @Before
     fun init() {
-        activityTransitionDao = getDb().activityTransitionDao()
+        activityTransitionDao = db.activityTransitionDao()
     }
 
     @Test

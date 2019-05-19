@@ -2,7 +2,6 @@ package com.simonvanendern.tracking.database.schemata.raw
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
-import com.simonvanendern.tracking.repository.StepsRepository
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +17,7 @@ class StepsRawDaoTest : DatabaseTest() {
 
     @Before
     fun init() {
-        stepsRawDao = getDb().stepsRawDao()
+        stepsRawDao = db.stepsRawDao()
     }
 
     @Test
@@ -80,7 +79,7 @@ class StepsRawDaoTest : DatabaseTest() {
 
     @Test
     fun computeNewSteps() {
-        stepsRawDao = getDb().stepsRawDao()
+        stepsRawDao = db.stepsRawDao()
 
         val day1 = "2019-01-02"
         val day2 = "2019-01-03"
