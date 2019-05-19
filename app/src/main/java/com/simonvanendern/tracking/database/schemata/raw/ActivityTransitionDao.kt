@@ -14,6 +14,9 @@ interface ActivityTransitionDao {
     @Insert(onConflict = ABORT)
     fun insert(activityTransition: ActivityTransition): Long
 
+    @Insert
+    fun insertAll (activityTransitions : List<ActivityTransition>)
+
     @Query("SELECT * FROM activity_transition_table")
     fun getAll(): List<ActivityTransition>
 
@@ -28,6 +31,12 @@ interface ActivityTransitionDao {
     fun getLastTimestamp(): Long
 
     @Query(
+        """UPDATE activity_transition_table SET processed = 1
+                WHERE start <= :lastTimestamp"""
+    )
+    fun setProcessed(lastTimestamp: Long)
+
+    @Query(
         """
         SELECT 0 as id, at1.day, at1.activity_type, at1.start, at2.start - at1.start as duration
             FROM activity_transition_table at1, activity_transition_table at2
@@ -39,13 +48,4 @@ interface ActivityTransitionDao {
     """
     )
     fun computeNewActivities(): List<Activity>
-
-    @Query(
-        """UPDATE activity_transition_table SET processed = 1
-                WHERE start <= :lastTimestamp"""
-    )
-    fun setProcessed(lastTimestamp: Long)
-
-    @Insert
-    fun insertAll (activityTransitions : List<ActivityTransition>)
 }
