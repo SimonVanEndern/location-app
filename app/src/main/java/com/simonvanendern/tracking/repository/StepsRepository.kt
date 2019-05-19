@@ -5,12 +5,10 @@ import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.aggregated.Steps
 import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Abstracted Repository as promoted by the Architecture Guide.
- * https://developer.android.com/topic/libraries/architecture/guide.html
- */
 class StepsRepository @Inject constructor(db: TrackingDatabase) {
 
     private val stepsDao = db.stepsDao()
@@ -25,7 +23,9 @@ class StepsRepository @Inject constructor(db: TrackingDatabase) {
 //    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     fun insert(stepsRaw: StepsRaw) {
-        stepsRawDao.insert(stepsRaw)
+        GlobalScope.launch {
+            stepsRawDao.insert(stepsRaw)
+        }
     }
 
     fun aggregateSteps() {

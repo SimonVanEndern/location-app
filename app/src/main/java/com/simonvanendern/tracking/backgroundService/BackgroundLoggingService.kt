@@ -19,7 +19,6 @@ import com.simonvanendern.tracking.logging.TransitionRecognition
 import java.lang.Thread.sleep
 import java.util.concurrent.TimeUnit
 
-
 class BackgroundLoggingService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
@@ -29,11 +28,11 @@ class BackgroundLoggingService : Service() {
         override fun handleMessage(msg: Message) {
             Log.d("SERVICE_HANLDER", "got intent")
 
+            locationUpdates = LocationUpdates(applicationContext)
             if (msg.arg2 == -1) {
                 // Do GPS Logging here
                 val stepsLogger = StepsLogger(applicationContext)
                 TransitionRecognition(applicationContext)
-                locationUpdates = LocationUpdates(applicationContext)
                 post(stepsLogger)
 
 
@@ -63,8 +62,6 @@ class BackgroundLoggingService : Service() {
     }
 
     override fun onCreate() {
-//        super.onCreate()
-//        Toast.makeText(this, "logging service created", Toast.LENGTH_SHORT).show()
 
         Log.d("FOREGROUND", "created")
         HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND).apply {
@@ -90,7 +87,6 @@ class BackgroundLoggingService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-//        Toast.makeText(this, "logging service starting", Toast.LENGTH_SHORT).show()
 
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
@@ -133,7 +129,10 @@ class BackgroundLoggingService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         Toast.makeText(this, "logging service done", Toast.LENGTH_SHORT).show()
-        Log.e("LOGGINGDESTROY", "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver.")
+        Log.e(
+            "LOGGINGDESTROY",
+            "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver."
+        )
         val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
         sendBroadcast(broadcastIntent)
     }
@@ -141,7 +140,10 @@ class BackgroundLoggingService : Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         Toast.makeText(this, "logging service done with onTaskRemoved", Toast.LENGTH_SHORT).show()
-        Log.e("LOGGINGDESTROY", "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver.")
+        Log.e(
+            "LOGGINGDESTROY",
+            "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver."
+        )
         val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
         sendBroadcast(broadcastIntent)
     }

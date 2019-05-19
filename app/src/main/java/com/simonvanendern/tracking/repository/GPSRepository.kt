@@ -7,6 +7,10 @@ import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.raw.GPSData
 import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -35,23 +39,28 @@ class GPSRepository @Inject constructor(db: TrackingDatabase) {
         return gpsLocationDao.insert(gpsLocation)
     }
 
+    @WorkerThread
     fun insertLocations(locations: List<Location>) {
-        locations.forEach {
-            val location = GPSLocation(
-                0,
-                it.longitude.toFloat(),
-                it.latitude.toFloat(),
-                it.speed
-            )
+        GlobalScope.launch {
+            async(Dispatchers.IO) {
+                locations.forEach {
+                    val location = GPSLocation(
+                        0,
+                        it.longitude.toFloat(),
+                        it.latitude.toFloat(),
+                        it.speed
+                    )
 
-            val id = gpsLocationDao.insert(location)
+                    val id = gpsLocationDao.insert(location)
 
-            gpsDataDao.insert(
-                GPSData(
-                    id,
-                    it.time
-                )
-            )
+                    gpsDataDao.insert(
+                        GPSData(
+                            id,
+                            it.time
+                        )
+                    )
+                }
+            }
         }
     }
 }
