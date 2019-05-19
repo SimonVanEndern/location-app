@@ -1,7 +1,9 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.raw
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
+import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
+import com.simonvanendern.tracking.database.schemata.raw.GPSLocationDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

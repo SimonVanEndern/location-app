@@ -1,7 +1,9 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.raw
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
+import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
+import com.simonvanendern.tracking.database.schemata.raw.StepsRawDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

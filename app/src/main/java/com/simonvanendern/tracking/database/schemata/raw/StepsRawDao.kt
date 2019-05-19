@@ -1,10 +1,11 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.raw
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import com.simonvanendern.tracking.database.schemata.aggregated.Steps
 import java.util.*
 
 @Dao

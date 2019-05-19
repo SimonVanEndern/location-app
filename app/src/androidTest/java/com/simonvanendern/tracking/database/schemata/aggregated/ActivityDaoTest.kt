@@ -1,7 +1,9 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.aggregated
 
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.google.android.gms.location.DetectedActivity
+import com.simonvanendern.tracking.database.schemata.aggregated.Activity
+import com.simonvanendern.tracking.database.schemata.aggregated.ActivityDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +25,13 @@ class ActivityDaoTest : DatabaseTest() {
         val start = day.time + 10000
         val duration = 350
         val activity =
-            Activity(0, day, DetectedActivity.ON_BICYCLE, start, duration)
+            Activity(
+                0,
+                day,
+                DetectedActivity.ON_BICYCLE,
+                start,
+                duration
+            )
         val id = activityDao.insert(activity)
         val savedActivity = activityDao.getById(id.toInt())
 

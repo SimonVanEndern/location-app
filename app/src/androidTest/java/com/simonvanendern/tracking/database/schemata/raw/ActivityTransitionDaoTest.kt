@@ -1,8 +1,10 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.raw
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.google.android.gms.location.DetectedActivity
+import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
+import com.simonvanendern.tracking.database.schemata.raw.ActivityTransitionDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

@@ -5,8 +5,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.ActivityTransitionEvent
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.Activity
-import com.simonvanendern.tracking.database.schemata.ActivityTransition
+import com.simonvanendern.tracking.database.schemata.aggregated.Activity
+import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
 import java.util.*
 import javax.inject.Inject
 

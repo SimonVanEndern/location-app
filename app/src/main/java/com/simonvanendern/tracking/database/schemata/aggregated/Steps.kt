@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.aggregated
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

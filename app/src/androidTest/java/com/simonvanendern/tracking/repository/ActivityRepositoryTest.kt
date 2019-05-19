@@ -3,9 +3,9 @@ package com.simonvanendern.tracking.repository
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
-import com.simonvanendern.tracking.database.schemata.ActivityDao
-import com.simonvanendern.tracking.database.schemata.ActivityTransition
-import com.simonvanendern.tracking.database.schemata.ActivityTransitionDao
+import com.simonvanendern.tracking.database.schemata.aggregated.ActivityDao
+import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
+import com.simonvanendern.tracking.database.schemata.raw.ActivityTransitionDao
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -28,8 +28,22 @@ class ActivityRepositoryTest : DatabaseTest() {
 
     @Test
     fun testComputeOneActivity() {
-        val activityTransition1 = ActivityTransition(0, Date(), 5, 0, Date().time + 100, false)
-        val activityTransition2 = ActivityTransition(0, Date(), 5, 1, Date().time + 200, false)
+        val activityTransition1 = ActivityTransition(
+            0,
+            Date(),
+            5,
+            0,
+            Date().time + 100,
+            false
+        )
+        val activityTransition2 = ActivityTransition(
+            0,
+            Date(),
+            5,
+            1,
+            Date().time + 200,
+            false
+        )
 
         Log.d("TEST", activityTransitionDao.getAll().size.toString())
 

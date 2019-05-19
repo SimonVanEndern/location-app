@@ -1,11 +1,11 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.raw
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.ABORT
 import androidx.room.Query
-import com.google.android.gms.location.DetectedActivity
+import com.simonvanendern.tracking.database.schemata.aggregated.Activity
 import java.util.*
 
 @Dao

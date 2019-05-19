@@ -35,7 +35,17 @@ class RequestRepositoryTest : DatabaseTest() {
     private fun any() = any(User::class.java) ?: User("")
 
     private fun any2() = any(com.simonvanendern.tracking.database.schemata.AggregationRequest::class.java)
-        ?: com.simonvanendern.tracking.database.schemata.AggregationRequest(0, "", "", "", 0, 0f, Date(), Date(), true)
+        ?: com.simonvanendern.tracking.database.schemata.AggregationRequest(
+            0,
+            "",
+            "",
+            "",
+            0,
+            0f,
+            Date(),
+            Date(),
+            true
+        )
 
     @Before
     fun setUp() {

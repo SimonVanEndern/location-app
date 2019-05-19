@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.raw
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

@@ -1,9 +1,10 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.aggregated
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
 
 @Entity(
     tableName = "trajectory_table",

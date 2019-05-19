@@ -2,9 +2,9 @@ package com.simonvanendern.tracking.aggregation
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.ActivityDao
+import com.simonvanendern.tracking.database.schemata.aggregated.ActivityDao
 import com.simonvanendern.tracking.database.schemata.AggregationRequest
-import com.simonvanendern.tracking.database.schemata.StepsDao
+import com.simonvanendern.tracking.database.schemata.aggregated.StepsDao
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before

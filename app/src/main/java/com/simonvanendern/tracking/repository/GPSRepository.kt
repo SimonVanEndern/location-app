@@ -5,8 +5,8 @@ import android.location.Location
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.GPSData
-import com.simonvanendern.tracking.database.schemata.GPSLocation
+import com.simonvanendern.tracking.database.schemata.raw.GPSData
+import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
 import javax.inject.Inject
 
 /**

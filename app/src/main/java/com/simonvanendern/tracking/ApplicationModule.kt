@@ -6,8 +6,8 @@ import com.simonvanendern.tracking.aggregation.RequestExecuter
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
-import com.simonvanendern.tracking.database.schemata.StepsDao
-import com.simonvanendern.tracking.database.schemata.StepsRawDao
+import com.simonvanendern.tracking.database.schemata.aggregated.StepsDao
+import com.simonvanendern.tracking.database.schemata.raw.StepsRawDao
 import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.repository.RequestRepository
 import dagger.Module

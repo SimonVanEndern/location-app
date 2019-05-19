@@ -3,8 +3,8 @@ package com.simonvanendern.tracking.repository
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.Steps
-import com.simonvanendern.tracking.database.schemata.StepsRaw
+import com.simonvanendern.tracking.database.schemata.aggregated.Steps
+import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
 import javax.inject.Inject
 
 /**

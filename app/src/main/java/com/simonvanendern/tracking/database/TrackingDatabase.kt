@@ -8,7 +8,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.simonvanendern.tracking.database.schemata.*
+import com.simonvanendern.tracking.database.schemata.AggregationRequest
+import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
+import com.simonvanendern.tracking.database.schemata.aggregated.*
+import com.simonvanendern.tracking.database.schemata.raw.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

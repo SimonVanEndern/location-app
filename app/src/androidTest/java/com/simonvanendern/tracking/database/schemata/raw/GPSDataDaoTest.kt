@@ -1,8 +1,12 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.schemata.raw
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
+import com.simonvanendern.tracking.database.schemata.raw.GPSData
+import com.simonvanendern.tracking.database.schemata.raw.GPSDataDao
+import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
+import com.simonvanendern.tracking.database.schemata.raw.GPSLocationDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

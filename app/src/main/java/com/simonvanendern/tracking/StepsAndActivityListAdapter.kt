@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.simonvanendern.tracking.database.schemata.Activity
-import com.simonvanendern.tracking.database.schemata.ActivityTransition
-import com.simonvanendern.tracking.database.schemata.GPSData
-import com.simonvanendern.tracking.database.schemata.Steps
+import com.simonvanendern.tracking.database.schemata.aggregated.Activity
+import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
+import com.simonvanendern.tracking.database.schemata.raw.GPSData
+import com.simonvanendern.tracking.database.schemata.aggregated.Steps
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

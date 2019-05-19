@@ -3,9 +3,9 @@ package com.simonvanendern.tracking.repository
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.StepsDao
-import com.simonvanendern.tracking.database.schemata.StepsRaw
-import com.simonvanendern.tracking.database.schemata.StepsRawDao
+import com.simonvanendern.tracking.database.schemata.aggregated.StepsDao
+import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
+import com.simonvanendern.tracking.database.schemata.raw.StepsRawDao
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -69,11 +69,36 @@ class StepsRepositoryTest : DatabaseTest() {
         val day3 = "2019-01-04"
 
         val stepsRaw = arrayOf(
-            StepsRaw(formatter.parse(day1).time, formatter.parse(day1), 50, false),
-            StepsRaw(formatter.parse(day1).time + 10000, formatter.parse(day1), 200, false),
-            StepsRaw(formatter.parse(day1).time + 30000, formatter.parse(day1), 20, false),
-            StepsRaw(formatter.parse(day2).time + 200, formatter.parse(day2), 40, false),
-            StepsRaw(formatter.parse(day3).time + 100, formatter.parse(day3), 10, false)
+            StepsRaw(
+                formatter.parse(day1).time,
+                formatter.parse(day1),
+                50,
+                false
+            ),
+            StepsRaw(
+                formatter.parse(day1).time + 10000,
+                formatter.parse(day1),
+                200,
+                false
+            ),
+            StepsRaw(
+                formatter.parse(day1).time + 30000,
+                formatter.parse(day1),
+                20,
+                false
+            ),
+            StepsRaw(
+                formatter.parse(day2).time + 200,
+                formatter.parse(day2),
+                40,
+                false
+            ),
+            StepsRaw(
+                formatter.parse(day3).time + 100,
+                formatter.parse(day3),
+                10,
+                false
+            )
         )
 
         var steps = stepsDao.getAll()
