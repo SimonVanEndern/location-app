@@ -45,27 +45,9 @@ class ApplicationModule(private val application: Context) {
 
     @Singleton
     @Provides
-    fun provideAggregationRequestDao(db: TrackingDatabase): AggregationRequestDao {
-        return db.aggregationRequestDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideStepsDao(db: TrackingDatabase): StepsDao {
-        return db.stepsDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideStepsRawDao(db: TrackingDatabase): StepsRawDao {
-        return db.stepsRawDao()
-    }
-
-    @Singleton
-    @Provides
     fun provideRequestRepository(
         webService: WebService,
-        db : TrackingDatabase
+        db: TrackingDatabase
     ): RequestRepository {
         return RequestRepository(db, webService)
     }
