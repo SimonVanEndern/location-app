@@ -102,6 +102,7 @@ class TransitionRecognition(private val context: Context) {
 
         val task = activityRecognitionClient.requestActivityTransitionUpdates(request, mPendingIntent)
         task.addOnSuccessListener {
+            Log.i("TRANSITION_RECOGNITION", "Registered receiver")
 //            mPendingIntent.cancel()
 //            Toast.makeText(context, "Started Activity Recognition", Toast.LENGTH_SHORT).show()
         }

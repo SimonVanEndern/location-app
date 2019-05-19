@@ -25,7 +25,7 @@ class RequestRepository @Inject constructor(
             aggregationRequestDao.insert(
                 com.simonvanendern.tracking.database.schemata.AggregationRequest(
                     0,
-                    request.id,
+                    request.serverId,
                     request.nextUser,
                     request.type,
                     request.n,
@@ -40,6 +40,10 @@ class RequestRepository @Inject constructor(
         return aggregationRequestDao.getAllPendingRequests()
     }
 
+    fun getPendingResults(): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
+        return aggregationRequestDao.getAllPendingResults()
+    }
+
     fun insertRequestResult(res: com.simonvanendern.tracking.database.schemata.AggregationRequest) {
         aggregationRequestDao.insert(res)
     }
@@ -49,7 +53,8 @@ class RequestRepository @Inject constructor(
     }
 
     fun sendOutResults() {
-        for (res in aggregationRequestDao.getAllPendingResults()) {
+        val requests = aggregationRequestDao.getAllPendingResults()
+        for (res in requests) {
             webService.forwardAggregationRequest(
                 AggregationRequest(
                     res.serverId,

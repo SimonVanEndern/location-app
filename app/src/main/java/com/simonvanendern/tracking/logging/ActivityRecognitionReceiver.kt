@@ -25,11 +25,12 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
             .inject(this)
 
         if (ActivityTransitionResult.hasResult(intent)) {
+            Log.d("ACTIVITY_RECOGNITION", "Got activity")
 
             val result = ActivityTransitionResult.extractResult(intent)
 
             val detectedActivities = result?.transitionEvents as List<ActivityTransitionEvent>
-            activityRepository.insertDetectedActiviteis(detectedActivities)
+            activityRepository.insertDetectedActivities(detectedActivities)
 
             val activity = detectedActivities
                 .filter { it.transitionType == 0 }
@@ -37,6 +38,8 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
                 ?.activityType
 
             notifyAboutActivityChange(context, activity)
+        } else {
+            Log.d("ACTIVITY_RECOGNITION", "Got something else")
         }
     }
 

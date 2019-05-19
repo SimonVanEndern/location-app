@@ -7,6 +7,8 @@ import com.google.android.gms.location.ActivityTransitionEvent
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.aggregated.Activity
 import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -45,19 +47,21 @@ class ActivityRepository @Inject constructor(db: TrackingDatabase) {
         activityTransitionDao.setProcessed(lastTimestamp)
     }
 
-    fun insertDetectedActiviteis(activities: List<ActivityTransitionEvent>) {
-        val now = Date()
-        val activityTransitions = activities.map {
-            ActivityTransition(
-                0,
-                now,
-                it.activityType,
-                it.transitionType,
-                now.time - ((elapsedRealtimeNanos() - it.elapsedRealTimeNanos) / 1000000),
-                false
-            )
-        }
+    fun insertDetectedActivities(activities: List<ActivityTransitionEvent>) {
+        GlobalScope.launch {
+            val now = Date()
+            val activityTransitions = activities.map {
+                ActivityTransition(
+                    0,
+                    now,
+                    it.activityType,
+                    it.transitionType,
+                    now.time - ((elapsedRealtimeNanos() - it.elapsedRealTimeNanos) / 1000000),
+                    false
+                )
+            }
 
-        activityTransitionDao.insertAll(activityTransitions)
+            activityTransitionDao.insertAll(activityTransitions)
+        }
     }
 }

@@ -2,12 +2,10 @@ package com.simonvanendern.tracking
 
 import android.content.Context
 import androidx.room.Room
+import com.google.gson.GsonBuilder
 import com.simonvanendern.tracking.aggregation.RequestExecuter
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
-import com.simonvanendern.tracking.database.schemata.aggregated.StepsDao
-import com.simonvanendern.tracking.database.schemata.raw.StepsRawDao
 import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.repository.RequestRepository
 import dagger.Module
@@ -22,9 +20,13 @@ class ApplicationModule(private val application: Context) {
     @Singleton
     @Provides
     fun provideWebservice(): WebService {
+        val gson = GsonBuilder()
+            .setDateFormat("yyyy-MM-dd")
+            .create()
         return Retrofit.Builder()
-            .baseUrl("http://localhost:8888/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://privacy-research-proud-platypus.eu-gb.mybluemix.net/")
+//            .baseUrl("http://localhost:8888/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(WebService::class.java)
     }

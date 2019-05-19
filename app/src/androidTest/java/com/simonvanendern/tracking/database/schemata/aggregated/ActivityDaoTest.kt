@@ -34,7 +34,7 @@ class ActivityDaoTest : DatabaseTest() {
         val id = activityDao.insert(activity)
         val savedActivity = activityDao.getById(id.toInt())
 
-        // We test for only one property but all except id should be equal
+        // We test for only one property but all except serverId should be equal
         assertEquals(duration, savedActivity.duration)
     }
 

@@ -75,8 +75,8 @@ class WebServiceTest {
 
         val result: List<AggregationRequest>? = webservice.getRequestsForUser(userId).execute().body()
 
-        assertTrue(result?.map(AggregationRequest::id)?.contains(request1.id) ?: false)
-        assertTrue(result?.map(AggregationRequest::id)?.contains(request2.id) ?: false)
+        assertTrue(result?.map(AggregationRequest::serverId)?.contains(request1.serverId) ?: false)
+        assertTrue(result?.map(AggregationRequest::serverId)?.contains(request2.serverId) ?: false)
         assertTrue(result?.map(AggregationRequest::nextUser)?.contains(request1.nextUser) ?: false)
         assertTrue(result?.map(AggregationRequest::nextUser)?.contains(request2.nextUser) ?: false)
         assertEquals(result?.first()?.value, request1.value)

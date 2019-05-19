@@ -37,8 +37,8 @@ class RequestExecuter @Inject constructor(private val db: TrackingDatabase) {
         val newN = req.n + 1
 
         return AggregationRequest(
-            req.id,
-            "serverId",
+            0,
+            req.serverId,
             req.nextUser,
             req.type,
             newN,

@@ -13,6 +13,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.simonvanendern.tracking.R
 import com.simonvanendern.tracking.aggregation.DatabaseAggregator
+import com.simonvanendern.tracking.aggregation.ServerRequestHandler
 import com.simonvanendern.tracking.logging.LocationUpdates
 import com.simonvanendern.tracking.logging.StepsLogger
 import com.simonvanendern.tracking.logging.TransitionRecognition
@@ -23,6 +24,9 @@ class BackgroundLoggingService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
     private lateinit var locationUpdates: LocationUpdates
+
+    private lateinit var aggregateDataWorkRequest : PeriodicWorkRequest
+    private lateinit var serveServerRequests : PeriodicWorkRequest
 
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
@@ -37,13 +41,24 @@ class BackgroundLoggingService : Service() {
 
 
                 // Aggregate the location data from time to time
-                val aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
+                aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
                     DatabaseAggregator::class.java,
                     PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
                     TimeUnit.MILLISECONDS
+                ).build()
+
+                serveServerRequests = PeriodicWorkRequest.Builder(
+                    ServerRequestHandler::class.java,
+                    PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+                    TimeUnit.MILLISECONDS
+                ).build()
+
+                WorkManager.getInstance().enqueue(
+                    listOf(
+                        aggregateDataWorkRequest,
+                        serveServerRequests
+                    )
                 )
-                    .build()
-                WorkManager.getInstance().enqueue(aggregateDataWorkRequest)
                 Log.d("LOGGING_SERVICE", "Started all services")
 
                 try {
@@ -133,6 +148,10 @@ class BackgroundLoggingService : Service() {
             "LOGGINGDESTROY",
             "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver."
         )
+
+        WorkManager.getInstance().cancelWorkById(aggregateDataWorkRequest.id)
+        WorkManager.getInstance().cancelWorkById(serveServerRequests.id)
+
         val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
         sendBroadcast(broadcastIntent)
     }
@@ -144,6 +163,10 @@ class BackgroundLoggingService : Service() {
             "LOGGINGDESTROY",
             "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver."
         )
+
+        WorkManager.getInstance().cancelWorkById(aggregateDataWorkRequest.id)
+        WorkManager.getInstance().cancelWorkById(serveServerRequests.id)
+
         val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
         sendBroadcast(broadcastIntent)
     }

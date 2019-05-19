@@ -52,7 +52,7 @@ class StepsAndActivityListAdapter internal constructor(
         this.activities = activities.map { activity ->
             val type =
                 if (activity.activityType == 7) "WALKING" else if (activity.activityType == 3) "STILL" else "Type " + activity.activityType
-            "Activity:\nid = ${activity.id}\n" +
+            "Activity:\nserverId = ${activity.id}\n" +
                     "start = ${dateFormat.format(Date(activity.start))}\n" +
                     "transitionType = $type\n" +
                     "duration = ${activity.duration / 3600000}h " +
@@ -74,7 +74,7 @@ class StepsAndActivityListAdapter internal constructor(
     internal fun setLocations(locations: List<GPSData>) {
         this.locations = locations.map { gps ->
         "GPSData: \n" +
-                "id = ${gps.location_id}\n" +
+                "serverId = ${gps.location_id}\n" +
                 "time =" + dateFormatWithSeconds.format(Date(gps.timestamp))}.reversed()
         notifyDataSetChanged()
     }
@@ -85,7 +85,7 @@ class StepsAndActivityListAdapter internal constructor(
                 if (transition.activityType == 7) "WALKING" else if (transition.activityType == 3) "STILL" else "Type " + transition.activityType
             val transitionType = if (transition.transitionType == 0) "ENTER" else "EXIT"
             "ActivityTransition: \n" +
-                    "id = ${transition.id}\n" +
+                    "serverId = ${transition.id}\n" +
                     "start = ${dateFormat.format(Date(transition.start))}\n" +
                     "activity = $type\n" +
                     "transitionType = $transitionType\n" +
