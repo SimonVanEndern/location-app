@@ -53,7 +53,8 @@ class RequestExecuterTest {
 
         val result = executer.execute(request)
 
-        assertEquals(request.id, result.id)
+        assertEquals(0, result.id)
+        assertEquals(request.serverId, result.serverId)
         assertEquals(request.n + 1, result.n)
         assertEquals((request.value * request.n + averageSteps) / (request.n + 1), result.value)
         assertFalse(result.incoming)
@@ -90,7 +91,8 @@ class RequestExecuterTest {
 
         val result = executer.execute(request)
 
-        assertEquals(request.id, result.id)
+        assertEquals(0, result.id)
+        assertEquals(request.serverId, result.serverId)
         assertEquals(request.n + 1, result.n)
         assertEquals(
             (request.value * request.n + timeInActivity1 / exactDifferenceInDays) / (request.n + 1),

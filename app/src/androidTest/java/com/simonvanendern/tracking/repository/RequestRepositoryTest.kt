@@ -2,12 +2,12 @@ package com.simonvanendern.tracking.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.communication.AggregationRequest
-import com.simonvanendern.tracking.communication.Response
 import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -32,7 +32,7 @@ class RequestRepositoryTest : DatabaseTest() {
 
     inline fun <reified T : Any> mock() = mock(T::class.java)
 
-    private fun any() = any(User::class.java) ?: User("")
+    private fun any() = any(User::class.java) ?: User("", "")
 
     private fun any2() = any(com.simonvanendern.tracking.database.schemata.AggregationRequest::class.java)
         ?: com.simonvanendern.tracking.database.schemata.AggregationRequest(
@@ -61,9 +61,10 @@ class RequestRepositoryTest : DatabaseTest() {
 
     @Test
     fun testCreateUser() {
-        val responseHolder = retrofit2.Response.success(Response(true))
+        val pw = "testPw"
+        val responseHolder = retrofit2.Response.success(User(user, pw))
 
-        val call: Call<Response> = mock()
+        val call: Call<User> = mock()
 
         `when`(call.execute())
             .thenReturn(responseHolder)
@@ -72,7 +73,8 @@ class RequestRepositoryTest : DatabaseTest() {
             .thenReturn(call)
 
         val result = requestRepository.createUser(user)
-        assertTrue(result)
+        assertEquals(user, result?.pk)
+        assertEquals(pw, result?.pw)
 
         verify(webService).createUser(any())
     }

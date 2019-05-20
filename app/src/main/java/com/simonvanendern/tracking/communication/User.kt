@@ -1,3 +1,6 @@
 package com.simonvanendern.tracking.communication
 
-class User(private val pk: String)
+class User(
+    val pk: String,
+    val pw: String
+)

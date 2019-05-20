@@ -5,7 +5,8 @@ import com.google.gson.Gson
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -34,7 +35,8 @@ class WebServiceTest {
 
     @Test
     fun testCreateUser() {
-        val response = "{\"status\":true}"
+        val pw = "testPw"
+        val response = "{\"userId\":\"$userId\",\"pw\":\"$pw\"}"
 
         server.enqueue(MockResponse().setBody(response))
         server.start()
@@ -47,9 +49,10 @@ class WebServiceTest {
             .build()
             .create(WebService::class.java)
 
-        val result: Response? = webservice.createUser(User(userId)).execute().body()
+        val result = webservice.createUser(User(userId, "")).execute()
+        assertTrue(result.isSuccessful)
 
-        assertEquals(true, result?.status)
+        assertEquals(pw, result.body()?.pw)
     }
 
     @Test

@@ -7,4 +7,8 @@
     <string name="notification_title">Do not quit, needs to stay here</string>
     <string name="notification_message">Message</string>
     <string name="ticker_text">ticker</string>
+    <string name="identifiers">Identifiers</string>
+    <string name="public_key">public_key</string>
+    <string name="private_key">private_key</string>
+    <string name="password">password</string>
 </resources>

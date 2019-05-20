@@ -14,8 +14,8 @@ class RequestRepository @Inject constructor(
 ) {
     private val aggregationRequestDao = db.aggregationRequestDao()
 
-    fun createUser(userId: String): Boolean {
-        return webService.createUser(User(userId)).execute().body()?.status ?: true
+    fun createUser(userId: String): User? {
+        return webService.createUser(User(userId, "")).execute().body()
     }
 
     fun getPendingRequests(userId: String): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
