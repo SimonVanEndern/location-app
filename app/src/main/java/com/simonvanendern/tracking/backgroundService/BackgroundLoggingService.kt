@@ -5,28 +5,44 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.*
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.simonvanendern.tracking.ApplicationModule
+import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.R
 import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.aggregation.ServerRequestHandler
 import com.simonvanendern.tracking.logging.LocationUpdates
 import com.simonvanendern.tracking.logging.StepsLogger
 import com.simonvanendern.tracking.logging.TransitionRecognition
+import com.simonvanendern.tracking.repository.RequestRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okio.ByteString
+import java.io.FileOutputStream
 import java.lang.Thread.sleep
+import java.nio.charset.StandardCharsets
+import java.security.KeyPairGenerator
+import java.security.spec.X509EncodedKeySpec
 import java.util.concurrent.TimeUnit
+import javax.crypto.Cipher
+import javax.inject.Inject
 
 class BackgroundLoggingService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
     private lateinit var locationUpdates: LocationUpdates
 
-    private lateinit var aggregateDataWorkRequest : PeriodicWorkRequest
-    private lateinit var serveServerRequests : PeriodicWorkRequest
+    @Inject
+    lateinit var requestRepository: RequestRepository
+
+    private lateinit var aggregateDataWorkRequest: PeriodicWorkRequest
+    private lateinit var serveServerRequests: PeriodicWorkRequest
 
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
@@ -77,6 +93,12 @@ class BackgroundLoggingService : Service() {
     }
 
     override fun onCreate() {
+        DaggerApplicationComponent.builder()
+            .applicationModule(ApplicationModule(applicationContext))
+            .build()
+            .inject(this)
+
+        GlobalScope.launch { setUpApp() }
 
         Log.d("FOREGROUND", "created")
         HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND).apply {
@@ -169,5 +191,44 @@ class BackgroundLoggingService : Service() {
 
         val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
         sendBroadcast(broadcastIntent)
+    }
+
+    private fun setUpApp() {
+        val store = getSharedPreferences(getString(R.string.identifiers), Context.MODE_PRIVATE)
+        val generator = KeyPairGenerator.getInstance("RSA")
+        generator.initialize(2048)
+        val keyPair = generator.generateKeyPair()
+        val private = "-----BEGIN RSA PRIVATE KEY-----\n" +
+                Base64.encodeToString(keyPair.private.encoded, 0) +
+                "\n-----END RSA PRIVATE KEY-----\n"
+        val format_privat = keyPair.private.format
+        val format_public = keyPair.public.format
+        val public = "-----BEGIN RSA PUBLIC KEY-----\n" +
+                Base64.encodeToString(keyPair.public.encoded, 0) +
+                "\n-----END RSA PUBLIC KEY-----\n"
+//        val cipher = Cipher.getInstance("RSA/None/PKCS1Padding")
+        val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, keyPair.public)
+        val encrypted = cipher.doFinal("testIng".toByteArray())
+        val encryptedUtf8 = String(encrypted, StandardCharsets.UTF_8)
+        val encryptedString = Base64.encodeToString(encrypted, 0)
+        val spec = X509EncodedKeySpec(keyPair.public.encoded).encoded
+        val specs = Base64.encodeToString(spec, 0)
+        if (!store.contains(getString(R.string.public_key))) {
+            with(store.edit()) {
+                putString(getString(R.string.public_key), keyPair.public.toString())
+                putString(getString(R.string.private_key), keyPair.private.toString())
+                apply()
+            }
+            val user = requestRepository.createUser(
+                store.getString(getString(R.string.public_key), null)!!
+            )
+            if (user != null) {
+                with(store.edit()) {
+                    putString(getString(R.string.password), user.pw)
+                    apply()
+                }
+            }
+        }
     }
 }

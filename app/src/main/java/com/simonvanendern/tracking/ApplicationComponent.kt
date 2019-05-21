@@ -1,8 +1,8 @@
 package com.simonvanendern.tracking
 
-import com.simonvanendern.tracking.activity.MainActivity
 import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.aggregation.ServerRequestHandler
+import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
 import com.simonvanendern.tracking.logging.ActivityRecognitionReceiver
 import com.simonvanendern.tracking.logging.LocationReceiver
 import com.simonvanendern.tracking.logging.StepsLogger
@@ -19,5 +19,5 @@ interface ApplicationComponent {
     fun inject(stepsLogger: StepsLogger)
     fun inject(allDataViewModel: AllDataViewModel)
     fun inject(serverRequestHandler: ServerRequestHandler)
-    fun inject(mainActivity: MainActivity)
+    fun inject(backgroundLoggingService: BackgroundLoggingService)
 }
