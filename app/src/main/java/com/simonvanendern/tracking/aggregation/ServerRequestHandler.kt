@@ -6,6 +6,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.simonvanendern.tracking.ApplicationModule
 import com.simonvanendern.tracking.DaggerApplicationComponent
+import com.simonvanendern.tracking.R
 import com.simonvanendern.tracking.repository.RequestRepository
 import javax.inject.Inject
 
@@ -31,7 +32,11 @@ class ServerRequestHandler(private val appContext: Context, workParams: WorkerPa
     }
 
     private fun updatePendingRequests() {
-        val pendingRequests = requestRepository.getPendingRequests("testUser")
+        val store = appContext.getSharedPreferences(appContext.getString(R.string.identifiers), Context.MODE_PRIVATE)
+        var user = store.getString("public_key_complete", "test")!!
+        user = user.replace('+', '-').replace('/', '_')
+        val pw = store.getString("password", "testPw")!!
+        val pendingRequests = requestRepository.getPendingRequests(user, pw)
 
         for (request in pendingRequests) {
             val result = requestExecuter.execute(request)

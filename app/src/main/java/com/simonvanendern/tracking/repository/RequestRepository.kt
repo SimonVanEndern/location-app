@@ -19,10 +19,10 @@ class RequestRepository @Inject constructor(
         return webService.createUser(User(userId, "")).execute().body()
     }
 
-    fun getPendingRequests(userId: String): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
-        val pk = Base64.encodeToString(Base64.decode(userId, 0), Base64.URL_SAFE)
+    fun getPendingRequests(userId: String, pw : String): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
+//        val pk = Base64.encodeToString(Base64.decode(userId, 0), Base64.URL_SAFE)
 
-        val newRequests = webService.getRequestsForUser((pk)).execute().body() ?: emptyList()
+        val newRequests = webService.getRequestsForUser(userId, pw).execute().body() ?: emptyList()
         for (request in newRequests) {
             aggregationRequestDao.insert(
                 com.simonvanendern.tracking.database.schemata.AggregationRequest(

@@ -198,14 +198,14 @@ class BackgroundLoggingService : Service() {
         val generator = KeyPairGenerator.getInstance("RSA")
         generator.initialize(2048)
         val keyPair = generator.generateKeyPair()
-        val private = "-----BEGIN RSA PRIVATE KEY-----\n" +
+        val private = "-----BEGIN PRIVATE KEY-----\n" +
                 Base64.encodeToString(keyPair.private.encoded, 0) +
-                "\n-----END RSA PRIVATE KEY-----\n"
+                "-----END PRIVATE KEY-----"
         val format_privat = keyPair.private.format
         val format_public = keyPair.public.format
-        val public = "-----BEGIN RSA PUBLIC KEY-----\n" +
-                Base64.encodeToString(keyPair.public.encoded, 0) +
-                "\n-----END RSA PUBLIC KEY-----\n"
+        val public = "-----BEGIN PUBLIC KEY-----\n" +
+                Base64.encodeToString(keyPair.public.encoded, Base64.DEFAULT) +
+                "-----END PUBLIC KEY-----"
 //        val cipher = Cipher.getInstance("RSA/None/PKCS1Padding")
         val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
         cipher.init(Cipher.ENCRYPT_MODE, keyPair.public)
@@ -216,12 +216,15 @@ class BackgroundLoggingService : Service() {
         val specs = Base64.encodeToString(spec, 0)
         if (!store.contains(getString(R.string.public_key))) {
             with(store.edit()) {
-                putString(getString(R.string.public_key), keyPair.public.toString())
-                putString(getString(R.string.private_key), keyPair.private.toString())
+                putString(getString(R.string.public_key), Base64.encodeToString(keyPair.public.encoded, Base64.DEFAULT))
+                putString("public_key_complete", public)
+                putString(getString(R.string.private_key), Base64.encodeToString(keyPair.private.encoded, Base64.DEFAULT))
                 apply()
             }
+        }
+        if (!store.contains("password")) {
             val user = requestRepository.createUser(
-                store.getString(getString(R.string.public_key), null)!!
+                store.getString("public_key_complete", null)!!
             )
             if (user != null) {
                 with(store.edit()) {

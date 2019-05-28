@@ -90,10 +90,10 @@ class RequestRepositoryTest : DatabaseTest() {
         `when`(call.execute())
             .thenReturn(responseHolder)
 
-        `when`(webService.getRequestsForUser(user))
+        `when`(webService.getRequestsForUser(user, "testPw"))
             .thenReturn(call)
 
-        requestRepository.getPendingRequests(user)
+        requestRepository.getPendingRequests(user, "testPw")
 
         verify(aggregationRequestDao, times(2)).insert(any2())
         verify(aggregationRequestDao, times(1)).getAllPendingRequests()

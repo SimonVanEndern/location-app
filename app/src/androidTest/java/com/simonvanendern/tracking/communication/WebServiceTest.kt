@@ -76,7 +76,7 @@ class WebServiceTest {
             .build()
             .create(WebService::class.java)
 
-        val result: List<AggregationRequest>? = webservice.getRequestsForUser(userId).execute().body()
+        val result: List<AggregationRequest>? = webservice.getRequestsForUser(userId, "testPw").execute().body()
 
         assertTrue(result?.map(AggregationRequest::serverId)?.contains(request1.serverId) ?: false)
         assertTrue(result?.map(AggregationRequest::serverId)?.contains(request2.serverId) ?: false)
