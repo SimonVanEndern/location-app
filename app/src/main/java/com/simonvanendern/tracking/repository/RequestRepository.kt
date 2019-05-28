@@ -1,6 +1,5 @@
 package com.simonvanendern.tracking.repository
 
-import android.util.Base64
 import com.simonvanendern.tracking.communication.AggregationRequest
 import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
@@ -19,7 +18,10 @@ class RequestRepository @Inject constructor(
         return webService.createUser(User(userId, "")).execute().body()
     }
 
-    fun getPendingRequests(userId: String, pw : String): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
+    fun getPendingRequests(
+        userId: String,
+        pw: String
+    ): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
 //        val pk = Base64.encodeToString(Base64.decode(userId, 0), Base64.URL_SAFE)
 
         val newRequests = webService.getRequestsForUser(userId, pw).execute().body() ?: emptyList()
@@ -34,7 +36,8 @@ class RequestRepository @Inject constructor(
                     request.value,
                     request.start,
                     request.end,
-                    true
+                    true,
+                    request.valueList
                 )
             )
         }
@@ -65,7 +68,8 @@ class RequestRepository @Inject constructor(
                     res.n,
                     res.value,
                     res.start,
-                    res.end
+                    res.end,
+                    res.valueList
                 )
             ).execute()
             aggregationRequestDao.delete(res)

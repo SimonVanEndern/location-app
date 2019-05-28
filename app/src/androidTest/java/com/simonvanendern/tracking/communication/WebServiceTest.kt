@@ -59,8 +59,8 @@ class WebServiceTest {
     fun testGetRequestsForUser() {
         val date1 = Date()
         val date2 = Date()
-        val request1 = AggregationRequest("22", userId, "steps", 1, 1.0f, date1, date2)
-        val request2 = AggregationRequest("23", userId, "steps", 1, 1.1f, date1, date2)
+        val request1 = AggregationRequest("22", userId, "steps", 1, 1.0f, date1, date2, mutableListOf())
+        val request2 = AggregationRequest("23", userId, "steps", 1, 1.1f, date1, date2, mutableListOf())
 
         val gson = Gson()
         val response = gson.toJson(arrayOf(request1, request2))
@@ -88,7 +88,7 @@ class WebServiceTest {
 
     @Test
     fun testForwardAggregationRequest() {
-        val request1 = AggregationRequest("22", userId, "steps", 1, 1.0f, Date(), Date())
+        val request1 = AggregationRequest("22", userId, "steps", 1, 1.0f, Date(), Date(), mutableListOf())
 
         val response = "{\"status\":true}"
 

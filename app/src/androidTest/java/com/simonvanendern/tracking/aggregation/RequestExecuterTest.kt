@@ -48,7 +48,7 @@ class RequestExecuterTest {
             .thenReturn(averageSteps)
 
         val request = AggregationRequest(
-            1, "1", "user", "steps", 3, 2300f, Date(), Date(), true
+            1, "1", "user", "steps", 3, 2300f, Date(), Date(), true, mutableListOf()
         )
 
         val result = executer.execute(request)
@@ -86,7 +86,8 @@ class RequestExecuterTest {
             43214334345f,
             formatter.parse(date1),
             formatter.parse(date2),
-            true
+            true,
+            mutableListOf()
         )
 
         val result = executer.execute(request)

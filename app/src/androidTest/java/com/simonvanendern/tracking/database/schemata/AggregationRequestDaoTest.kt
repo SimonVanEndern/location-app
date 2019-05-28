@@ -22,7 +22,7 @@ class AggregationRequestDaoTest : DatabaseTest() {
 
         val aggregationRequest = AggregationRequest(
             0, serverSideID, "user",
-            "steps", 1, 1.0f, Date(), Date(), true
+            "steps", 1, 1.0f, Date(), Date(), true, mutableListOf()
         )
 
         val id = aggregationRequestDao.insert(aggregationRequest)
@@ -51,7 +51,8 @@ class AggregationRequestDaoTest : DatabaseTest() {
             1.0f,
             Date(),
             Date(),
-            true
+            true,
+            mutableListOf()
         )
         val aggregationRequest_1 = AggregationRequest(
             0,
@@ -62,7 +63,8 @@ class AggregationRequestDaoTest : DatabaseTest() {
             1.0f,
             Date(),
             Date(),
-            true
+            true,
+            mutableListOf()
         )
         val aggregationRequest_2 = AggregationRequest(
             0,
@@ -73,7 +75,8 @@ class AggregationRequestDaoTest : DatabaseTest() {
             1.0f,
             Date(),
             Date(),
-            true
+            true,
+            mutableListOf()
         )
 
         aggregationRequestDao.insert(aggregationRequest_0)

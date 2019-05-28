@@ -9,5 +9,6 @@ class AggregationRequest(
     val n : Int,
     val value : Float,
     val start : Date,
-    val end : Date
+    val end : Date,
+    val valueList : MutableList<Float>
 )

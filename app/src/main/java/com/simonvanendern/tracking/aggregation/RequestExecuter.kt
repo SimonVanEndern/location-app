@@ -19,7 +19,12 @@ class RequestExecuter @Inject constructor(private val db: TrackingDatabase) {
                 ownValue = db.stepsDao().getAverageSteps(req.start, req.end)
             }
 
+            "stepsListing" -> {
+                ownValue = db.stepsDao().getAverageSteps(req.start, req.end)
+            }
+
             "activity" -> {
+                // The activities according to the Android activity framework
                 val activity = req.type.substring("activity_".length).toInt()
 
                 val diffInMilliSeconds = Math.abs(req.end.time - req.start.time)
@@ -35,6 +40,7 @@ class RequestExecuter @Inject constructor(private val db: TrackingDatabase) {
 
         val newMean = (ownValue + req.n * req.value) / (req.n + 1)
         val newN = req.n + 1
+        req.valueList.add(ownValue)
 
         return AggregationRequest(
             0,
@@ -45,7 +51,8 @@ class RequestExecuter @Inject constructor(private val db: TrackingDatabase) {
             newMean,
             req.start,
             req.end,
-            false
+            false,
+            req.valueList
         )
     }
 }

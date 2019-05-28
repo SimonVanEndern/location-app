@@ -44,7 +44,8 @@ class RequestRepositoryTest : DatabaseTest() {
             0f,
             Date(),
             Date(),
-            true
+            true,
+            mutableListOf()
         )
 
     @Before
@@ -81,8 +82,8 @@ class RequestRepositoryTest : DatabaseTest() {
 
     @Test
     fun testGetPendingRequests() {
-        val request1 = AggregationRequest("1", "wo0ifwdji", "steps", 1, 1.1f, Date(), Date())
-        val request2 = AggregationRequest("2", "owfijoj2d", "steps", 1, 1.1f, Date(), Date())
+        val request1 = AggregationRequest("1", "wo0ifwdji", "steps", 1, 1.1f, Date(), Date(), mutableListOf())
+        val request2 = AggregationRequest("2", "owfijoj2d", "steps", 1, 1.1f, Date(), Date(), mutableListOf())
 
         val responseHolder = retrofit2.Response.success(listOf(request1, request2))
         val call: Call<List<AggregationRequest>> = mock()

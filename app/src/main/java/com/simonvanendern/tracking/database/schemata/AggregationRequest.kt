@@ -15,7 +15,8 @@ data class AggregationRequest (
     @ColumnInfo(name = "value") val value : Float,
     @ColumnInfo(name = "start") val start : Date,
     @ColumnInfo(name = "end") val end : Date,
-    @ColumnInfo(name = "incoming") val incoming : Boolean
+    @ColumnInfo(name = "incoming") val incoming : Boolean,
+    @ColumnInfo(name = "valueList") val valueList : MutableList<Float>
 ) {
 //    override fun equals(other: Any?): Boolean{
 //        if (this === other) return true
