@@ -2,7 +2,6 @@ package com.simonvanendern.tracking
 
 import android.content.Context
 import android.util.Base64
-import android.util.Log
 import androidx.room.Room
 import com.google.gson.GsonBuilder
 import com.simonvanendern.tracking.aggregation.RequestExecuter
@@ -23,7 +22,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.KeyFactory
 import java.security.PrivateKey
-import java.security.SecureRandom
 import java.security.spec.PKCS8EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -73,31 +71,16 @@ class ApplicationModule(private val application: Context) {
                         val iv = json.getJSONObject(i).getString("iv")
                         synchronousCipher.init(Cipher.DECRYPT_MODE, key.toAESKey(), IvParameterSpec(Base64.decode(iv, 0)))
                         val plainText = String(synchronousCipher.doFinal(encryptedRequest))
-                        val newBody = ResponseBody.create(
-                            response.body()?.contentType(),
-                            json.toString()
-                        )
-                        response.newBuilder().body(newBody).build()
-                    }
-                } catch (e : JSONException) {
-                    val newBody = ResponseBody.create(
-                        response.body()?.contentType(),
-                        raw!!
-                    )
-                    response.newBuilder().body(newBody).build()
-                }
+                        val nestedJson = JSONObject(plainText)
+                        nestedJson.keys().forEach { key -> json.getJSONObject(i).put(key, nestedJson.get(key)) }
 
-                try {
-                    val json = JSONArray(raw)
-                    for (i in json.length() - 1 downTo 0) {
-                        json.getJSONObject(i).put("test", "test")
                     }
                     val newBody = ResponseBody.create(
                         response.body()?.contentType(),
                         json.toString()
                     )
                     response.newBuilder().body(newBody).build()
-                } catch (e: JSONException) {
+                } catch (e : JSONException) {
                     val newBody = ResponseBody.create(
                         response.body()?.contentType(),
                         raw!!
