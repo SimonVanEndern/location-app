@@ -27,7 +27,7 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
         activityRepository.aggregateActivities()
         stepsRepository.aggregateSteps()
 
-        Log.d("AGGREGATOR", "Successful aggregation")
+        Log.d("AGGREGATOR", "Successful aggregation of Stuff")
 
         return Result.success()
     }

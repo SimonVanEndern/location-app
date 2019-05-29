@@ -26,7 +26,7 @@ class ServerRequestHandler(private val appContext: Context, workParams: WorkerPa
             .inject(this)
         updatePendingRequests()
 
-        Log.d("SERVER_HANDLER", "Successful server handling")
+        Log.d("SERVER_HANDLER", "Successful server handling of requests")
 
         return Result.success()
     }

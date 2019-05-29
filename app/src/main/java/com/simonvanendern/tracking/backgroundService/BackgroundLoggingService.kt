@@ -98,7 +98,7 @@ class BackgroundLoggingService : Service() {
 
         GlobalScope.launch { setUpApp() }
 
-        Log.d("FOREGROUND", "created")
+        Log.d("FOREGROUND", "created Foreground")
         HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND).apply {
             start()
             serviceLooper = looper
@@ -196,22 +196,11 @@ class BackgroundLoggingService : Service() {
         val generator = KeyPairGenerator.getInstance("RSA")
         generator.initialize(2048)
         val keyPair = generator.generateKeyPair()
-        val private = "-----BEGIN PRIVATE KEY-----\n" +
-                Base64.encodeToString(keyPair.private.encoded, 0) +
-                "-----END PRIVATE KEY-----"
-        val format_privat = keyPair.private.format
-        val format_public = keyPair.public.format
-        val public = "-----BEGIN PUBLIC KEY-----\n" +
+        var public = "-----BEGIN PUBLIC KEY-----\n" +
                 Base64.encodeToString(keyPair.public.encoded, Base64.DEFAULT) +
                 "-----END PUBLIC KEY-----"
-//        val cipher = Cipher.getInstance("RSA/None/PKCS1Padding")
         val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
         cipher.init(Cipher.ENCRYPT_MODE, keyPair.public)
-        val encrypted = cipher.doFinal("testIng".toByteArray())
-        val encryptedUtf8 = String(encrypted, StandardCharsets.UTF_8)
-        val encryptedString = Base64.encodeToString(encrypted, 0)
-        val spec = X509EncodedKeySpec(keyPair.public.encoded).encoded
-        val specs = Base64.encodeToString(spec, 0)
         if (!store.contains(getString(R.string.public_key))) {
             with(store.edit()) {
                 putString(getString(R.string.public_key), Base64.encodeToString(keyPair.public.encoded, Base64.DEFAULT))

@@ -80,8 +80,6 @@ class ApplicationModule(private val application: Context) {
                     for (i in json.length() - 1 downTo 0) {
                         val encryptedKey = json.getJSONObject(i).getString("encryptionKey")
                         val key = cipher.doFinal(Base64.decode(encryptedKey.toByteArray(), 0))
-                        val sync = json.getJSONObject(i).getString("sync")
-                        val buffer = Base64.decode(sync, 0)
                         val encryptedRequest = Base64.decode(json.getJSONObject(i).getString("encryptedRequest"), 0)
                         val synchronousCipher = Cipher.getInstance("AES/CBC/PKCS7PADDING")
                         val iv = json.getJSONObject(i).getString("iv")
@@ -93,6 +91,8 @@ class ApplicationModule(private val application: Context) {
                         val plainText = String(synchronousCipher.doFinal(encryptedRequest))
                         val nestedJson = JSONObject(plainText)
                         nestedJson.keys().forEach { key -> json.getJSONObject(i).put(key, nestedJson.get(key)) }
+                        val valueList = JSONArray(nestedJson.getString("valueList"))
+                        json.getJSONObject(i).put("valueList", valueList)
 
                     }
                     val newBody = ResponseBody.create(
