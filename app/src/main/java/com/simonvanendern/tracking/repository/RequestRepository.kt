@@ -1,9 +1,19 @@
 package com.simonvanendern.tracking.repository
 
+import android.util.Base64
 import com.simonvanendern.tracking.communication.AggregationRequest
+import com.simonvanendern.tracking.communication.AggregationResponse
 import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
+import org.json.JSONObject
+import java.security.KeyFactory
+import java.security.SecureRandom
+import java.security.spec.X509EncodedKeySpec
+import java.text.SimpleDateFormat
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.spec.IvParameterSpec
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -60,25 +70,80 @@ class RequestRepository @Inject constructor(
     fun sendOutResults() {
         val requests = aggregationRequestDao.getAllPendingResults()
         for (res in requests) {
-            webService.forwardAggregationRequest(
-                AggregationRequest(
-                    res.serverId,
-                    res.nextUser,
-                    res.type,
-                    res.n,
-                    res.value,
-                    res.start,
-                    res.end,
-                    res.valueList
-                )
-            ).execute()
-            aggregationRequestDao.delete(res)
+            if (res.nextUser == null) {
+                webService.insertAggregationResult(
+                    AggregationRequest(
+                        res.serverId,
+                        res.nextUser,
+                        res.type,
+                        res.n,
+                        res.value,
+                        res.start,
+                        res.end,
+                        res.valueList
+                    )
+                ).execute()
+                aggregationRequestDao.delete(res)
+            } else {
+                webService.forwardAggregationRequest(
+                    generateResponse(res)
+                ).execute()
+                aggregationRequestDao.delete(res)
+            }
         }
     }
 
-    fun postAggregationRequest(userId: String, request: AggregationRequest): Boolean {
-        return webService.forwardAggregationRequest(request).execute().body()?.status ?: false
+    fun generateResponse(request: com.simonvanendern.tracking.database.schemata.AggregationRequest): AggregationResponse {
+        val generator = KeyGenerator.getInstance("AES")
+        generator.init(256)
+        val key = generator.generateKey()
+        val keyString = Base64.encodeToString(key.encoded, Base64.DEFAULT)
+
+
+        var formatter = SimpleDateFormat("yyyy-MM-dd")
+
+        val json = JSONObject()
+        json.put("start", formatter.format(request.start))
+        json.put("end", formatter.format(request.end))
+        json.put("type", request.type)
+        json.put("n", request.n)
+        json.put("value", request.value)
+        json.put("valueList", request.valueList)
+
+        val jsonString = json.toString()
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7PADDING")
+        val iv = ByteArray(cipher.blockSize)
+        SecureRandom().nextBytes(iv)
+
+        cipher.init(Cipher.ENCRYPT_MODE, key, IvParameterSpec(iv))
+        val encryptedRequest = Base64.encodeToString(cipher.doFinal(jsonString.toByteArray()), Base64.DEFAULT)
+
+        val ivString = Base64.encodeToString(iv, Base64.DEFAULT)
+        val keyBytes: ByteArray = Base64.decode(
+            request.nextUser!!
+                .replace("-----BEGIN PUBLIC KEY-----\n", "")
+                .replace("\n-----END PUBLIC KEY-----", ""), Base64.DEFAULT
+        )
+        val spec = X509EncodedKeySpec(keyBytes)
+        val keyFactory = KeyFactory.getInstance("RSA")
+
+        val publicKey = keyFactory.generatePublic(spec)
+        val rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
+        rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey)
+        val encryptedSynchronousKey = Base64.encodeToString(rsaCipher.doFinal(key.encoded), Base64.DEFAULT)
+        return AggregationResponse(
+            request.serverId,
+            request.nextUser!!,
+            encryptedSynchronousKey,
+            encryptedRequest,
+            ivString
+        )
     }
+
+//    fun postAggregationRequest(userId: String, request: AggregationRequest): Boolean {
+//        return webService.forwardAggregationRequest(request).execute().body()?.status ?: false
+//    }
 
 //    fun postAggregationnResult(userId: String, result: AggregationResult): Boolean {
 //        return webService.insertAggregationResult(result).execute().body()?.status ?: false

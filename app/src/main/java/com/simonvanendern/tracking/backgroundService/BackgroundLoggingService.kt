@@ -23,8 +23,6 @@ import com.simonvanendern.tracking.logging.TransitionRecognition
 import com.simonvanendern.tracking.repository.RequestRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okio.ByteString
-import java.io.FileOutputStream
 import java.lang.Thread.sleep
 import java.nio.charset.StandardCharsets
 import java.security.KeyPairGenerator
@@ -218,7 +216,10 @@ class BackgroundLoggingService : Service() {
             with(store.edit()) {
                 putString(getString(R.string.public_key), Base64.encodeToString(keyPair.public.encoded, Base64.DEFAULT))
                 putString("public_key_complete", public)
-                putString(getString(R.string.private_key), Base64.encodeToString(keyPair.private.encoded, Base64.DEFAULT))
+                putString(
+                    getString(R.string.private_key),
+                    Base64.encodeToString(keyPair.private.encoded, Base64.DEFAULT)
+                )
                 apply()
             }
         }
