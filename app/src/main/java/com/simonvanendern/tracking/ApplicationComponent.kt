@@ -6,6 +6,7 @@ import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
 import com.simonvanendern.tracking.logging.ActivityRecognitionReceiver
 import com.simonvanendern.tracking.logging.LocationReceiver
 import com.simonvanendern.tracking.logging.StepsLogger
+import com.simonvanendern.tracking.repository.GPSRepository
 import dagger.Component
 import javax.inject.Singleton
 
@@ -20,4 +21,5 @@ interface ApplicationComponent {
     fun inject(allDataViewModel: AllDataViewModel)
     fun inject(serverRequestHandler: ServerRequestHandler)
     fun inject(backgroundLoggingService: BackgroundLoggingService)
+    fun inject(gpsRepository: GPSRepository)
 }

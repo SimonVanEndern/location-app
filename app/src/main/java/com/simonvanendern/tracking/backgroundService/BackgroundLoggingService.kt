@@ -24,9 +24,7 @@ import com.simonvanendern.tracking.repository.RequestRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Thread.sleep
-import java.nio.charset.StandardCharsets
 import java.security.KeyPairGenerator
-import java.security.spec.X509EncodedKeySpec
 import java.util.concurrent.TimeUnit
 import javax.crypto.Cipher
 import javax.inject.Inject
@@ -39,8 +37,8 @@ class BackgroundLoggingService : Service() {
     @Inject
     lateinit var requestRepository: RequestRepository
 
-    private lateinit var aggregateDataWorkRequest: PeriodicWorkRequest
-    private lateinit var serveServerRequests: PeriodicWorkRequest
+    private var aggregateDataWorkRequest: PeriodicWorkRequest? = null
+    private var serveServerRequests: PeriodicWorkRequest? = null
 
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
@@ -53,19 +51,22 @@ class BackgroundLoggingService : Service() {
                 TransitionRecognition(applicationContext)
                 post(stepsLogger)
 
+                if (aggregateDataWorkRequest == null) {
+                    // Aggregate the location data from time to time
+                    aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
+                        DatabaseAggregator::class.java,
+                        PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+                        TimeUnit.MILLISECONDS
+                    ).build()
+                }
 
-                // Aggregate the location data from time to time
-                aggregateDataWorkRequest = PeriodicWorkRequest.Builder(
-                    DatabaseAggregator::class.java,
-                    PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
-                    TimeUnit.MILLISECONDS
-                ).build()
-
-                serveServerRequests = PeriodicWorkRequest.Builder(
-                    ServerRequestHandler::class.java,
-                    PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
-                    TimeUnit.MILLISECONDS
-                ).build()
+                if (serveServerRequests == null) {
+                    serveServerRequests = PeriodicWorkRequest.Builder(
+                        ServerRequestHandler::class.java,
+                        PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+                        TimeUnit.MILLISECONDS
+                    ).build()
+                }
 
                 WorkManager.getInstance().enqueue(
                     listOf(
@@ -123,6 +124,8 @@ class BackgroundLoggingService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
+        Log.d("STARTCOMMAND", "Started service")
+
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
             msg.arg2 = intent.getIntExtra("granularity", -1)
@@ -169,8 +172,14 @@ class BackgroundLoggingService : Service() {
             "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver."
         )
 
-        WorkManager.getInstance().cancelWorkById(aggregateDataWorkRequest.id)
-        WorkManager.getInstance().cancelWorkById(serveServerRequests.id)
+        if (aggregateDataWorkRequest != null) {
+            WorkManager.getInstance().cancelWorkById(aggregateDataWorkRequest!!.id)
+            aggregateDataWorkRequest = null
+        }
+        if (serveServerRequests != null) {
+            WorkManager.getInstance().cancelWorkById(serveServerRequests!!.id)
+            serveServerRequests = null
+        }
 
         val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
         sendBroadcast(broadcastIntent)
@@ -180,12 +189,18 @@ class BackgroundLoggingService : Service() {
         super.onTaskRemoved(rootIntent)
         Toast.makeText(this, "logging service done with onTaskRemoved", Toast.LENGTH_SHORT).show()
         Log.e(
-            "LOGGINGDESTROY",
+            "LOGGINGREMOVED",
             "Service unexpectedly destroyed while GPSLogger was running. Will send broadcast to RestarterReceiver."
         )
 
-        WorkManager.getInstance().cancelWorkById(aggregateDataWorkRequest.id)
-        WorkManager.getInstance().cancelWorkById(serveServerRequests.id)
+        if (aggregateDataWorkRequest != null) {
+            WorkManager.getInstance().cancelWorkById(aggregateDataWorkRequest!!.id)
+            aggregateDataWorkRequest = null
+        }
+        if (serveServerRequests != null) {
+            WorkManager.getInstance().cancelWorkById(serveServerRequests!!.id)
+            serveServerRequests = null
+        }
 
         val broadcastIntent = Intent(applicationContext, RestarterReceiver::class.java)
         sendBroadcast(broadcastIntent)

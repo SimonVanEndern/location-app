@@ -90,11 +90,11 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
 
-        Toast.makeText(
-            applicationContext,
-            R.string.empty_not_saved,
-            Toast.LENGTH_LONG
-        ).show()
+//        Toast.makeText(
+//            applicationContext,
+//            R.string.empty_not_saved,
+//            Toast.LENGTH_LONG
+//        ).show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

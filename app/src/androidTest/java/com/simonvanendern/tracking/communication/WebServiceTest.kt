@@ -103,7 +103,7 @@ class WebServiceTest {
             .build()
             .create(WebService::class.java)
 
-        val result: Response? = webservice.forwardAggregationRequest(request1).execute().body()
+        val result: Response? = webservice.insertAggregationResult(request1).execute().body()
 
         assertEquals(true, result?.status)
     }

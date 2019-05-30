@@ -11,7 +11,7 @@ class RestarterReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         println("RESTARTER ACTIVE")
-        Toast.makeText(context, "Received boradccaast", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, "Received boradccaast", Toast.LENGTH_SHORT).show()
         try {
             if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
                 Log.d("RESTARTER", "Phone was restarted, starting service ...")

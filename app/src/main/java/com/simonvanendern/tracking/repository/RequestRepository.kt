@@ -71,7 +71,7 @@ class RequestRepository @Inject constructor(
         val requests = aggregationRequestDao.getAllPendingResults()
         for (res in requests) {
             if (res.nextUser == null) {
-                webService.insertAggregationResult(
+                if(webService.insertAggregationResult(
                     AggregationRequest(
                         res.serverId,
                         res.nextUser,
@@ -82,13 +82,15 @@ class RequestRepository @Inject constructor(
                         res.end,
                         res.valueList
                     )
-                ).execute()
-                aggregationRequestDao.delete(res)
+                ).execute().isSuccessful) {
+                    aggregationRequestDao.delete(res)
+                }
             } else {
-                webService.forwardAggregationRequest(
+                if (webService.forwardAggregationRequest(
                     generateResponse(res)
-                ).execute()
-                aggregationRequestDao.delete(res)
+                ).execute().isSuccessful) {
+                    aggregationRequestDao.delete(res)
+                }
             }
         }
     }

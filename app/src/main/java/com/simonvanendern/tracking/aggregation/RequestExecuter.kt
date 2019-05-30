@@ -9,6 +9,8 @@ class RequestExecuter @Inject constructor(private val db: TrackingDatabase) {
 
     fun execute(req: AggregationRequest): AggregationRequest {
         val ownValue: Float
+        val newMean: Float
+        val newN: Int
 
         when (if (req.type.startsWith("activity")) {
             "activity"
@@ -17,10 +19,20 @@ class RequestExecuter @Inject constructor(private val db: TrackingDatabase) {
         }) {
             "steps" -> {
                 ownValue = db.stepsDao().getAverageSteps(req.start, req.end)
+                if (ownValue.compareTo(0) == 0) {
+                    newMean = req.value
+                    newN = req.n
+                } else {
+                    newMean = (ownValue + req.n * req.value) / (req.n + 1)
+                    newN = req.n + 1
+                }
             }
 
             "stepsListing" -> {
                 ownValue = db.stepsDao().getAverageSteps(req.start, req.end)
+                newMean = req.value
+                newN = req.n
+                req.valueList.add(ownValue)
             }
 
             "activity" -> {
@@ -33,14 +45,29 @@ class RequestExecuter @Inject constructor(private val db: TrackingDatabase) {
                     req.start,
                     req.end,
                     activity
-                ).toFloat() / diff
+                ).toFloat() / (1000 * 60) / diff
+
+                newMean = (ownValue + req.n * req.value) / (req.n + 1)
+                newN = req.n + 1
+            }
+
+            "trajectory" -> {
+                val trajectories = db.trajectoryDao().getTrajectories(
+                    req.start.time,
+                    req.end.time
+                )
+                trajectories.forEach {
+                    req.valueList.add(it.lat1)
+                    req.valueList.add(it.lon1)
+                    req.valueList.add(it.lat2)
+                    req.valueList.add(it.lon2)
+                }
+                newMean = req.value
+                newN = req.n
             }
             else -> throw Exception("Should not happen. Implementation missing")
         }
 
-        val newMean = (ownValue + req.n * req.value) / (req.n + 1)
-        val newN = req.n + 1
-        req.valueList.add(ownValue)
 
         return AggregationRequest(
             0,

@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import com.simonvanendern.tracking.ApplicationModule
 import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.repository.ActivityRepository
+import com.simonvanendern.tracking.repository.GPSRepository
 import com.simonvanendern.tracking.repository.StepsRepository
 import javax.inject.Inject
 
@@ -19,6 +20,9 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
     @Inject
     lateinit var stepsRepository: StepsRepository
 
+    @Inject
+    lateinit var gpsRepository: GPSRepository
+
     override fun doWork(): Result {
         DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(appContext))
@@ -26,6 +30,11 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
             .inject(this)
         activityRepository.aggregateActivities()
         stepsRepository.aggregateSteps()
+        gpsRepository.aggregateGPSRoutes()
+//        val gpsData = gpsRepository.getAll()
+//        val json = gpsData.map { data ->  "{\"longitude\":${data.longitude}, \"latitude\":${data.latitude}, \"timestamp\":${data.timestamp}}" }
+//
+//        val jsonString = json.joinToString()
 
         Log.d("AGGREGATOR", "Successful aggregation of Stuff")
 

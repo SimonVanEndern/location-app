@@ -79,7 +79,7 @@ class LocationUpdates(private val context: Context) {
 
         Log.d("LOCATION_UPDATES", "Sending change location update frequency update")
 
-        Toast.makeText(context, "Changed location listener update frequency", Toast.LENGTH_LONG).show()
+        //Toast.makeText(context, "Changed location listener update frequency", Toast.LENGTH_LONG).show()
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED

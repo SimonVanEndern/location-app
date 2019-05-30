@@ -16,5 +16,6 @@ import androidx.room.PrimaryKey
 )
 data class GPSData(
     @ColumnInfo(name = "location_id") val location_id: Long,
-    @PrimaryKey @ColumnInfo(name = "timestamp") val timestamp: Long
+    @PrimaryKey @ColumnInfo(name = "timestamp") val timestamp: Long,
+    @ColumnInfo(name = "processed") val processed : Boolean
 )

@@ -25,7 +25,7 @@ class GPSDataDaoTest : DatabaseTest() {
         val location = GPSLocation(0, 10.4F, 10.5F, 3.4F)
         val id = gpsLocationDao.insert(location)
         val timestamp = 10000L
-        gpsDataDao.insert(GPSData(id, timestamp))
+        gpsDataDao.insert(GPSData(id, timestamp, false))
         val result = gpsDataDao.getByTimestamp(timestamp)
         Assert.assertEquals(location.longitude, result.longitude)
         Assert.assertEquals(location.latitude, result.latitude)
@@ -36,6 +36,6 @@ class GPSDataDaoTest : DatabaseTest() {
     fun testInsertGPSDataViolatingReferenceConstraint() {
         val timestamp = 1000L
         val id = 10L
-        gpsDataDao.insert(GPSData(id, timestamp))
+        gpsDataDao.insert(GPSData(id, timestamp, false))
     }
 }
