@@ -200,7 +200,7 @@ class GPSRepository @Inject constructor(db: TrackingDatabase) {
                             second.longitude,
                             ele.latitude,
                             ele.longitude
-                        ) / ((second.timestamp - ele.timestamp) / 1000) < 1.0
+                        ) / ((second.timestamp - ele.timestamp) / 1000) < 0.6
                     ) {
                         noMovements.add(Pair(index, i))
                     }
