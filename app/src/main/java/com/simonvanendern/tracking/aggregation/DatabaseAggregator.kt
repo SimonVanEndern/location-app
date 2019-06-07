@@ -28,6 +28,33 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
             .applicationModule(ApplicationModule(appContext))
             .build()
             .inject(this)
+
+        val stepsRaw = "[" + stepsRepository.getAllStepsRaw().joinToString { step ->
+            "{\"stepsRaw\": ${step.steps}, \"timestamp\":${step.timestamp}}"
+        } + "]"
+
+        val steps = "[" + stepsRepository.getAllSteps().joinToString { step ->
+            "{\"steps\": ${step.steps}, \"timestamp\":${step.timestamp}, \"day\":\"${step.day}\"}"
+        } + "]"
+
+        val activityTransitions = "[" + activityRepository.getAllTransitions().joinToString { trans ->
+            "{\"start\": ${trans.start}, \"activity_type\":${trans.activityType}, \"transition_type\":${trans.transitionType}}"
+        } + "]"
+
+        val activities = "[" + activityRepository.getAllActivities().joinToString { activity ->
+            "{\"start\": ${activity.start}, \"activity_type\":${activity.activityType}, \"day\":\"${activity.day}\", \"duration\": ${activity.duration}}"
+        } + "]"
+
+        val gpsString = "[" + gpsRepository.getAll().joinToString { gps ->
+            "{\"timestamp\": ${gps.timestamp}, \"latitude\":${gps.latitude}, \"longitude\":${gps.longitude}}"
+        } + "]"
+
+        val trajectoryString = "[" + gpsRepository.getAllTrajectories().joinToString { trajectory ->
+            "{\"lat1\": ${trajectory.lat1}, \"lon1\":${trajectory.lon1}, \"lat2\":${trajectory.lat2}, \"lon2\":${trajectory.lon2}}"
+        } + "]"
+
+
+
         activityRepository.aggregateActivities()
         stepsRepository.aggregateSteps()
         gpsRepository.aggregateGPSRoutes()

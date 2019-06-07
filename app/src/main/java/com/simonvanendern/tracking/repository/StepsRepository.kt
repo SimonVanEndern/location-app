@@ -24,6 +24,14 @@ class StepsRepository @Inject constructor(db: TrackingDatabase) {
         stepsRawDao.insert(stepsRaw)
     }
 
+    fun getAllSteps () :List<Steps>{
+        return stepsDao.getAll()
+    }
+
+    fun getAllStepsRaw () : List<StepsRaw> {
+        return stepsRawDao.getAll()
+    }
+
     fun aggregateSteps() {
         val lastTimestamp = stepsRawDao.getLastTimestamp()
         val newSteps = stepsRawDao.computeNewSteps()

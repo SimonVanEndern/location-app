@@ -40,6 +40,14 @@ class ActivityRepository @Inject constructor(db: TrackingDatabase) {
         activityDao.insert(activity)
     }
 
+    fun getAllTransitions(): List<ActivityTransition> {
+        return activityTransitionDao.getAll()
+    }
+
+    fun getAllActivities () : List<Activity> {
+        return activityDao.getAll()
+    }
+
     fun aggregateActivities() {
         val lastTimestamp = activityTransitionDao.getLastTimestamp()
         val newActivities = activityTransitionDao.computeNewActivities()

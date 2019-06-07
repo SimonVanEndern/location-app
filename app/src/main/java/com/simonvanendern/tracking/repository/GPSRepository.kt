@@ -6,6 +6,7 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.schemata.aggregated.Trajectory
+import com.simonvanendern.tracking.database.schemata.aggregated.TrajectoryDao
 import com.simonvanendern.tracking.database.schemata.raw.GPSData
 import com.simonvanendern.tracking.database.schemata.raw.GPSDataDao
 import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
@@ -47,6 +48,10 @@ class GPSRepository @Inject constructor(db: TrackingDatabase) {
 //    @WorkerThread
     fun getAll(): List<GPSDataDao.GPSLocationWithTime> {
         return gpsDataDao.getAll()
+    }
+
+    fun getAllTrajectories () : List<TrajectoryDao.TrajectoryData>{
+        return trajectoryDao.getAllFormatted()
     }
 
     @WorkerThread
