@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.simonvanendern.tracking.AllDataViewModel
 import com.simonvanendern.tracking.R
 import com.simonvanendern.tracking.StepsAndActivityListAdapter
@@ -23,7 +22,6 @@ import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
 class MainActivity : AppCompatActivity() {
 
     private val ACTIVITY_REQUEST_CODE = 777
-    private val newWordActivityRequestCode = 1
     private lateinit var allDataViewModel: AllDataViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,12 +61,6 @@ class MainActivity : AppCompatActivity() {
             activityTransition?.let { adapter.setActivityTransitions(it) }
         })
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
-            val intent = Intent(this@MainActivity, NewWordActivity::class.java)
-            startActivityForResult(intent, newWordActivityRequestCode)
-        }
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
@@ -85,16 +77,6 @@ class MainActivity : AppCompatActivity() {
     private fun startBackgroundService() {
         val i = Intent(this, BackgroundLoggingService::class.java)
         startService(i)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intentData)
-
-//        Toast.makeText(
-//            applicationContext,
-//            R.string.empty_not_saved,
-//            Toast.LENGTH_LONG
-//        ).show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
