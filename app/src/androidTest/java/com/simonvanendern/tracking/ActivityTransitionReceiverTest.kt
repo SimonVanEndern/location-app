@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.simonvanendern.tracking.data_collection.ActivityRecognitionReceiver
+import com.simonvanendern.tracking.data_collection.ActivityTransitionReceiver
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -13,9 +13,9 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
-class ActivityRecognitionReceiverTest {
+class ActivityTransitionReceiverTest {
 
-    private var activityRecognitionReceiver: ActivityRecognitionReceiver? = null
+    private var activityTransitionReceiver: ActivityTransitionReceiver? = null
     private var mContext: Context? = null
 
     // Executes each task synchronously using Architecture Components.
@@ -25,15 +25,15 @@ class ActivityRecognitionReceiverTest {
     @Before
     @Throws(Exception::class)
     fun setUp() {
-        activityRecognitionReceiver = ActivityRecognitionReceiver()
+        activityTransitionReceiver = ActivityTransitionReceiver()
         mContext = mock(Context::class.java)
     }
 
     @Ignore("Not possible to properly inject a mocked object")
     @Test
     fun testReceiverAllIntent() {
-        val intent = Intent(mContext, ActivityRecognitionReceiver::class.java)
+        val intent = Intent(mContext, ActivityTransitionReceiver::class.java)
 
-        activityRecognitionReceiver!!.onReceive(mContext!!, intent)
+        activityTransitionReceiver!!.onReceive(mContext!!, intent)
     }
 }

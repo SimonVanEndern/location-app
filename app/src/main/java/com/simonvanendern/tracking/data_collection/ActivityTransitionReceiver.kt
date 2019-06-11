@@ -13,17 +13,31 @@ import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
 import com.simonvanendern.tracking.repository.ActivityRepository
 import javax.inject.Inject
 
-class ActivityRecognitionReceiver : BroadcastReceiver() {
+/**
+ * BroadcastReceiver receiving updates from the ActivityRecognition framework.
+ */
+class ActivityTransitionReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var activityRepository: ActivityRepository
 
+    /**
+     * Stores the received ActivityTransitionEvents to the database and
+     * informs the GPS logging service to set the logging frequency accordingly.
+     * When the device is still, GPS logging frequency is lower than when it is moving.
+     */
     override fun onReceive(context: Context, intent: Intent) {
-        DaggerApplicationComponent.builder()
-            .applicationModule(ApplicationModule(context))
-            .build()
-            .inject(this)
 
+        // Trigger dependency injection on first receive.
+        // This cannot be done in the constructor because we need the context
+        if (!this::activityRepository.isInitialized) {
+            DaggerApplicationComponent.builder()
+                .applicationModule(ApplicationModule(context))
+                .build()
+                .inject(this)
+        }
+
+        // An Event might be fired without actual content
         if (ActivityTransitionResult.hasResult(intent)) {
             Log.d("ACTIVITY_RECOGNITION", "Got activity")
 
@@ -37,13 +51,19 @@ class ActivityRecognitionReceiver : BroadcastReceiver() {
                 .maxBy { it.elapsedRealTimeNanos }
                 ?.activityType
 
-            notifyAboutActivityChange(context, activity)
+            notifyGPSLoggingServiceAboutActivityChange(context, activity)
         } else {
             Log.d("ACTIVITY_RECOGNITION", "Got something else")
         }
     }
 
-    private fun notifyAboutActivityChange(context: Context, activity: Int?) {
+    /**
+     * Sends a notification to the @see BackgroundLoggingService in order to
+     * change the frequency of GPS updates.
+     * The frequency itself is set in the GPS logging service, this method sends an extra
+     * along the intent specifying the frequency (granularity) as one of 0,1,2.
+     */
+    private fun notifyGPSLoggingServiceAboutActivityChange(context: Context, activity: Int?) {
         Log.d("ACTIVITY_RECOGNITION", "Got activity for change: $activity")
 
         val i = Intent(context, BackgroundLoggingService::class.java)

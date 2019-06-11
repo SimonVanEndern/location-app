@@ -97,7 +97,7 @@ class TransitionRecognition(private val context: Context) {
         val request = ActivityTransitionRequest(transitions)
         val activityRecognitionClient = ActivityRecognition.getClient(context)
 
-        val intent = Intent(context, ActivityRecognitionReceiver::class.java)
+        val intent = Intent(context, ActivityTransitionReceiver::class.java)
         mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
 
         val task = activityRecognitionClient.requestActivityTransitionUpdates(request, mPendingIntent)

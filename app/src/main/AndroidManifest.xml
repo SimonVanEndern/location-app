@@ -53,7 +53,7 @@
             <!--<category android:name="android.intent.category.DEFAULT" />-->
             <!--</intent-filter>-->
         </receiver>
-        <receiver android:name=".data_collection.ActivityRecognitionReceiver">
+        <receiver android:name=".data_collection.ActivityTransitionReceiver">
 
         </receiver>
     </application>

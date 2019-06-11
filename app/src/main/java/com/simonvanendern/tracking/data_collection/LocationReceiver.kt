@@ -10,23 +10,32 @@ import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.repository.GPSRepository
 import javax.inject.Inject
 
+/**
+ * BroadcastReceiver receiving GPS updates.
+ */
 class LocationReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var locationRepository: GPSRepository
 
+    /**
+    * Stores the received GPS data to the database.
+     * This function is not called upon every single GPS position received but rather in bundles.
+    */
     override fun onReceive(context: Context, intent: Intent) {
-        DaggerApplicationComponent.builder()
-            .applicationModule(ApplicationModule(context))
-            .build()
-            .inject(this)
 
-        Log.d("LOCATION_RECEIVER", "Started onReceive")
+        // Trigger dependency injection on first receive.
+        // This cannot be done in the constructor because we need the context
+        if (!this::locationRepository.isInitialized) {
+            DaggerApplicationComponent.builder()
+                .applicationModule(ApplicationModule(context))
+                .build()
+                .inject(this)
+        }
 
+        // An Event might be fired without actual content
         if (LocationResult.hasResult(intent)) {
             val result = LocationResult.extractResult(intent)
-
-            Log.d("LOCATION_RECEIVER", "onReceive with result")
 
             locationRepository.insertLocations(result.locations)
         }
