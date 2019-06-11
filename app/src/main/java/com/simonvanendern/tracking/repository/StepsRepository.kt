@@ -6,7 +6,12 @@ import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.data_model.aggregated.Steps
 import com.simonvanendern.tracking.database.data_model.raw.StepsRaw
 import javax.inject.Inject
+import javax.inject.Singleton
 
+/**
+ * Repository handling the DAOs corresponding to steps
+ */
+@Singleton
 class StepsRepository @Inject constructor(db: TrackingDatabase) {
 
     private val stepsDao = db.stepsDao()
@@ -32,6 +37,11 @@ class StepsRepository @Inject constructor(db: TrackingDatabase) {
         return stepsRawDao.getAll()
     }
 
+    /**
+     * Computes steps walked from not yet processed step counter values
+     * reflecting the step counter value since last reboot
+     * and then sets those step counter values as processed.
+     */
     fun aggregateSteps() {
         val lastTimestamp = stepsRawDao.getLastTimestamp()
         val newSteps = stepsRawDao.computeNewSteps()

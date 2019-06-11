@@ -17,6 +17,9 @@ import javax.crypto.spec.IvParameterSpec
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Repository handling the requests used for server communication
+ */
 @Singleton
 class RequestRepository @Inject constructor(
     db: TrackingDatabase,
@@ -28,11 +31,14 @@ class RequestRepository @Inject constructor(
         return webService.createUser(User(userId, "")).execute().body()
     }
 
+    /**
+     * Retrieves all requests waiting to be processed by this user from the server
+     * and stores them locally.
+     */
     fun getPendingRequests(
         userId: String,
         pw: String
     ): List<com.simonvanendern.tracking.database.data_model.AggregationRequest> {
-//        val pk = Base64.encodeToString(Base64.decode(userId, 0), Base64.URL_SAFE)
 
         val newRequests = webService.getRequestsForUser(userId, pw).execute().body() ?: emptyList()
         for (request in newRequests) {
@@ -41,22 +47,18 @@ class RequestRepository @Inject constructor(
                     0,
                     request.serverId,
                     request.nextUser,
+                    request.start,
+                    request.end,
                     request.type,
                     request.n,
                     request.value,
-                    request.start,
-                    request.end,
-                    true,
-                    request.valueList
+                    request.valueList,
+                    true
                 )
             )
         }
 
         return aggregationRequestDao.getAllIncomingAggregationRequests()
-    }
-
-    fun getPendingResults(): List<com.simonvanendern.tracking.database.data_model.AggregationRequest> {
-        return aggregationRequestDao.getAllPendingOutgoingAggregationRequests()
     }
 
     fun insertRequestResult(res: com.simonvanendern.tracking.database.data_model.AggregationRequest) {
@@ -67,42 +69,52 @@ class RequestRepository @Inject constructor(
         aggregationRequestDao.delete(req)
     }
 
+    /**
+     * Sends all pending requests that have been processed and stored
+     * to the server and deletes the request if the server acknowledges to
+     * have received the request.
+     */
     fun sendOutResults() {
         val requests = aggregationRequestDao.getAllPendingOutgoingAggregationRequests()
         for (res in requests) {
             if (res.nextUser == null) {
-                if(webService.insertAggregationResult(
-                    AggregationRequest(
-                        res.serverId,
-                        res.nextUser,
-                        res.type,
-                        res.n,
-                        res.value,
-                        res.start,
-                        res.end,
-                        res.valueList
-                    )
-                ).execute().isSuccessful) {
+                if (webService.insertAggregationResult(
+                        AggregationRequest(
+                            res.serverId,
+                            res.nextUser,
+                            res.type,
+                            res.n,
+                            res.value,
+                            res.start,
+                            res.end,
+                            res.valueList
+                        )
+                    ).execute().isSuccessful
+                ) {
                     aggregationRequestDao.delete(res)
                 }
             } else {
                 if (webService.forwardAggregationRequest(
-                    generateResponse(res)
-                ).execute().isSuccessful) {
+                        generateResponse(res)
+                    ).execute().isSuccessful
+                ) {
                     aggregationRequestDao.delete(res)
                 }
             }
         }
     }
 
-    fun generateResponse(request: com.simonvanendern.tracking.database.data_model.AggregationRequest): AggregationResponse {
+    /**
+     * Encrypts the processed aggregation request with the public key of the next user
+     * Encryption is hybrid - the aggregation request in JSON format itself is encrypted
+     * with a synchronous key (AES) and this one is encrypted with the public key.
+     */
+    private fun generateResponse(request: com.simonvanendern.tracking.database.data_model.AggregationRequest): AggregationResponse {
         val generator = KeyGenerator.getInstance("AES")
         generator.init(256)
         val key = generator.generateKey()
-        val keyString = Base64.encodeToString(key.encoded, Base64.DEFAULT)
 
-
-        var formatter = SimpleDateFormat("yyyy-MM-dd")
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
 
         val json = JSONObject()
         json.put("start", formatter.format(request.start))
@@ -136,18 +148,10 @@ class RequestRepository @Inject constructor(
         val encryptedSynchronousKey = Base64.encodeToString(rsaCipher.doFinal(key.encoded), Base64.DEFAULT)
         return AggregationResponse(
             request.serverId,
-            request.nextUser!!,
+            request.nextUser,
             encryptedSynchronousKey,
             encryptedRequest,
             ivString
         )
     }
-
-//    fun postAggregationRequest(userId: String, request: AggregationRequest): Boolean {
-//        return webService.forwardAggregationRequest(request).execute().body()?.status ?: false
-//    }
-
-//    fun postAggregationnResult(userId: String, result: AggregationResult): Boolean {
-//        return webService.insertAggregationResult(result).execute().body()?.status ?: false
-//    }
 }

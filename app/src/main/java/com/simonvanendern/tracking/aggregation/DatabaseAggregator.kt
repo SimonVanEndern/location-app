@@ -45,7 +45,7 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
             "{\"start\": ${activity.start}, \"activity_type\":${activity.activityType}, \"day\":\"${activity.day}\", \"duration\": ${activity.duration}}"
         } + "]"
 
-        val gpsString = "[" + gpsRepository.getAll().joinToString { gps ->
+        val gpsString = "[" + gpsRepository.getAllGPSDataEntries().joinToString { gps ->
             "{\"timestamp\": ${gps.timestamp}, \"latitude\":${gps.latitude}, \"longitude\":${gps.longitude}}"
         } + "]"
 
@@ -58,7 +58,7 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
         activityRepository.aggregateActivities()
         stepsRepository.aggregateSteps()
         gpsRepository.aggregateGPSRoutes()
-//        val gpsData = gpsRepository.getAll()
+//        val gpsData = gpsRepository.getAllGPSDataEntries()
 //        val json = gpsData.map { data ->  "{\"longitude\":${data.longitude}, \"latitude\":${data.latitude}, \"timestamp\":${data.timestamp}}" }
 //
 //        val jsonString = json.joinToString()

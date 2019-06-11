@@ -11,11 +11,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
- * Abstracted Repository as promoted by the Architecture Guide.
- * https://developer.android.com/topic/libraries/architecture/guide.html
+ * Repository handling the DAOs corresponding to detected activities
  */
+@Singleton
 class ActivityRepository @Inject constructor(db: TrackingDatabase) {
     private val activityTransitionDao = db.activityTransitionDao()
     private val activityDao = db.activityDao()
@@ -44,10 +45,14 @@ class ActivityRepository @Inject constructor(db: TrackingDatabase) {
         return activityTransitionDao.getAll()
     }
 
-    fun getAllActivities () : List<Activity> {
+    fun getAllActivities(): List<Activity> {
         return activityDao.getAll()
     }
 
+    /**
+     * Computes activities from not yet processed activity transition events
+     * and then sets those events as processed.
+     */
     fun aggregateActivities() {
         val lastTimestamp = activityTransitionDao.getLastTimestamp()
         val newActivities = activityTransitionDao.computeNewActivities()
@@ -58,18 +63,18 @@ class ActivityRepository @Inject constructor(db: TrackingDatabase) {
     fun insertDetectedActivities(activities: List<ActivityTransitionEvent>) {
         GlobalScope.launch {
             val now = Date()
-            val activityTransitions = activities.map {
-                ActivityTransition(
-                    0,
-                    now,
-                    it.activityType,
-                    it.transitionType,
-                    now.time - ((elapsedRealtimeNanos() - it.elapsedRealTimeNanos) / 1000000),
-                    false
-                )
-            }
-
-            activityTransitionDao.insertAll(activityTransitions)
+            activityTransitionDao.insertAll(
+                activities.map {
+                    ActivityTransition(
+                        0,
+                        now,
+                        it.activityType,
+                        it.transitionType,
+                        now.time - ((elapsedRealtimeNanos() - it.elapsedRealTimeNanos) / 1000000),
+                        false
+                    )
+                }
+            )
         }
     }
 }
