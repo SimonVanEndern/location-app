@@ -5,6 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
+/**
+ * This class saves activities computed from a starting and exiting @see ActivityTransitionEvent
+ * activityType corresponds to @see DetectedActivity
+ * duration is in nano seconds
+ * start is a UNIX timestamp
+ */
 @Entity(tableName = "activity_table")
 data class Activity (
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id : Int,

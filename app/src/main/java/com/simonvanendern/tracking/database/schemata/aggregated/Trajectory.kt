@@ -6,6 +6,12 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
 
+/**
+ * This class saves trajectories computed from the GPS locations saved in gps_data_table and gps_location_table.
+ * start and end are timestamps specifying the start and end of the trajectory.
+ * activity specifies the corresponding @see DetectedActivity (not used yet).
+ * location_end and location_start link to the gps points in gps_location_table
+ */
 @Entity(
     tableName = "trajectory_table",
     foreignKeys = [ForeignKey(
