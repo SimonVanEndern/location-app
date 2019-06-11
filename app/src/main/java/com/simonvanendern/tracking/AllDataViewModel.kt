@@ -4,11 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.aggregated.Activity
-import com.simonvanendern.tracking.database.schemata.aggregated.Steps
-import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
-import com.simonvanendern.tracking.database.schemata.raw.GPSData
-import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
+import com.simonvanendern.tracking.database.data_model.aggregated.Activity
+import com.simonvanendern.tracking.database.data_model.aggregated.Steps
+import com.simonvanendern.tracking.database.data_model.raw.ActivityTransition
+import com.simonvanendern.tracking.database.data_model.raw.GPSData
+import com.simonvanendern.tracking.database.data_model.raw.StepsRaw
 import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.repository.GPSRepository
 import com.simonvanendern.tracking.repository.StepsRepository

@@ -1,10 +1,10 @@
-package com.simonvanendern.tracking.database.schemata.aggregated
+package com.simonvanendern.tracking.database.data_model.aggregated
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
+import com.simonvanendern.tracking.database.data_model.raw.GPSLocation
 
 /**
  * This class saves trajectories computed from the GPS locations saved in gps_data_table and gps_location_table.

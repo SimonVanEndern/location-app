@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata.raw
+package com.simonvanendern.tracking.database.data_model.raw
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -19,5 +19,5 @@ data class StepsRaw(
     @PrimaryKey @ColumnInfo(name = "timestamp") val timestamp: Long,
     @ColumnInfo(name = "day") val day: Date,
     @ColumnInfo(name = "steps") val steps: Int,
-    @ColumnInfo(name = "processed") val processed : Boolean
+    @ColumnInfo(name = "processed") val processed: Boolean
 )

@@ -6,9 +6,8 @@ import com.simonvanendern.tracking.communication.User
 import com.simonvanendern.tracking.communication.WebService
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.AggregationRequestDao
+import com.simonvanendern.tracking.database.data_model.AggregationRequestDao
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,8 +33,8 @@ class RequestRepositoryTest : DatabaseTest() {
 
     private fun any() = any(User::class.java) ?: User("", "")
 
-    private fun any2() = any(com.simonvanendern.tracking.database.schemata.AggregationRequest::class.java)
-        ?: com.simonvanendern.tracking.database.schemata.AggregationRequest(
+    private fun any2() = any(com.simonvanendern.tracking.database.data_model.AggregationRequest::class.java)
+        ?: com.simonvanendern.tracking.database.data_model.AggregationRequest(
             0,
             "",
             "",
@@ -97,6 +96,6 @@ class RequestRepositoryTest : DatabaseTest() {
         requestRepository.getPendingRequests(user, "testPw")
 
         verify(aggregationRequestDao, times(2)).insert(any2())
-        verify(aggregationRequestDao, times(1)).getAllPendingRequests()
+        verify(aggregationRequestDao, times(1)).getAllIncomingAggregationRequests()
     }
 }

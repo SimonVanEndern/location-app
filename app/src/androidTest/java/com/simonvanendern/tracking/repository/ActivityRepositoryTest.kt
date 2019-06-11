@@ -3,9 +3,9 @@ package com.simonvanendern.tracking.repository
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
-import com.simonvanendern.tracking.database.schemata.aggregated.ActivityDao
-import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
-import com.simonvanendern.tracking.database.schemata.raw.ActivityTransitionDao
+import com.simonvanendern.tracking.database.data_model.aggregated.ActivityDao
+import com.simonvanendern.tracking.database.data_model.raw.ActivityTransition
+import com.simonvanendern.tracking.database.data_model.raw.ActivityTransitionDao
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

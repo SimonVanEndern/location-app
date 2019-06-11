@@ -5,8 +5,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.ActivityTransitionEvent
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.aggregated.Activity
-import com.simonvanendern.tracking.database.schemata.raw.ActivityTransition
+import com.simonvanendern.tracking.database.data_model.aggregated.Activity
+import com.simonvanendern.tracking.database.data_model.raw.ActivityTransition
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*

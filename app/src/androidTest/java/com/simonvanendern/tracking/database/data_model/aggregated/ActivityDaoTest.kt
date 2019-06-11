@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata.aggregated
+package com.simonvanendern.tracking.database.data_model.aggregated
 
 import com.google.android.gms.location.DetectedActivity.*
 import com.simonvanendern.tracking.database.DatabaseTest

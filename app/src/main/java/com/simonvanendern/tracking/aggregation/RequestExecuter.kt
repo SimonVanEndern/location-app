@@ -1,7 +1,7 @@
 package com.simonvanendern.tracking.aggregation
 
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.AggregationRequest
+import com.simonvanendern.tracking.database.data_model.AggregationRequest
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

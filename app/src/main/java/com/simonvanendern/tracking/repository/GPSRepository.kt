@@ -5,11 +5,11 @@ import android.location.Location
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.aggregated.Trajectory
-import com.simonvanendern.tracking.database.schemata.aggregated.TrajectoryDao
-import com.simonvanendern.tracking.database.schemata.raw.GPSData
-import com.simonvanendern.tracking.database.schemata.raw.GPSDataDao
-import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
+import com.simonvanendern.tracking.database.data_model.aggregated.Trajectory
+import com.simonvanendern.tracking.database.data_model.aggregated.TrajectoryDao
+import com.simonvanendern.tracking.database.data_model.raw.GPSData
+import com.simonvanendern.tracking.database.data_model.raw.GPSDataDao
+import com.simonvanendern.tracking.database.data_model.raw.GPSLocation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async

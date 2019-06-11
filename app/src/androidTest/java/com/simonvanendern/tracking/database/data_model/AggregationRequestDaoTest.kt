@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata
+package com.simonvanendern.tracking.database.data_model
 
 import com.simonvanendern.tracking.database.DatabaseTest
 import org.junit.Assert
@@ -83,7 +83,7 @@ class AggregationRequestDaoTest : DatabaseTest() {
         aggregationRequestDao.insert(aggregationRequest_1)
         aggregationRequestDao.insert(aggregationRequest_2)
 
-        val savedRequests = aggregationRequestDao.getAllPendingRequests()
+        val savedRequests = aggregationRequestDao.getAllIncomingAggregationRequests()
 
         Assert.assertEquals(savedRequests.size, 3)
         Assert.assertTrue(savedRequests.map(AggregationRequest::serverId).contains(serverSideId_0))

@@ -1,10 +1,10 @@
-package com.simonvanendern.tracking.database.schemata.raw
+package com.simonvanendern.tracking.database.data_model.raw
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
-import com.simonvanendern.tracking.database.schemata.aggregated.Steps
+import com.simonvanendern.tracking.database.data_model.aggregated.Steps
 import java.util.*
 
 /**

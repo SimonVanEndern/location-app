@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata.raw
+package com.simonvanendern.tracking.database.data_model.raw
 
 import androidx.room.Dao
 import androidx.room.Insert

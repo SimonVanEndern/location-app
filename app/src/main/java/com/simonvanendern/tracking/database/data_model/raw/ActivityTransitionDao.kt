@@ -1,11 +1,11 @@
-package com.simonvanendern.tracking.database.schemata.raw
+package com.simonvanendern.tracking.database.data_model.raw
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.ABORT
 import androidx.room.Query
-import com.simonvanendern.tracking.database.schemata.aggregated.Activity
+import com.simonvanendern.tracking.database.data_model.aggregated.Activity
 import java.util.*
 
 /**
@@ -18,7 +18,7 @@ interface ActivityTransitionDao {
     fun insert(activityTransition: ActivityTransition): Long
 
     @Insert(onConflict = ABORT)
-    fun insertAll (activityTransitions : List<ActivityTransition>)
+    fun insertAll(activityTransitions: List<ActivityTransition>)
 
     @Query("SELECT * FROM activity_transition_table")
     fun getAll(): List<ActivityTransition>

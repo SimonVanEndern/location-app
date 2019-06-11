@@ -1,10 +1,10 @@
-package com.simonvanendern.tracking.database.schemata.aggregated
+package com.simonvanendern.tracking.database.data_model.aggregated
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.gms.location.DetectedActivity
 import com.simonvanendern.tracking.database.DatabaseTest
-import com.simonvanendern.tracking.database.schemata.raw.GPSLocation
-import com.simonvanendern.tracking.database.schemata.raw.GPSLocationDao
+import com.simonvanendern.tracking.database.data_model.raw.GPSLocation
+import com.simonvanendern.tracking.database.data_model.raw.GPSLocationDao
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

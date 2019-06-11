@@ -8,7 +8,7 @@ import android.hardware.SensorManager
 import android.util.Log
 import com.simonvanendern.tracking.ApplicationModule
 import com.simonvanendern.tracking.DaggerApplicationComponent
-import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
+import com.simonvanendern.tracking.database.data_model.raw.StepsRaw
 import com.simonvanendern.tracking.repository.StepsRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

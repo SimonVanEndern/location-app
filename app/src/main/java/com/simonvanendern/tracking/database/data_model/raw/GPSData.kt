@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata.raw
+package com.simonvanendern.tracking.database.data_model.raw
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -23,5 +23,5 @@ import androidx.room.PrimaryKey
 data class GPSData(
     @ColumnInfo(name = "location_id") val location_id: Long,
     @PrimaryKey @ColumnInfo(name = "timestamp") val timestamp: Long,
-    @ColumnInfo(name = "processed") val processed : Boolean
+    @ColumnInfo(name = "processed") val processed: Boolean
 )

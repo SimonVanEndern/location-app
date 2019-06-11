@@ -31,13 +31,13 @@ class RequestRepository @Inject constructor(
     fun getPendingRequests(
         userId: String,
         pw: String
-    ): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
+    ): List<com.simonvanendern.tracking.database.data_model.AggregationRequest> {
 //        val pk = Base64.encodeToString(Base64.decode(userId, 0), Base64.URL_SAFE)
 
         val newRequests = webService.getRequestsForUser(userId, pw).execute().body() ?: emptyList()
         for (request in newRequests) {
             aggregationRequestDao.insert(
-                com.simonvanendern.tracking.database.schemata.AggregationRequest(
+                com.simonvanendern.tracking.database.data_model.AggregationRequest(
                     0,
                     request.serverId,
                     request.nextUser,
@@ -52,23 +52,23 @@ class RequestRepository @Inject constructor(
             )
         }
 
-        return aggregationRequestDao.getAllPendingRequests()
+        return aggregationRequestDao.getAllIncomingAggregationRequests()
     }
 
-    fun getPendingResults(): List<com.simonvanendern.tracking.database.schemata.AggregationRequest> {
-        return aggregationRequestDao.getAllPendingResults()
+    fun getPendingResults(): List<com.simonvanendern.tracking.database.data_model.AggregationRequest> {
+        return aggregationRequestDao.getAllPendingOutgoingAggregationRequests()
     }
 
-    fun insertRequestResult(res: com.simonvanendern.tracking.database.schemata.AggregationRequest) {
+    fun insertRequestResult(res: com.simonvanendern.tracking.database.data_model.AggregationRequest) {
         aggregationRequestDao.insert(res)
     }
 
-    fun deletePendingRequest(req: com.simonvanendern.tracking.database.schemata.AggregationRequest) {
+    fun deletePendingRequest(req: com.simonvanendern.tracking.database.data_model.AggregationRequest) {
         aggregationRequestDao.delete(req)
     }
 
     fun sendOutResults() {
-        val requests = aggregationRequestDao.getAllPendingResults()
+        val requests = aggregationRequestDao.getAllPendingOutgoingAggregationRequests()
         for (res in requests) {
             if (res.nextUser == null) {
                 if(webService.insertAggregationResult(
@@ -95,7 +95,7 @@ class RequestRepository @Inject constructor(
         }
     }
 
-    fun generateResponse(request: com.simonvanendern.tracking.database.schemata.AggregationRequest): AggregationResponse {
+    fun generateResponse(request: com.simonvanendern.tracking.database.data_model.AggregationRequest): AggregationResponse {
         val generator = KeyGenerator.getInstance("AES")
         generator.init(256)
         val key = generator.generateKey()

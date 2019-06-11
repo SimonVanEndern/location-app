@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata.aggregated
+package com.simonvanendern.tracking.database.data_model.aggregated
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest

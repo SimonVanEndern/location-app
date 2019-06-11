@@ -3,9 +3,9 @@ package com.simonvanendern.tracking.repository
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.schemata.aggregated.StepsDao
-import com.simonvanendern.tracking.database.schemata.raw.StepsRaw
-import com.simonvanendern.tracking.database.schemata.raw.StepsRawDao
+import com.simonvanendern.tracking.database.data_model.aggregated.StepsDao
+import com.simonvanendern.tracking.database.data_model.raw.StepsRaw
+import com.simonvanendern.tracking.database.data_model.raw.StepsRawDao
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before

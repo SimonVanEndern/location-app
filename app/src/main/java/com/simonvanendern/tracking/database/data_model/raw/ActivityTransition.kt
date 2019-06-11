@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.database.schemata.raw
+package com.simonvanendern.tracking.database.data_model.raw
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -21,5 +21,5 @@ data class ActivityTransition(
     @ColumnInfo(name = "activity_type") val activityType: Int,
     @ColumnInfo(name = "transition_type") val transitionType: Int,
     @ColumnInfo(name = "start") val start: Long,
-    @ColumnInfo(name = "processed") val processed : Boolean
+    @ColumnInfo(name = "processed") val processed: Boolean
 )
