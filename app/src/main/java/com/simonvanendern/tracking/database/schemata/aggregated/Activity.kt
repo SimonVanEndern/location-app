@@ -8,7 +8,7 @@ import java.util.*
 /**
  * This class saves activities computed from a starting and exiting @see ActivityTransitionEvent
  * activityType corresponds to @see DetectedActivity
- * duration is in nano seconds
+ * duration is in milliseconds
  * start is a UNIX timestamp
  */
 @Entity(tableName = "activity_table")

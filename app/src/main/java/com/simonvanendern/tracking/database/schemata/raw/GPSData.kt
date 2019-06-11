@@ -5,6 +5,12 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+/**
+ * This class saves GPS data together with the linked gps_location_table.
+ * location_id corresponds to the id of the GPS data in gps_location table.
+ * processed is a flag whether this entry has already been processed and used to
+ * compute aggregated data in the aggregated package
+ */
 @Entity(
     tableName = "gps_data_table",
     foreignKeys = [ForeignKey(

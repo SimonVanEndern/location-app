@@ -27,7 +27,7 @@ class StepsRawDaoTest : DatabaseTest() {
         val steps = 5000
         val stepsObject = StepsRaw(day.time, day, steps, false)
         stepsRawDao.insert(stepsObject)
-        val result = stepsRawDao.getSteps(day)
+        val result = stepsRawDao.getStepsByDay(day)
         assertEquals(steps, result)
     }
 
@@ -39,11 +39,11 @@ class StepsRawDaoTest : DatabaseTest() {
         val steps2 = 4000
         val stepsObject1 = StepsRaw(day.time, day, steps1, false)
         stepsRawDao.insert(stepsObject1)
-        var result = stepsRawDao.getSteps(day)
+        var result = stepsRawDao.getStepsByDay(day)
         assertEquals(steps1, result)
         val stepsObject2 = StepsRaw(day.time, day, steps2, false)
         stepsRawDao.insert(stepsObject2)
-        result = stepsRawDao.getSteps(day)
+        result = stepsRawDao.getStepsByDay(day)
         assertEquals(steps2, result)
     }
 

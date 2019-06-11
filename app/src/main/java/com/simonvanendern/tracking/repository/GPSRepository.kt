@@ -26,7 +26,7 @@ class GPSRepository @Inject constructor(db: TrackingDatabase) {
     private val gpsDataDao = db.gPSDataDao()
     private val trajectoryDao = db.trajectoryDao()
 
-    val recentLocations: LiveData<List<GPSData>> = gpsLocationDao.get10MostRecentLocations()
+    val recentLocations: LiveData<List<GPSData>> = gpsDataDao.get10MostRecentLocationTimestamps()
 
     // You must call this on a non-UI thread or your app will crash. So we're making this a
     // suspend function so the caller methods know this.
