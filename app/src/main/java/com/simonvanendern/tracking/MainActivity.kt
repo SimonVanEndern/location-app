@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.activity
+package com.simonvanendern.tracking
 
 
 import android.Manifest
@@ -14,9 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.simonvanendern.tracking.AllDataViewModel
-import com.simonvanendern.tracking.R
-import com.simonvanendern.tracking.StepsAndActivityListAdapter
 import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
 
 class MainActivity : AppCompatActivity() {
