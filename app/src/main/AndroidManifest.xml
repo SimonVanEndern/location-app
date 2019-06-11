@@ -36,7 +36,7 @@
                 <action android:name=".LOGGING_SERVICE"/>
             </intent-filter>
         </service>
-        <receiver android:name=".logging.LocationReceiver"/>
+        <receiver android:name=".data_collection.LocationReceiver"/>
 
         <receiver android:name="com.simonvanendern.tracking.backgroundService.RestarterReceiver"
                   android:enabled="true"
@@ -53,7 +53,7 @@
             <!--<category android:name="android.intent.category.DEFAULT" />-->
             <!--</intent-filter>-->
         </receiver>
-        <receiver android:name=".logging.ActivityRecognitionReceiver">
+        <receiver android:name=".data_collection.ActivityRecognitionReceiver">
 
         </receiver>
     </application>

@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.logging
+package com.simonvanendern.tracking.data_collection
 
 import android.content.Context
 import android.hardware.Sensor

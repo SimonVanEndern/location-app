@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.simonvanendern.tracking.logging.ActivityRecognitionReceiver
+import com.simonvanendern.tracking.data_collection.ActivityRecognitionReceiver
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule

@@ -17,9 +17,9 @@ import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.R
 import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.aggregation.ServerRequestHandler
-import com.simonvanendern.tracking.logging.LocationUpdates
-import com.simonvanendern.tracking.logging.StepsLogger
-import com.simonvanendern.tracking.logging.TransitionRecognition
+import com.simonvanendern.tracking.data_collection.LocationUpdates
+import com.simonvanendern.tracking.data_collection.StepsLogger
+import com.simonvanendern.tracking.data_collection.TransitionRecognition
 import com.simonvanendern.tracking.repository.RequestRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -3,9 +3,9 @@ package com.simonvanendern.tracking
 import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.aggregation.ServerRequestHandler
 import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
-import com.simonvanendern.tracking.logging.ActivityRecognitionReceiver
-import com.simonvanendern.tracking.logging.LocationReceiver
-import com.simonvanendern.tracking.logging.StepsLogger
+import com.simonvanendern.tracking.data_collection.ActivityRecognitionReceiver
+import com.simonvanendern.tracking.data_collection.LocationReceiver
+import com.simonvanendern.tracking.data_collection.StepsLogger
 import com.simonvanendern.tracking.repository.GPSRepository
 import dagger.Component
 import javax.inject.Singleton
