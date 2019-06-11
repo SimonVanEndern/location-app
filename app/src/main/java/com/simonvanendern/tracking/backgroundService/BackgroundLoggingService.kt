@@ -19,7 +19,7 @@ import com.simonvanendern.tracking.aggregation.DatabaseAggregator
 import com.simonvanendern.tracking.aggregation.ServerRequestHandler
 import com.simonvanendern.tracking.data_collection.LocationUpdates
 import com.simonvanendern.tracking.data_collection.StepsLogger
-import com.simonvanendern.tracking.data_collection.TransitionRecognition
+import com.simonvanendern.tracking.data_collection.ActivityTransitionRecognition
 import com.simonvanendern.tracking.repository.RequestRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,7 +48,7 @@ class BackgroundLoggingService : Service() {
             if (msg.arg2 == -1) {
                 // Do GPS Logging here
                 val stepsLogger = StepsLogger(applicationContext)
-                TransitionRecognition(applicationContext)
+                ActivityTransitionRecognition(applicationContext)
                 post(stepsLogger)
 
                 if (aggregateDataWorkRequest == null) {

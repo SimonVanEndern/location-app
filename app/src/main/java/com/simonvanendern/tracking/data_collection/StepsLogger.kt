@@ -5,7 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import com.simonvanendern.tracking.ApplicationModule
 import com.simonvanendern.tracking.DaggerApplicationComponent
 import com.simonvanendern.tracking.database.data_model.raw.StepsRaw
@@ -15,6 +14,9 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * Requesting the step counter value from the phone internal step sensor
+ */
 class StepsLogger(private val context: Context) : Runnable, SensorEventListener {
 
     var sensorManager: SensorManager? = null
@@ -23,6 +25,10 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
     @Inject
     lateinit var stepsRepository: StepsRepository
 
+    /**
+     * Invoking dependency injection and registering the step sensor listener if the
+     * sensor is available
+     */
     override fun run() {
         DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(context))
@@ -41,10 +47,13 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
         }
     }
 
+    /**
+     * Triggered each time the sensor reports new data
+     */
     override fun onSensorChanged(event: SensorEvent) {
-        Log.d("STEPS_SENSOR", "last timestamp: $lastTimeStamp")
         val now = Date()
-        if (now.time - lastTimeStamp > 1000 * 60 * 1) {
+        // We only save steps data at a 60 seconds interval
+        if (now.time - lastTimeStamp > 1000 * 60) {
             lastTimeStamp = now.time
             GlobalScope.launch {
                 stepsRepository.insert(
@@ -59,5 +68,6 @@ class StepsLogger(private val context: Context) : Runnable, SensorEventListener 
         }
     }
 
+    // Not needed but has to be implemented
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
 }

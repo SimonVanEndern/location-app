@@ -4,22 +4,25 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
 import com.google.android.gms.location.DetectedActivity
 
-class TransitionRecognition(private val context: Context) {
+/**
+ * Registers a broadcast to be fired on activity transition events
+ */
+class ActivityTransitionRecognition(private val context: Context) {
     lateinit var mPendingIntent: PendingIntent
 
     init {
         launchTransitionsTracker()
     }
 
-    /***********************************************************************************************
-     * LAUNCH TRANSITIONS TRACKER
-     **********************************************************************************************/
+    /**
+     * Registers for updates that concern the activities
+     * STILL, WALKING, RUNNING, ON_BICYCLE, IN_VEHICLE
+     */
     private fun launchTransitionsTracker() {
         val transitions = ArrayList<ActivityTransition>()
 
@@ -93,7 +96,6 @@ class TransitionRecognition(private val context: Context) {
                 .build()
         )
 
-
         val request = ActivityTransitionRequest(transitions)
         val activityRecognitionClient = ActivityRecognition.getClient(context)
 
@@ -101,15 +103,9 @@ class TransitionRecognition(private val context: Context) {
         mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
 
         val task = activityRecognitionClient.requestActivityTransitionUpdates(request, mPendingIntent)
-        task.addOnSuccessListener {
-            Log.i("TRANSITION_RECOGNITION", "Registered receiver")
-//            mPendingIntent.cancel()
-//            Toast.makeText(context, "Started Activity Recognition", Toast.LENGTH_SHORT).show()
-        }
 
         task.addOnFailureListener { e: Exception ->
-            Toast.makeText(context, "Failed Activity Recognition", Toast.LENGTH_SHORT).show()
-            Log.e("MYCOMPONENT", e.message)
+            Log.e("ACTIVITY_TRANSITION", e.message)
         }
     }
 }
