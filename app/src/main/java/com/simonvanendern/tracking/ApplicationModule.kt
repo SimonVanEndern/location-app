@@ -27,9 +27,19 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.inject.Singleton
 
+/**
+ * Module for handling creation of injected classes that
+ * deserve special handling and cannot be constructed via a plain constructor.
+ */
 @Module
 class ApplicationModule(private val application: Context) {
 
+    // The encryption code should be moved to a separate module
+    /**
+     * Provides an instance of @see WebService that
+     * 1. decrypts incoming requests
+     * 2. adds authentication to outgoing requests
+     */
     @Singleton
     @Provides
     fun provideWebservice(): WebService {
@@ -46,6 +56,7 @@ class ApplicationModule(private val application: Context) {
             return spec
         }
 
+        // HTTP Interceptor for decryption
         val interceptor = Interceptor { chain ->
             {
                 val request: Request = chain.request()
@@ -53,20 +64,6 @@ class ApplicationModule(private val application: Context) {
                 val raw = response.body()?.string()
                 val store =
                     application.getSharedPreferences(application.getString(R.string.identifiers), Context.MODE_PRIVATE)
-
-
-//                var keyy = store.getString("public_key_complete", "test")!!
-//                keyy = keyy.replace("-----BEGIN PUBLIC KEY-----\n", "")
-//                    .replace("\n-----END PUBLIC KEY-----", "")
-//                var publicKey = store.getString("public_key", "test")
-//                val specs = X509EncodedKeySpec(Base64.decode(keyy, Base64.DEFAULT))
-//                val keyFactory = KeyFactory.getInstance("RSA")
-//                val generated = keyFactory.generatePublic(specs)
-
-
-
-
-
 
                 val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
                 val keyString = store.getString("private_key", "test")
@@ -108,6 +105,7 @@ class ApplicationModule(private val application: Context) {
             }()
         }
 
+        // HTTP interceptor for adding authentication
         val authenticationInterceptor = Interceptor { chain ->
             {
                 val request = chain.request()
@@ -148,7 +146,6 @@ class ApplicationModule(private val application: Context) {
             .create()
         return Retrofit.Builder()
             .baseUrl("https://privacy-research-sweet-porcupine.eu-gb.mybluemix.net/")
-//            .baseUrl("http://localhost:8888/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(clientBuilder)
             .build()
@@ -169,6 +166,7 @@ class ApplicationModule(private val application: Context) {
         ).build()
     }
 
+    // Candidate for removing
     @Singleton
     @Provides
     fun provideRequestRepository(
@@ -178,12 +176,14 @@ class ApplicationModule(private val application: Context) {
         return RequestRepository(db, webService)
     }
 
+    // Candidate for removing
     @Singleton
     @Provides
     fun provideRequestExecutor(db: TrackingDatabase): RequestExecuter {
         return RequestExecuter(db)
     }
 
+    // Candidate for removing
     @Singleton
     @Provides
     fun provideActivityRepository(db: TrackingDatabase): ActivityRepository {

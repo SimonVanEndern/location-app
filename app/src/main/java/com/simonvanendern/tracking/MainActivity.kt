@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.simonvanendern.tracking.backgroundService.BackgroundService
 
+/**
+ * Main Activity showing some debug data
+ */
 class MainActivity : AppCompatActivity() {
 
     private val ACTIVITY_REQUEST_CODE = 777
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = StepsAndActivityListAdapter(this)
+        val adapter = DebugDataAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 

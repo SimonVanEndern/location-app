@@ -14,10 +14,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-class StepsAndActivityListAdapter internal constructor(
+/**
+ * Adapter to connect the View and the ViewModel
+ */
+class DebugDataAdapter internal constructor(
     context: Context
-) : RecyclerView.Adapter<StepsAndActivityListAdapter.StepsAndActivityViewHolder>() {
+) : RecyclerView.Adapter<DebugDataAdapter.DebugDataViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var activities = emptyList<String>() // Cached copy of words
@@ -29,16 +31,19 @@ class StepsAndActivityListAdapter internal constructor(
     private val dateFormatWithSeconds = SimpleDateFormat("HH:mm:ss - dd MMMM yyyy")
 
 
-    inner class StepsAndActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class DebugDataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val stepsAndActivityItemView: TextView = itemView.findViewById(R.id.textView)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepsAndActivityViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DebugDataViewHolder {
         val itemView = inflater.inflate(R.layout.recyclerview_item, parent, false)
-        return StepsAndActivityViewHolder(itemView)
+        return DebugDataViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: StepsAndActivityViewHolder, position: Int) {
+    /**
+     * Basically writing all debug data in one list
+     */
+    override fun onBindViewHolder(holder: DebugDataViewHolder, position: Int) {
         val combined = ArrayList<String>()
         combined.addAll(steps)
         combined.addAll(activityTransitions)
@@ -96,5 +101,3 @@ class StepsAndActivityListAdapter internal constructor(
 
     override fun getItemCount() = steps.size + activities.size + locations.size + activityTransitions.size
 }
-
-
