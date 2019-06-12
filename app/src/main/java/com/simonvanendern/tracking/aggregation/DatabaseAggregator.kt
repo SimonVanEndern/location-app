@@ -1,7 +1,6 @@
 package com.simonvanendern.tracking.aggregation
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.simonvanendern.tracking.ApplicationModule
@@ -11,6 +10,9 @@ import com.simonvanendern.tracking.repository.GPSRepository
 import com.simonvanendern.tracking.repository.StepsRepository
 import javax.inject.Inject
 
+/**
+ * Worker that controls the aggregation of raw data
+ */
 class DatabaseAggregator(private val appContext: Context, workParams: WorkerParameters) :
     Worker(appContext, workParams) {
 
@@ -23,12 +25,31 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
     @Inject
     lateinit var gpsRepository: GPSRepository
 
+    /**
+     * Invokes dependency injection and starts aggregating the raw data
+     * to the data models defined in the aggregated package.
+     */
     override fun doWork(): Result {
         DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(appContext))
             .build()
             .inject(this)
 
+        activityRepository.aggregateActivities()
+        stepsRepository.aggregateSteps()
+        gpsRepository.aggregateGPSRoutes()
+
+        return Result.success()
+    }
+
+    /**
+     * This method is used for manually exporting the raw data
+     * to JSON strings when the phone is connected.
+     * Call the function from doWork and use debug mode to obtain the strings.
+     * Saving to a file would require an extra permission for the app which actually
+     * is not necessary right now.
+     */
+    private fun exportToJson() {
         val stepsRaw = "[" + stepsRepository.getAllStepsRaw().joinToString { step ->
             "{\"stepsRaw\": ${step.steps}, \"timestamp\":${step.timestamp}}"
         } + "]"
@@ -52,19 +73,5 @@ class DatabaseAggregator(private val appContext: Context, workParams: WorkerPara
         val trajectoryString = "[" + gpsRepository.getAllTrajectories().joinToString { trajectory ->
             "{\"lat1\": ${trajectory.lat1}, \"lon1\":${trajectory.lon1}, \"lat2\":${trajectory.lat2}, \"lon2\":${trajectory.lon2}}"
         } + "]"
-
-
-
-        activityRepository.aggregateActivities()
-        stepsRepository.aggregateSteps()
-        gpsRepository.aggregateGPSRoutes()
-//        val gpsData = gpsRepository.getAllGPSDataEntries()
-//        val json = gpsData.map { data ->  "{\"longitude\":${data.longitude}, \"latitude\":${data.latitude}, \"timestamp\":${data.timestamp}}" }
-//
-//        val jsonString = json.joinToString()
-
-        Log.d("AGGREGATOR", "Successful aggregation of Stuff")
-
-        return Result.success()
     }
 }

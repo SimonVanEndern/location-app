@@ -1,7 +1,6 @@
 package com.simonvanendern.tracking.aggregation
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.simonvanendern.tracking.ApplicationModule
@@ -10,6 +9,10 @@ import com.simonvanendern.tracking.R
 import com.simonvanendern.tracking.repository.RequestRepository
 import javax.inject.Inject
 
+
+/**
+ * Worker that handles the server communication.
+ */
 class ServerRequestHandler(private val appContext: Context, workParams: WorkerParameters) :
     Worker(appContext, workParams) {
 
@@ -19,6 +22,10 @@ class ServerRequestHandler(private val appContext: Context, workParams: WorkerPa
     @Inject
     lateinit var requestRepository: RequestRepository
 
+    /**
+     * Called once on creation of the Worker.
+     * Initiates dependency injection and deals with aggregation requests.
+     */
     override fun doWork(): Result {
         DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(appContext))
@@ -26,11 +33,13 @@ class ServerRequestHandler(private val appContext: Context, workParams: WorkerPa
             .inject(this)
         updatePendingRequests()
 
-        Log.d("SERVER_HANDLER", "Successful server handling of requests")
-
         return Result.success()
     }
 
+    /**
+     * polls new aggregation requests from the server,
+     * processes those aggregation requests and sends the results back to the server
+     */
     private fun updatePendingRequests() {
         val store = appContext.getSharedPreferences(appContext.getString(R.string.identifiers), Context.MODE_PRIVATE)
         var user = store.getString("public_key_complete", "test")!!
