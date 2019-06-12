@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".backgroundService.BackgroundLoggingService" android:stopWithTask="false"
+        <service android:name=".backgroundService.BackgroundService" android:stopWithTask="false"
                  android:exported="true"
                  android:enabled="true">
             <intent-filter>

@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
+import com.simonvanendern.tracking.backgroundService.BackgroundService
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startBackgroundService() {
-        val i = Intent(this, BackgroundLoggingService::class.java)
+        val i = Intent(this, BackgroundService::class.java)
         startService(i)
     }
 

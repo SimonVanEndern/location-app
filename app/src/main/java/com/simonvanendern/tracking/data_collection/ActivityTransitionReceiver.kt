@@ -9,7 +9,7 @@ import com.google.android.gms.location.ActivityTransitionResult
 import com.google.android.gms.location.DetectedActivity
 import com.simonvanendern.tracking.ApplicationModule
 import com.simonvanendern.tracking.DaggerApplicationComponent
-import com.simonvanendern.tracking.backgroundService.BackgroundLoggingService
+import com.simonvanendern.tracking.backgroundService.BackgroundService
 import com.simonvanendern.tracking.repository.ActivityRepository
 import javax.inject.Inject
 
@@ -58,7 +58,7 @@ class ActivityTransitionReceiver : BroadcastReceiver() {
     }
 
     /**
-     * Sends a notification to the @see BackgroundLoggingService in order to
+     * Sends a notification to the @see BackgroundService in order to
      * change the frequency of GPS updates.
      * The frequency itself is set in the GPS logging service, this method sends an extra
      * along the intent specifying the frequency (granularity) as one of 0,1,2.
@@ -66,7 +66,7 @@ class ActivityTransitionReceiver : BroadcastReceiver() {
     private fun notifyGPSLoggingServiceAboutActivityChange(context: Context, activity: Int?) {
         Log.d("ACTIVITY_RECOGNITION", "Got activity for change: $activity")
 
-        val i = Intent(context, BackgroundLoggingService::class.java)
+        val i = Intent(context, BackgroundService::class.java)
 
         when (activity) {
             DetectedActivity.STILL -> {
