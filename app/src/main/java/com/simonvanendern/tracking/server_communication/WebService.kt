@@ -3,6 +3,9 @@ package com.simonvanendern.tracking.server_communication
 import retrofit2.Call
 import retrofit2.http.*
 
+/**
+ * Retrofit WebService for interacting with the server.
+ */
 interface WebService {
 
     @Headers("Content-Type: application/json")
@@ -11,15 +14,15 @@ interface WebService {
 
     @GET("/requests")
     fun getRequestsForUser(
-        @Query("pk") pk: String,
-        @Query("pw") pw: String
+        @Query("publicKey") publicKey: String,
+        @Query("password") password: String
     ): Call<List<AggregationRequest>>
 
     @Headers("Content-Type: application/json")
     @POST("/forward")
-    fun forwardAggregationRequest(@Body request: AggregationResponse): Call<Response>
+    fun forwardAggregationRequest(@Body request: AggregationResponse): Call<Void>
 
     @Headers("Content-Type: application/json")
     @POST("/forward")
-    fun insertAggregationResult(@Body result: AggregationRequest): Call<Response>
+    fun insertAggregationResult(@Body result: AggregationRequest): Call<Void>
 }

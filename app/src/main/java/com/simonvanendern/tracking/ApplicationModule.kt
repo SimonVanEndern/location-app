@@ -123,8 +123,8 @@ class ApplicationModule(private val application: Context) {
                         val store =
                             application.getSharedPreferences(application.getString(R.string.identifiers), Context.MODE_PRIVATE)
 
-                        json.put("pk", store.getString("public_key_complete", "test")!!)
-                        json.put("pw", store.getString("private_key", "test")!!)
+                        json.put("publicKey", store.getString("public_key_complete", "test")!!)
+                        json.put("password", store.getString("private_key", "test")!!)
                         val newRequest = request.newBuilder()
                             .post(RequestBody.create(request.body()?.contentType(),
                                 json.toString()))

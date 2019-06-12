@@ -73,8 +73,8 @@ class RequestRepositoryTest : DatabaseTest() {
             .thenReturn(call)
 
         val result = requestRepository.createUser(user)
-        assertEquals(user, result?.pk)
-        assertEquals(pw, result?.pw)
+        assertEquals(user, result?.publicKey)
+        assertEquals(pw, result?.password)
 
         verify(webService).createUser(any())
     }

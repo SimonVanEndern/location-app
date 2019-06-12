@@ -36,7 +36,7 @@ class WebServiceTest {
     @Test
     fun testCreateUser() {
         val pw = "testPw"
-        val response = "{\"userId\":\"$userId\",\"pw\":\"$pw\"}"
+        val response = "{\"userId\":\"$userId\",\"password\":\"$pw\"}"
 
         server.enqueue(MockResponse().setBody(response))
         server.start()
@@ -52,7 +52,7 @@ class WebServiceTest {
         val result = webservice.createUser(User(userId, "")).execute()
         assertTrue(result.isSuccessful)
 
-        assertEquals(pw, result.body()?.pw)
+        assertEquals(pw, result.body()?.password)
     }
 
     @Test
@@ -103,16 +103,14 @@ class WebServiceTest {
             .build()
             .create(WebService::class.java)
 
-        val result: Response? = webservice.insertAggregationResult(request1).execute().body()
+        val result = webservice.insertAggregationResult(request1).execute()
 
-        assertEquals(true, result?.status)
+        assertEquals(true, result.isSuccessful)
     }
 
     @Ignore
     @Test
     fun testInsertAggregationResult() {
-        val result = AggregationResult("22", userId, "1111111".toByteArray())
-
         val serverResponse = "{\"status\":true}"
 
         server.enqueue(MockResponse().setBody(serverResponse))

@@ -265,7 +265,7 @@ class BackgroundService : Service() {
             )
             if (user != null) {
                 with(store.edit()) {
-                    putString(getString(R.string.password), user.pw)
+                    putString(getString(R.string.password), user.password)
                     apply()
                 }
             }
