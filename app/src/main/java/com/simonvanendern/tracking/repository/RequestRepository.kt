@@ -1,10 +1,10 @@
 package com.simonvanendern.tracking.repository
 
 import android.util.Base64
-import com.simonvanendern.tracking.communication.AggregationRequest
-import com.simonvanendern.tracking.communication.AggregationResponse
-import com.simonvanendern.tracking.communication.User
-import com.simonvanendern.tracking.communication.WebService
+import com.simonvanendern.tracking.server_communication.AggregationRequest
+import com.simonvanendern.tracking.server_communication.AggregationResponse
+import com.simonvanendern.tracking.server_communication.User
+import com.simonvanendern.tracking.server_communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
 import org.json.JSONObject
 import java.security.KeyFactory

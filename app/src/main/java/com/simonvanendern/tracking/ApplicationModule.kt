@@ -5,7 +5,7 @@ import android.util.Base64
 import androidx.room.Room
 import com.google.gson.GsonBuilder
 import com.simonvanendern.tracking.aggregation.RequestExecuter
-import com.simonvanendern.tracking.communication.WebService
+import com.simonvanendern.tracking.server_communication.WebService
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.repository.ActivityRepository
 import com.simonvanendern.tracking.repository.RequestRepository
@@ -13,7 +13,6 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.*
 import okio.Buffer
-import okio.BufferedSink
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -22,7 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
-import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec

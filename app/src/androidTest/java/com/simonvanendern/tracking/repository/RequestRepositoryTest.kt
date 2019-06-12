@@ -1,9 +1,9 @@
 package com.simonvanendern.tracking.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.simonvanendern.tracking.communication.AggregationRequest
-import com.simonvanendern.tracking.communication.User
-import com.simonvanendern.tracking.communication.WebService
+import com.simonvanendern.tracking.server_communication.AggregationRequest
+import com.simonvanendern.tracking.server_communication.User
+import com.simonvanendern.tracking.server_communication.WebService
 import com.simonvanendern.tracking.database.DatabaseTest
 import com.simonvanendern.tracking.database.TrackingDatabase
 import com.simonvanendern.tracking.database.data_model.AggregationRequestDao

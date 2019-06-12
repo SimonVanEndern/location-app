@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.communication
+package com.simonvanendern.tracking.server_communication
 
 import java.util.*
 

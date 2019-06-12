@@ -1,4 +1,4 @@
-package com.simonvanendern.tracking.communication
+package com.simonvanendern.tracking.server_communication
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
