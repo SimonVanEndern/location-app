@@ -21,8 +21,16 @@ class AggregationRequestDaoTest : DatabaseTest() {
         val data = "11111111111111".toByteArray()
 
         val aggregationRequest = AggregationRequest(
-            0, serverSideID, "user",
-            "steps", 1, 1.0f, Date(), Date(), true, mutableListOf()
+            0,
+            serverSideID,
+            "user",
+            Date(),
+            Date(),
+            "steps",
+            1,
+            1.0f,
+            mutableListOf(),
+            true
         )
 
         val id = aggregationRequestDao.insert(aggregationRequest)
@@ -46,37 +54,37 @@ class AggregationRequestDaoTest : DatabaseTest() {
             0,
             serverSideId_0,
             "user",
+            Date(),
+            Date(),
             "type",
             1,
             1.0f,
-            Date(),
-            Date(),
-            true,
-            mutableListOf()
+            mutableListOf(),
+            true
         )
         val aggregationRequest_1 = AggregationRequest(
             0,
             serverSideId_1,
             "user",
+            Date(),
+            Date(),
             "type",
             1,
             1.0f,
-            Date(),
-            Date(),
-            true,
-            mutableListOf()
+            mutableListOf(),
+            true
         )
         val aggregationRequest_2 = AggregationRequest(
             0,
             serverSideId_2,
             "user",
+            Date(),
+            Date(),
             "type",
             1,
             1.0f,
-            Date(),
-            Date(),
-            true,
-            mutableListOf()
+            mutableListOf(),
+            true
         )
 
         aggregationRequestDao.insert(aggregationRequest_0)

@@ -38,13 +38,13 @@ class RequestRepositoryTest : DatabaseTest() {
             0,
             "",
             "",
+            Date(),
+            Date(),
             "",
             0,
             0f,
-            Date(),
-            Date(),
-            true,
-            mutableListOf()
+            mutableListOf(),
+            true
         )
 
     @Before

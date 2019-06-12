@@ -2,8 +2,8 @@ package com.simonvanendern.tracking.aggregation
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.simonvanendern.tracking.database.TrackingDatabase
-import com.simonvanendern.tracking.database.data_model.aggregated.ActivityDao
 import com.simonvanendern.tracking.database.data_model.AggregationRequest
+import com.simonvanendern.tracking.database.data_model.aggregated.ActivityDao
 import com.simonvanendern.tracking.database.data_model.aggregated.StepsDao
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -48,7 +48,16 @@ class RequestExecuterTest {
             .thenReturn(averageSteps)
 
         val request = AggregationRequest(
-            1, "1", "user", "steps", 3, 2300f, Date(), Date(), true, mutableListOf()
+            1,
+            "1",
+            "user",
+            Date(),
+            Date(),
+            "steps",
+            3,
+            2300f,
+            mutableListOf(),
+            true
         )
 
         val result = executer.execute(request)
@@ -81,13 +90,13 @@ class RequestExecuterTest {
             1,
             "1",
             "user",
+            formatter.parse(date1),
+            formatter.parse(date2),
             "activity_1",
             4,
             43214334345f,
-            formatter.parse(date1),
-            formatter.parse(date2),
-            true,
-            mutableListOf()
+            mutableListOf(),
+            true
         )
 
         val result = executer.execute(request)
