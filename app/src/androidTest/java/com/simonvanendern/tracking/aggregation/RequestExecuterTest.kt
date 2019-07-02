@@ -105,7 +105,7 @@ class RequestExecuterTest {
         assertEquals(request.serverId, result.serverId)
         assertEquals(request.n + 1, result.n)
         assertEquals(
-            (request.value * request.n + timeInActivity1 / exactDifferenceInDays) / (request.n + 1),
+            (request.value * request.n + timeInActivity1 / exactDifferenceInDays / 60000) / (request.n + 1),
             result.value
         )
         assertFalse(result.incoming)
