@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         allDataViewModel = ViewModelProviders.of(this).get(AllDataViewModel::class.java)
 
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
+        // Add an observer on the LiveData.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
         allDataViewModel.mostRecentSteps.observe(this, Observer { steps ->
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             activityTransition?.let { adapter.setActivityTransitions(it) }
         })
 
+        // Ask the user for the permission to access its location
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
@@ -74,11 +75,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Starts the service controlling all background tasks
+     */
     private fun startBackgroundService() {
         val i = Intent(this, BackgroundService::class.java)
         startService(i)
     }
 
+    /**
+     * Handles the response (denial or approval) of the user to the location access request
+     */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             ACTIVITY_REQUEST_CODE -> {

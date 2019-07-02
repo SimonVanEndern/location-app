@@ -53,6 +53,9 @@ class DebugDataAdapter internal constructor(
         holder.stepsAndActivityItemView.text = current
     }
 
+    /**
+     * Formatting the activities to a readable output displayed in the application
+     */
     internal fun setActivities(activities: List<Activity>) {
         this.activities = activities.map { activity ->
             val type =
@@ -67,6 +70,9 @@ class DebugDataAdapter internal constructor(
         notifyDataSetChanged()
     }
 
+    /**
+     * Formatting the steps to a readable output displayed in the application
+     */
     internal fun setSteps(steps: List<Steps>) {
         this.steps = steps.map { step ->
             "Step:\n" +
@@ -76,6 +82,9 @@ class DebugDataAdapter internal constructor(
         notifyDataSetChanged()
     }
 
+    /**
+     * Formatting the GPS points to a readable output displayed in the application
+     */
     internal fun setLocations(locations: List<GPSData>) {
         this.locations = locations.map { gps ->
         "GPSData: \n" +
@@ -84,6 +93,9 @@ class DebugDataAdapter internal constructor(
         notifyDataSetChanged()
     }
 
+    /**
+     * Formatting the activity transitions to a readable output displayed in the application
+     */
     internal fun setActivityTransitions(activityTransitions: List<ActivityTransition>) {
         this.activityTransitions = activityTransitions.map { transition ->
             val type =
@@ -99,5 +111,8 @@ class DebugDataAdapter internal constructor(
         notifyDataSetChanged()
     }
 
+    /**
+     * Getting the total length of the list displayed in the application used by the Adapter class
+     */
     override fun getItemCount() = steps.size + activities.size + locations.size + activityTransitions.size
 }
